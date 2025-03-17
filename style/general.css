@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "AfacadFlux";
+  src: url("fonts/AfacadFlux-VariableFont.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+body {
+  font-family: "AfacadFlux", sans-serif;
+  font-weight: 400;
+}
+
+body {
+  background-color: #072946;
+}
+
+p {
+  color: #f5f5f5;
+}
