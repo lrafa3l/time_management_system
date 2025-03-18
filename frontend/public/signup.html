@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" class="d-flex">
+<head>
+    <title>SGH - Sign Up</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../src/styles/general.css">
+    <link rel="stylesheet" href="../src/styles/signup.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="d-flex">
+    <div class="container">
+        <div class="main d-flex">
+            <img src="../assets/images/logo.png" alt="Logo">
+        </div>
+        <form id="signup-form">
+            <div class="name-field">
+                <div class="input-icon">
+                    <i class="fa-solid fa-signature"></i>
+                    <input type="text" id="name" class="form-control" placeholder="Name" required>
+                </div>
+            </div>
+            <div class="email-field">
+                <div class="input-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="email" class="form-control" placeholder="Email" required>
+                </div>
+            </div>
+            <div class="password-field">
+                <div class="input-icon">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" class="form-control" placeholder="Password" required>
+                </div>
+            </div>
+            <div class="password-field">
+                <div class="input-icon">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="confirm-password" class="form-control" placeholder="Confirm Password" required>
+                </div>
+            </div>
+            <div class="form-group sign-in-btn">
+                <input type="submit" class="submit" value="Sign Up">
+            </div>
+        </form>
+        <div class="back-to-login">
+            <a href="./auth.html" class="login-click"><i class="fa-solid fa-arrow-left"></i> Back</a>
+        </div>
+    </div>
+
+    <script src="../src/js/signup.js"></script>
+</body>
+</html>
