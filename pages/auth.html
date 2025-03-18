@@ -1,14 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="d-flex">
+
 <head>
+    <title>SGH</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../style/general.css">
     <link rel="stylesheet" href="../style/auth.css">
-    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
-    <title>SGH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-    
+
+<body class="d-flex">
+    <div class="container">
+        <div class="d-flex">
+            <img src="../assets/images/logo.png" alt="Logo">
+        </div>
+        <form>
+            <div class="email-field">
+                <div class="input-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" class="form-control" placeholder="Email">
+                </div>
+            </div>
+            <div class="password-field">
+                <div class="input-icon">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" class="form-control" placeholder="Password">
+                </div>
+            </div>
+            <div class="signin-btn">
+                <input type="submit" class="submit" value="Sign In">
+            </div>
+            <div class="forgot">
+                <a href="./recover_pass.html" class="forgot">I forgot my password</a>
+            </div>
+            <div class="sign-up">
+                <a href="./signup.html" class="forgot">I do not have an account</a>
+            </div>
+        </form>
+    </div>
 </body>
+
 </html>

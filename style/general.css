@@ -5,15 +5,26 @@
   font-style: normal;
 }
 
-body {
+body, html {
   font-family: "AfacadFlux", sans-serif;
   font-weight: 400;
+  background-color: #a1c5e4;
+  height: 100%;
+  margin: 0;
 }
 
-body {
+.d-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
   background-color: #072946;
-}
-
-p {
-  color: #f5f5f5;
+  box-shadow: 0 5px 9px rgba(87, 89, 90, 0.8);
+  border-radius: 10px;
+  padding-bottom: 45px;
 }

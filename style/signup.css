@@ -13,6 +13,7 @@ form {
   width: 100%;
 }
 
+.name-field,
 .email-field,
 .password-field,
 .signin-btn {
@@ -21,6 +22,7 @@ form {
 
 input[type="email"],
 input[type="password"],
+input[type="text"],
 input[type="submit"] {
   width: 100%;
   padding: 10px;
@@ -30,12 +32,14 @@ input[type="submit"] {
 }
 
 input[type="email"]:focus,
+input[type="text"]:focus,
 input[type="password"]:focus {
   border-color: #81ffd9;
   outline: none;
 }
 
 input[type="email"],
+input[type="text"],
 input[type="password"] {
   background-color: #a1c5e4;
   padding: 10px 10px 10px 35px;
@@ -99,5 +103,23 @@ a:visited {
 }
 
 .forgot a:hover {
+  color: #47b896;
+}
+
+.back-to-login {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #47b896;
+}
+
+.back-to-login a:hover,
+.back-to-login i:hover {
+  color: #81ffd9;
+}
+
+.back-to-login i,
+.back-to-login a {
   color: #47b896;
 }
