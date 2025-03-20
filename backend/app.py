@@ -14,7 +14,7 @@ def get_db_connection():
     return conn
 
 # Rota para criar conta
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['POST'])  # Change method to POST
 def register():
     data = request.get_json()
     nome = data.get('nome')

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,287 @@
     <title>SGH</title>
 </head>
 <body>
-    
+    <div>
+        <div class="sidebar">
+
+        </div>
+    </div>
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SGH</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="../src/styles/main.css" />
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../assets/images/logo.png" alt="Logo">
+            <!-- <svg width="100" height="40" viewBox="0 0 100 40">
+                <path d="M12,15 L30,15 L24,27 L12,27 Z" fill="#4270F4" />
+                <text x="38" y="27" fill="#262A39" font-size="20" font-weight="bold">
+                    FinFlow
+                </text>
+            </svg> -->
+        </div>
+
+        <div class="nav-menu">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-user-circle"></i>
+                <span>Account</span>
+            </a>
+            <!-- <a href="#" class="nav-item">
+                <i class="fas fa-wallet"></i>
+                <span>Payments</span>
+            </a> -->
+            <a href="#" class="nav-item">
+                <i class="fas fa-sliders-h"></i>
+                <span>Preferences</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-comment-dots"></i>
+                <span>Inbox</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Insights</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-life-ring"></i>
+                <span>Help Center</span>
+            </a>
+        </div>
+
+        <!-- <div class="premium-box">
+        <h3>Upgrade to Elite Plan</h3>
+        <button class="premium-btn">Try Free</button>
+      </div> -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="welcome-section">
+                <p class="greeting">Welcome, Lando!</p>
+                <h1 class="welcome-title">Gestão de Horários</h1>
+            </div>
+
+            <div class="header-right">
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-indicator"></div>
+                </div>
+
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/100?img=8" alt="Alex Morgan" class="profile-pic" />
+                </div>
+
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Container -->
+        <div class="dashboard-container">
+            <!-- Main Dashboard Content -->
+            <div class="dashboard-main">
+                <!-- Transfer Cards -->
+                <div class="transfer-cards">
+                    <div class="transfer-card">
+                        <div class="card-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <p class="card-title">Digital Payments</p>
+                        <h2 class="card-amount">$1,875</h2>
+                    </div>
+
+                    <div class="transfer-card">
+                        <div class="card-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <p class="card-title">External Transfers</p>
+                        <h2 class="card-amount">$263</h2>
+                    </div>
+
+                    <div class="transfer-card">
+                        <div class="card-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <p class="card-title">Domestic Transfers</p>
+                        <h2 class="card-amount">$394</h2>
+                    </div>
+                </div>
+
+                <!-- Promo Card -->
+                <!-- <div class="promo-card">
+            <div class="promo-info">
+              <h2 class="promo-title">Smart money management</h2>
+              <p class="promo-desc">
+                Experience global transactions with zero hidden charges. Secure,
+                transfer and manage your finances with confidence.
+              </p>
+              <button class="promo-btn">Explore Features</button>
+            </div>
+
+            <div class="credit-card">
+              <div class="card-overlay"></div>
+              <div class="card-brand">
+                <div class="card-type">Platinum Edge</div>
+                <div class="card-logo">
+                  <div class="card-logo-circle"></div>
+                  <div class="card-logo-circle"></div>
+                </div>
+              </div>
+
+              <div class="card-number">4832 7691 2450 8115</div>
+
+              <div class="card-details">
+                <div class="card-holder">
+                  <div class="card-holder-label">CARD HOLDER</div>
+                  <div class="card-holder-name">Alexander Morgan</div>
+                </div>
+                <div class="card-expiry">
+                  <div class="card-expiry-label">EXPIRES</div>
+                  <div class="card-expiry-date">09/27</div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+                <!-- Transaction & Transfer Sections -->
+                <div class="transaction-section">
+                    <div class="transaction-card">
+                        <h3 class="section-title">Recent Expenses</h3>
+
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-hamburger"></i>
+                            </div>
+                            <div class="transaction-content">
+                                <div class="transaction-title">Dining Out</div>
+                                <div class="transaction-time">
+                                    <i class="far fa-clock"></i> Today, 14:45
+                                </div>
+                            </div>
+                            <div class="transaction-amount negative">-$78</div>
+                        </div>
+
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <div class="transaction-content">
+                                <div class="transaction-title">Retail Purchase</div>
+                                <div class="transaction-time">
+                                    <i class="far fa-clock"></i> Yesterday, 16:08
+                                </div>
+                            </div>
+                            <div class="transaction-amount negative">-$125</div>
+                        </div>
+                    </div>
+
+                    <div class="transaction-card">
+                        <h3 class="section-title">Your Connections</h3>
+
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <img src="https://i.pravatar.cc/100?img=12" alt="Lisa Johnson" />
+                            </div>
+                            <div class="transaction-content">
+                                <div class="transaction-title">Lisa Johnson</div>
+                                <div class="transaction-time">
+                                    <i class="far fa-clock"></i> Today, 09:35
+                                </div>
+                            </div>
+                            <div class="transaction-amount positive">+$85</div>
+                        </div>
+
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <img src="https://i.pravatar.cc/100?img=11" alt="Michael Torres" />
+                            </div>
+                            <div class="transaction-content">
+                                <div class="transaction-title">Michael Torres</div>
+                                <div class="transaction-time">
+                                    <i class="far fa-clock"></i> Monday, 17:45
+                                </div>
+                            </div>
+                            <div class="transaction-amount negative">-$42</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Sidebar -->
+            <div class="dashboard-sidebar">
+                <div class="savings-card">
+                    <h3 class="savings-title">Monthly Savings</h3>
+                    <div class="savings-amount">$467.5</div>
+
+                    <div class="time-filter">
+                        <button class="time-option">Daily</button>
+                        <button class="time-option">Weekly</button>
+                        <button class="time-option active">Monthly</button>
+                        <button class="time-option">Annual</button>
+                    </div>
+
+                    <div class="chart-container">
+                        <svg class="chart" viewBox="0 0 300 100" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="gradientFill" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#4270F4" stop-opacity="0.7" />
+                                    <stop offset="100%" stop-color="#4270F4" stop-opacity="0.1" />
+                                </linearGradient>
+                            </defs>
+                            <path class="chart-line-path"
+                                d="M0,80 C20,70 40,30 60,60 C80,90 100,40 120,30 C140,20 160,50 180,20 C200,30 220,60 240,80 C260,60 280,40 300,60">
+                            </path>
+                            <path class="chart-area"
+                                d="M0,80 C20,70 40,30 60,60 C80,90 100,40 120,30 C140,20 160,50 180,20 C200,30 220,60 240,80 C260,60 280,40 300,60 L300,100 L0,100 Z">
+                            </path>
+                            <circle cx="180" cy="20" r="6" fill="#4270F4" stroke="#ffffff" stroke-width="3" />
+                        </svg>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="month">Oct</div>
+                        <div class="month">Nov</div>
+                        <div class="month active">Dec</div>
+                        <div class="month">Jan</div>
+                        <div class="month">Feb</div>
+                        <div class="month">Mar</div>
+                    </div>
+                </div>
+
+                <!-- <div class="plan-card">
+            <div class="plan-info">
+              <div class="plan-title">Budget Goal Q1 2025</div>
+              <div class="plan-status">On Track</div>
+            </div>
+
+            <div class="plan-progress">
+              <div class="plan-percentage">68%</div>
+            </div>
+          </div> -->
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

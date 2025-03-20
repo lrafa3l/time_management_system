@@ -101,3 +101,21 @@ a:visited {
 .forgot a:hover {
   color: #47b896;
 }
+
+.back-to-login {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #47b896;
+}
+
+.back-to-login a:hover,
+.back-to-login i:hover {
+  color: #81ffd9;
+}
+
+.back-to-login i,
+.back-to-login a {
+  color: #47b896;
+}

@@ -15,11 +15,11 @@ document.getElementById('signup-form').addEventListener('submit', async (event) 
     // Send data to the back-end
     try {
         const response = await fetch('http://127.0.0.1:5000/register', {
-            method: 'POST',
+            method: 'POST', // Change method to POST
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ nome: name, email, senha: password }),
+            body: JSON.stringify({ nome: name, email: email, senha: password }),
         });
 
         const data = await response.json();
