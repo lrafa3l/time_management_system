@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SGH</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="../src/styles/calendar.css" />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js'></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
+
+    <!-- Jcalendar -->
+    <link rel="stylesheet" href="dist/calendar.js.css">
+    <script src="dist/calendar.js"></script>
+
+    <link rel="stylesheet" href="../src/styles/main.css" />
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../assets/images/logo.png" alt="Logo">
+        </div>
+
+        <div class="nav-menu">
+            <a href="./main.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Página Inicial</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span>Calendário</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-comment-dots"></i>
+                <span>Mensagens</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-user-circle"></i>
+                <span>Conta</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-sliders-h"></i>
+                <span>Definições</span>
+            </a>
+
+        </div>
+        <div class="nav-menu-bottom">
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Ajuda</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Terminar Sessão</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="welcome-section">
+                <p class="greeting">Welcome, Lando!</p>
+                <h1 class="welcome-title">Gestão de Horários</h1>
+            </div>
+
+            <div class="header-right">
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-indicator"></div>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar" />
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-7 flex-col w-[70%]">
+            <div class="box-main flex">
+                <i class='bx bxs-book-bookmark text-[17pt]'></i>
+                <div class="box bg-[#eeee] w-full rounded-md" style="margin-left: 1rem;">
+                    <input type="text" placeholder="Disciplina" class="p-[10px] outline-0 w-full">
+                </div>
+            </div>
+            <div class="box-main flex">
+                <i class='bx bxs-user-plus text-[17pt]'></i>
+                <div class="box bg-[#eeee] w-full rounded-md" style="margin-left: 1rem;">
+                    <input type="text" placeholder="Docente" class="p-[10px] outline-0 w-full">
+                </div>
+            </div>
+            <div class="box-main flex">
+                <i class='bx bxs-time text-[17pt]'></i>
+                <div class="flex">
+                    <div class="flex box-main">
+                        <div class="box bg-[#eeee] w-full rounded-md" style="margin-left: 1rem;">
+                            <input type="date" placeholder="Adicione um titulo" class="p-[10px] outline-0 w-full">
+                        </div>
+                        <div class="box bg-[#eeee] w-full rounded-md" style="margin-left: 1rem;">
+                            <input type="time" placeholder="Adicione um titulo" class="p-[10px] outline-0 w-full">
+                        </div>
+                        <i class='bx bx-right-arrow-alt text-[17pt]' style="margin-left: 12px;"></i>
+                        <div class="box bg-[#eeee] w-full rounded-md" style="margin-left: 1rem;">
+                            <input type="date" placeholder="Adicione um titulo" class="p-[10px] outline-0 w-full">
+                        </div>
+                        <div class="box bg-[#eeee] w-full rounded-md" style="margin-left: 1rem;">
+                            <input type="time" placeholder="Adicione um titulo" class="p-[10px] outline-0 w-full">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                <div class="flex">
+                    <i class='bx bx-list-ul text-[20pt]'></i>
+
+                    <div class="w-full bg-[#eeee] p-2 rounded-md" style="margin-left: 0.5rem;">
+                        <div id="summernote"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='calendar'></div>
+</body>
+
+<script>
+    $('#summernote').summernote({
+        placeholder: 'Descrição',
+        tabsize: 2,
+        height: 120,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'italic', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview',]]
+        ]
+    });
+</script>
+
+
+<script>
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   var calendarEl = document.getElementById('calendar');
+
+//   var calendar = new FullCalendar.Calendar(calendarEl, {
+//     timeZone: 'UTC',
+//     initialView: 'multiMonthYear',
+//     editable: true,
+//     events: 'https://fullcalendar.io/api/demo-feeds/events.json'
+//   });
+//   calendar.render();
+// });
+
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    timeZone: 'UTC',
+    initialView: 'multiMonthYear',
+    editable: true,
+    events: 'https://fullcalendar.io/api/demo-feeds/events.json'
+  });
+
+  calendar.render();
+});
+
+</script>
+
+</html>

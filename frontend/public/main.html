@@ -1,22 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../src/styles/general.css">
-    <link rel="stylesheet" href="../src/styles/main.css">
-    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>SGH</title>
-</head>
-<body>
-    <div>
-        <div class="sidebar">
-
-        </div>
-    </div>
-</body>
-</html> -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,8 +7,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    
     <link rel="stylesheet" href="../src/styles/main.css" />
     <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <body>
@@ -35,49 +22,41 @@
     <div class="sidebar">
         <div class="logo">
             <img src="../assets/images/logo.png" alt="Logo">
-            <!-- <svg width="100" height="40" viewBox="0 0 100 40">
-                <path d="M12,15 L30,15 L24,27 L12,27 Z" fill="#4270F4" />
-                <text x="38" y="27" fill="#262A39" font-size="20" font-weight="bold">
-                    FinFlow
-                </text>
-            </svg> -->
         </div>
 
         <div class="nav-menu">
             <a href="#" class="nav-item active">
                 <i class="fas fa-home"></i>
-                <span>Home</span>
+                <span>Página Inicial</span>
             </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-user-circle"></i>
-                <span>Account</span>
-            </a>
-            <!-- <a href="#" class="nav-item">
-                <i class="fas fa-wallet"></i>
-                <span>Payments</span>
-            </a> -->
-            <a href="#" class="nav-item">
-                <i class="fas fa-sliders-h"></i>
-                <span>Preferences</span>
+            <a href="./calendar.html" class="nav-item">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span>Calendário</span>
             </a>
             <a href="#" class="nav-item">
                 <i class="fas fa-comment-dots"></i>
-                <span>Inbox</span>
+                <span>Mensagens</span>
             </a>
             <a href="#" class="nav-item">
-                <i class="fas fa-chart-line"></i>
-                <span>Insights</span>
+                <i class="fas fa-user-circle"></i>
+                <span>Conta</span>
             </a>
             <a href="#" class="nav-item">
-                <i class="fas fa-life-ring"></i>
-                <span>Help Center</span>
+                <i class="fas fa-sliders-h"></i>
+                <span>Definições</span>
+            </a>
+            
+        </div>
+        <div class="nav-menu-bottom">
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Ajuda</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Terminar Sessão</span>
             </a>
         </div>
-
-        <!-- <div class="premium-box">
-        <h3>Upgrade to Elite Plan</h3>
-        <button class="premium-btn">Try Free</button>
-      </div> -->
     </div>
 
     <!-- Main Content -->
@@ -94,11 +73,6 @@
                     <i class="fas fa-bell"></i>
                     <div class="notification-indicator"></div>
                 </div>
-
-                <div class="user-profile">
-                    <img src="https://i.pravatar.cc/100?img=8" alt="Alex Morgan" class="profile-pic" />
-                </div>
-
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Pesquisar" />
@@ -114,27 +88,27 @@
                 <div class="transfer-cards">
                     <div class="transfer-card">
                         <div class="card-icon">
-                            <i class="fas fa-credit-card"></i>
+                            <i class="fa-solid fa-clock-rotate-left"></i>
                         </div>
-                        <p class="card-title">Digital Payments</p>
-                        <h2 class="card-amount">$1,875</h2>
+                        <p class="card-title">Horários Feitos</p>
+                        <h2 class="card-amount">75</h2>
                     </div>
 
                     <div class="transfer-card">
                         <div class="card-icon">
-                            <i class="fas fa-exchange-alt"></i>
+                            <i class="fa-solid fa-users"></i>
                         </div>
-                        <p class="card-title">External Transfers</p>
-                        <h2 class="card-amount">$263</h2>
+                        <p class="card-title">Docentes</p>
+                        <h2 class="card-amount">48</h2>
                     </div>
 
-                    <div class="transfer-card">
+                    <!-- <div class="transfer-card">
                         <div class="card-icon">
                             <i class="fas fa-university"></i>
                         </div>
                         <p class="card-title">Domestic Transfers</p>
                         <h2 class="card-amount">$394</h2>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Promo Card -->
@@ -174,7 +148,7 @@
           </div> -->
 
                 <!-- Transaction & Transfer Sections -->
-                <div class="transaction-section">
+                <!-- <div class="transaction-section">
                     <div class="transaction-card">
                         <h3 class="section-title">Recent Expenses</h3>
 
@@ -235,11 +209,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Dashboard Sidebar -->
             <div class="dashboard-sidebar">
-                <div class="savings-card">
+                <!-- <div class="savings-card">
                     <h3 class="savings-title">Monthly Savings</h3>
                     <div class="savings-amount">$467.5</div>
 
@@ -276,7 +250,7 @@
                         <div class="month">Feb</div>
                         <div class="month">Mar</div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- <div class="plan-card">
             <div class="plan-info">
@@ -292,5 +266,4 @@
         </div>
     </div>
 </body>
-
 </html>
