@@ -5,7 +5,8 @@
   font-style: normal;
 }
 
-body, html {
+body,
+html {
   font-family: "AfacadFlux", sans-serif;
   font-weight: 400;
   background-color: #f5f7ff;
@@ -23,8 +24,35 @@ body, html {
   flex-direction: column;
   width: 300px;
   padding: 20px;
-  background-color: #072946;
-  box-shadow: 0 5px 9px rgba(87, 89, 90, 0.8);
-  border-radius: 10px;
+  background: linear-gradient(
+    #072946 0%,
+    #072946 40%,
+    #0e2b58 60%,
+    #0e2b58 70%,
+    #182c6a 100%
+  );
+  border-right: 1px solid var(--gray-medium);
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 80;
+  box-shadow: 5px 0 20px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  position: relative;
+  border-radius: 12px;
   padding-bottom: 45px;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  bottom: -200px;
+  left: -200px;
+  pointer-events: none;
 }

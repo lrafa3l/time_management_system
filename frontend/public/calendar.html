@@ -55,14 +55,14 @@
                 <i class="fas fa-user-circle"></i>
                 <span>Conta</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="./setting.html" class="nav-item">
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
 
         </div>
         <div class="nav-menu-bottom">
-            <a href="#" class="nav-item">
+            <a href="./help.html" class="nav-item">
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Ajuda</span>
             </a>
@@ -109,42 +109,6 @@
             </div>
             <div class="box-main flex">
                 <i class='bx bxs-time text-[17pt]'></i>
-                <style>
-                    /* Hide the default icons for date and time inputs */
-                    input[type="date"]::-webkit-calendar-picker-indicator,
-                    input[type="time"]::-webkit-calendar-picker-indicator {
-                        display: none;
-                    }
-
-                    /* Ensure the inputs still look good */
-                    input[type="date"],
-                    input[type="time"] {
-                        appearance: none;
-                        -webkit-appearance: none;
-                        background: transparent;
-                        padding: 10px;
-                        outline: none;
-                        width: 100%;
-                        text-align: center;
-                        border: 1px solid #ccc;
-                        /* Optional: Add a border */
-                        border-radius: 4px;
-                        /* Optional: Add rounded corners */
-                        cursor: pointer;
-                        /* Show pointer cursor to indicate interactivity */
-                    }
-
-                    /* Style the arrow icon */
-                    .bx {
-                        cursor: pointer;
-                        transition: color 0.3s ease;
-                    }
-
-                    .bx:hover {
-                        color: #71e0bf;
-                        /* Change color on hover */
-                    }
-                </style>
                 <div class="flex">
                     <div class="flex box-main">
                         <!-- Date Input -->
@@ -184,49 +148,13 @@
         </div>
         <div id='calendar'></div>
 </body>
-<style>
-    /* Style the editor */
-    .note-editor {
-        background-color: #eeee;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-
-    /* Style the toolbar */
-    .note-toolbar {
-        background-color: #295983;
-        border-bottom: 1px solid #ddd;
-    }
-
-    /* Style the editable area */
-    .note-editable {
-        font-family: 'Arial', sans-serif;
-        font-size: 18px;
-        color: #0f2a65;
-    }
-
-    /* Style the placeholder text */
-    .note-placeholder {
-        color: #999;
-        font-style: italic;
-    }
-
-    .note-btn {
-        background-color: #072946;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 5px 10px;
-        margin: 2px;
-    }
-
-    .note-btn:hover {
-        background-color: #072946;
-        color: #81ffd9;
-    }
-</style>
 <script>
-    $('#summernote').summernote({
+
+</script>
+
+<script>
+
+$('#summernote').summernote({
         placeholder: 'Descrição',
         tabsize: 4,
         height: 300,
@@ -238,9 +166,6 @@
             ['view', ['fullscreen', 'codeview',]]
         ]
     });
-</script>
-
-<script>
     // Function to format the current date as YYYY-MM-DD
     function getCurrentDate() {
             const now = new Date();

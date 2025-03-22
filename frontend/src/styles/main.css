@@ -17,6 +17,7 @@
   --header-height: 80px;
   --border-radius: 18px;
   --dark-blue: #072946;
+  --bluie: #262a39;
 }
 
 @font-face {
@@ -165,6 +166,7 @@ body {
   background: linear-gradient(45deg, var(--text-primary), var(--primary-color));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
 }
 
 .header-right {
@@ -348,7 +350,7 @@ body {
 .card-amount {
   font-size: 26px;
   font-weight: 700;
-  background: linear-gradient(45deg, #262a39, #072946);
+  background: linear-gradient(45deg, var(--bluie), var(--dark-blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -358,6 +360,7 @@ body {
   display: grid;
   grid-template-columns: 3fr 1.2fr;
   gap: 30px;
+  margin-top: 45px;
 }
 
 .dashboard-main {
@@ -371,15 +374,29 @@ body {
   grid-template-columns: repeat(2, 1fr);
   gap: 25px;
 }
-.transaction-card,
+.activity,
 .plan-card {
   background-color: var(--white);
   border-radius: var(--border-radius);
   padding: 25px;
   box-shadow: var(--card-shadow);
 }
+
+.activity
+ {
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+ }
+
+ .activities-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
 .plan-card {
-  background: linear-gradient(135deg, #182c6a, #072946);
+  background: linear-gradient(135deg, #182c6a, var(--dark-blue));
   color: var(--primary-color);
   display: flex;
   align-items: center;
@@ -416,7 +433,7 @@ body {
   left: 0;
   border-radius: 3px;
 }
-.transaction-item {
+.activity-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -427,15 +444,15 @@ body {
   cursor: pointer;
   position: relative;
 }
-.transaction-item:hover {
+.activity-item:hover {
   transform: translateX(5px);
 }
-.transaction-item:last-child {
+.activity-item:last-child {
   margin-bottom: 0;
   padding-bottom: 0;
   border-bottom: none;
 }
-.transaction-icon {
+.activity-icon {
   width: 45px;
   height: 45px;
   border-radius: 12px;
@@ -447,33 +464,33 @@ body {
   font-size: 18px;
   transition: all 0.3s ease;
 }
-.transaction-item:hover .transaction-icon {
+.activity-item:hover .activity-icon {
   transform: scale(1.1);
   background-color: var(--primary-light);
   color: var(--primary-color);
 }
-.transaction-icon img {
+.activity-icon img {
   width: 100%;
   height: 100%;
   border-radius: 12px;
   object-fit: cover;
 }
-.transaction-content {
+.activity-content {
   flex: 1;
   margin-left: 15px;
 }
-.transaction-title {
+.activity-title {
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 5px;
 }
-.transaction-time {
+.activity-time {
   color: var(--text-secondary);
   font-size: 13px;
   display: flex;
   align-items: center;
 }
-.transaction-time i {
+.activity-time i {
   margin-right: 5px;
   font-size: 12px;
 }
@@ -482,14 +499,8 @@ body {
   font-size: 17px;
   transition: all 0.2s ease;
 }
-.transaction-item:hover .transaction-amount {
+.activity-item:hover .transaction-amount {
   transform: scale(1.1);
-}
-.transaction-amount.negative {
-  color: var(--danger);
-}
-.transaction-amount.positive {
-  color: var(--success);
 }
 
 /* Plan Card */
