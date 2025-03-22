@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,11 +9,12 @@
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    
+
     <link rel="stylesheet" href="../src/styles/main.css" />
     <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 </head>
 
 <body>
@@ -45,14 +45,14 @@
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
-            
+
         </div>
         <div class="nav-menu-bottom">
-            <a href="#" class="nav-item">
+            <a href="./help.html" class="nav-item">
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Ajuda</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="./auth.html" class="nav-item">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Terminar Sessão</span>
             </a>
@@ -79,22 +79,38 @@
                 </div>
             </div>
         </div>
+        <div class="new-event">
+            <div class="new-content">
+                <a href="#" class="event-item">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Adicionar Horário(s)</span>
+                </a>
+                <a href="#" class="event-item">
+                    <i class="fa-solid fa-trash"></i>
+                    <span>Deletar Horário(s)</span>
+                </a>
+                <a href="#" class="event-item">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Editar Horário(s)</span>
+                </a>
+            </div>
+        </div>
 
         <!-- Dashboard Container -->
         <div class="dashboard-container">
             <!-- Main Dashboard Content -->
             <div class="dashboard-main">
-                <!-- Transfer Cards -->
-                <div class="transfer-cards">
-                    <div class="transfer-card">
+                <!-- Cards Sections -->
+                <div class="cards-section">
+                    <div class="card-section">
                         <div class="card-icon">
                             <i class="fa-solid fa-clock-rotate-left"></i>
                         </div>
                         <p class="card-title">Horários Feitos</p>
-                        <h2 class="card-amount">75</h2>
+                        <h2 class="card-amount">76</h2>
                     </div>
 
-                    <div class="transfer-card">
+                    <div class="card-section">
                         <div class="card-icon">
                             <i class="fa-solid fa-users"></i>
                         </div>
@@ -102,168 +118,76 @@
                         <h2 class="card-amount">48</h2>
                     </div>
 
-                    <!-- <div class="transfer-card">
+                    <div class="card-section">
                         <div class="card-icon">
-                            <i class="fas fa-university"></i>
+                            <i class='fas fa-chalkboard-teacher'></i>
                         </div>
-                        <p class="card-title">Domestic Transfers</p>
-                        <h2 class="card-amount">$394</h2>
-                    </div> -->
+                        <p class="card-title">Turmas</p>
+                        <h2 class="card-amount">25</h2>
+                    </div>
                 </div>
-
-                <!-- Promo Card -->
-                <!-- <div class="promo-card">
-            <div class="promo-info">
-              <h2 class="promo-title">Smart money management</h2>
-              <p class="promo-desc">
-                Experience global transactions with zero hidden charges. Secure,
-                transfer and manage your finances with confidence.
-              </p>
-              <button class="promo-btn">Explore Features</button>
-            </div>
-
-            <div class="credit-card">
-              <div class="card-overlay"></div>
-              <div class="card-brand">
-                <div class="card-type">Platinum Edge</div>
-                <div class="card-logo">
-                  <div class="card-logo-circle"></div>
-                  <div class="card-logo-circle"></div>
-                </div>
-              </div>
-
-              <div class="card-number">4832 7691 2450 8115</div>
-
-              <div class="card-details">
-                <div class="card-holder">
-                  <div class="card-holder-label">CARD HOLDER</div>
-                  <div class="card-holder-name">Alexander Morgan</div>
-                </div>
-                <div class="card-expiry">
-                  <div class="card-expiry-label">EXPIRES</div>
-                  <div class="card-expiry-date">09/27</div>
-                </div>
-              </div>
-            </div>
-          </div> -->
 
                 <!-- Transaction & Transfer Sections -->
-                <!-- <div class="transaction-section">
+                 <!-- Recent Activities Sections -->
+                <div class="activity-section">
                     <div class="transaction-card">
-                        <h3 class="section-title">Recent Expenses</h3>
+                        <h3 class="section-title">Actividades Recentes</h3>
 
                         <div class="transaction-item">
                             <div class="transaction-icon">
-                                <i class="fas fa-hamburger"></i>
+                                <i class="fa-solid fa-pen-to-square"></i>
                             </div>
                             <div class="transaction-content">
-                                <div class="transaction-title">Dining Out</div>
+                                <div class="transaction-title">Turma GSI13BT</div>
                                 <div class="transaction-time">
                                     <i class="far fa-clock"></i> Today, 14:45
                                 </div>
                             </div>
-                            <div class="transaction-amount negative">-$78</div>
+                            <div class="transaction-amount positive">1</div>
                         </div>
 
                         <div class="transaction-item">
                             <div class="transaction-icon">
-                                <i class="fas fa-tshirt"></i>
+                                <i class="fa-solid fa-trash"></i>
                             </div>
                             <div class="transaction-content">
-                                <div class="transaction-title">Retail Purchase</div>
+                                <div class="transaction-title">Turma GSI12AM</div>
                                 <div class="transaction-time">
                                     <i class="far fa-clock"></i> Yesterday, 16:08
                                 </div>
                             </div>
-                            <div class="transaction-amount negative">-$125</div>
-                        </div>
-                    </div>
-
-                    <div class="transaction-card">
-                        <h3 class="section-title">Your Connections</h3>
-
-                        <div class="transaction-item">
-                            <div class="transaction-icon">
-                                <img src="https://i.pravatar.cc/100?img=12" alt="Lisa Johnson" />
-                            </div>
-                            <div class="transaction-content">
-                                <div class="transaction-title">Lisa Johnson</div>
-                                <div class="transaction-time">
-                                    <i class="far fa-clock"></i> Today, 09:35
-                                </div>
-                            </div>
-                            <div class="transaction-amount positive">+$85</div>
+                            <div class="transaction-amount negative">-1</div>
                         </div>
 
                         <div class="transaction-item">
                             <div class="transaction-icon">
-                                <img src="https://i.pravatar.cc/100?img=11" alt="Michael Torres" />
+                                <i class="fa-solid fa-trash"></i>
                             </div>
                             <div class="transaction-content">
-                                <div class="transaction-title">Michael Torres</div>
+                                <div class="transaction-title">Turma GSI12AM</div>
                                 <div class="transaction-time">
-                                    <i class="far fa-clock"></i> Monday, 17:45
+                                    <i class="far fa-clock"></i> Yesterday, 16:08
                                 </div>
                             </div>
-                            <div class="transaction-amount negative">-$42</div>
+                            <div class="transaction-amount negative">-1</div>
                         </div>
                     </div>
                 </div>
-            </div> -->
-
+            </div>
             <!-- Dashboard Sidebar -->
             <div class="dashboard-sidebar">
-                <!-- <div class="savings-card">
-                    <h3 class="savings-title">Monthly Savings</h3>
-                    <div class="savings-amount">$467.5</div>
-
-                    <div class="time-filter">
-                        <button class="time-option">Daily</button>
-                        <button class="time-option">Weekly</button>
-                        <button class="time-option active">Monthly</button>
-                        <button class="time-option">Annual</button>
+                <div class="plan-card">
+                    <div class="plan-info">
+                        <div class="plan-title">O Melhor de 2025</div>
+                        <div class="plan-status">Capturando...</div>
                     </div>
-
-                    <div class="chart-container">
-                        <svg class="chart" viewBox="0 0 300 100" preserveAspectRatio="none">
-                            <defs>
-                                <linearGradient id="gradientFill" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#4270F4" stop-opacity="0.7" />
-                                    <stop offset="100%" stop-color="#4270F4" stop-opacity="0.1" />
-                                </linearGradient>
-                            </defs>
-                            <path class="chart-line-path"
-                                d="M0,80 C20,70 40,30 60,60 C80,90 100,40 120,30 C140,20 160,50 180,20 C200,30 220,60 240,80 C260,60 280,40 300,60">
-                            </path>
-                            <path class="chart-area"
-                                d="M0,80 C20,70 40,30 60,60 C80,90 100,40 120,30 C140,20 160,50 180,20 C200,30 220,60 240,80 C260,60 280,40 300,60 L300,100 L0,100 Z">
-                            </path>
-                            <circle cx="180" cy="20" r="6" fill="#4270F4" stroke="#ffffff" stroke-width="3" />
-                        </svg>
+                    <div class="plan-progress">
+                        <div class="plan-percentage">68%</div>
                     </div>
-
-                    <div class="timeline">
-                        <div class="month">Oct</div>
-                        <div class="month">Nov</div>
-                        <div class="month active">Dec</div>
-                        <div class="month">Jan</div>
-                        <div class="month">Feb</div>
-                        <div class="month">Mar</div>
-                    </div>
-                </div> -->
-
-                <!-- <div class="plan-card">
-            <div class="plan-info">
-              <div class="plan-title">Budget Goal Q1 2025</div>
-              <div class="plan-status">On Track</div>
-            </div>
-
-            <div class="plan-progress">
-              <div class="plan-percentage">68%</div>
-            </div>
-          </div> -->
+                </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

@@ -6,29 +6,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-
-    <link rel="stylesheet" href="../src/styles/calendar.css" />
-
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../src/styles/new_event.css" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
-
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js'></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
-
-    <!-- Jcalendar -->
-    <link rel="stylesheet" href="dist/calendar.js.css">
-    <script src="dist/calendar.js"></script>
-
-    <link rel="stylesheet" href="../src/styles/main.css" />
-    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -62,7 +48,7 @@
 
         </div>
         <div class="nav-menu-bottom">
-            <a href="#" class="nav-item">
+            <a href="./help.html" class="nav-item">
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Ajuda</span>
             </a>
@@ -109,42 +95,6 @@
             </div>
             <div class="box-main flex">
                 <i class='bx bxs-time text-[17pt]'></i>
-                <style>
-                    /* Hide the default icons for date and time inputs */
-                    input[type="date"]::-webkit-calendar-picker-indicator,
-                    input[type="time"]::-webkit-calendar-picker-indicator {
-                        display: none;
-                    }
-
-                    /* Ensure the inputs still look good */
-                    input[type="date"],
-                    input[type="time"] {
-                        appearance: none;
-                        -webkit-appearance: none;
-                        background: transparent;
-                        padding: 10px;
-                        outline: none;
-                        width: 100%;
-                        text-align: center;
-                        border: 1px solid #ccc;
-                        /* Optional: Add a border */
-                        border-radius: 4px;
-                        /* Optional: Add rounded corners */
-                        cursor: pointer;
-                        /* Show pointer cursor to indicate interactivity */
-                    }
-
-                    /* Style the arrow icon */
-                    .bx {
-                        cursor: pointer;
-                        transition: color 0.3s ease;
-                    }
-
-                    .bx:hover {
-                        color: #71e0bf;
-                        /* Change color on hover */
-                    }
-                </style>
                 <div class="flex">
                     <div class="flex box-main">
                         <!-- Date Input -->
@@ -184,47 +134,6 @@
         </div>
         <div id='calendar'></div>
 </body>
-<style>
-    /* Style the editor */
-    .note-editor {
-        background-color: #eeee;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-
-    /* Style the toolbar */
-    .note-toolbar {
-        background-color: #295983;
-        border-bottom: 1px solid #ddd;
-    }
-
-    /* Style the editable area */
-    .note-editable {
-        font-family: 'Arial', sans-serif;
-        font-size: 18px;
-        color: #0f2a65;
-    }
-
-    /* Style the placeholder text */
-    .note-placeholder {
-        color: #999;
-        font-style: italic;
-    }
-
-    .note-btn {
-        background-color: #072946;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 5px 10px;
-        margin: 2px;
-    }
-
-    .note-btn:hover {
-        background-color: #072946;
-        color: #81ffd9;
-    }
-</style>
 <script>
     $('#summernote').summernote({
         placeholder: 'Descrição',
@@ -243,54 +152,37 @@
 <script>
     // Function to format the current date as YYYY-MM-DD
     function getCurrentDate() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-            const day = String(now.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
-        // Function to format the current time as HH:MM
-        function getCurrentTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
+    // Function to format the current time as HH:MM
+    function getCurrentTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
 
-        // Set the default values for the inputs
-        document.getElementById('startDate').value = getCurrentDate();
-        document.getElementById('startTime').value = getCurrentTime();
-        document.getElementById('endDate').value = getCurrentDate();
-        document.getElementById('endTime').value = getCurrentTime();
+    // Set the default values for the inputs
+    document.getElementById('startDate').value = getCurrentDate();
+    document.getElementById('startTime').value = getCurrentTime();
+    document.getElementById('endDate').value = getCurrentDate();
+    document.getElementById('endTime').value = getCurrentTime();
 
-        // Open the date/time picker when the input is clicked or focused
-        document.querySelectorAll('input[type="date"], input[type="time"]').forEach(input => {
-            input.addEventListener('click', () => {
-                input.showPicker(); // Open the native picker
-            });
-
-            input.addEventListener('focus', () => {
-                input.showPicker(); // Open the native picker
-            });
+    // Open the date/time picker when the input is clicked or focused
+    document.querySelectorAll('input[type="date"], input[type="time"]').forEach(input => {
+        input.addEventListener('click', () => {
+            input.showPicker(); // Open the native picker
         });
-</script>
 
-<script>
-
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     var calendarEl = document.getElementById('calendar');
-
-        //     var calendar = new FullCalendar.Calendar(calendarEl, {
-        //         timeZone: 'UTC',
-        //         initialView: 'multiMonthYear',
-        //         editable: true,
-        //         events: 'https://fullcalendar.io/api/demo-feeds/events.json'
-        //     });
-
-        //     calendar.render();
-        // });
-
+        input.addEventListener('focus', () => {
+            input.showPicker(); // Open the native picker
+        });
+    });
 </script>
 
 </html>
