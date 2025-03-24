@@ -290,14 +290,14 @@ body {
   text-align: center;
 }
 
-/* Estilo do dropdown */
+/* Dropdown Styles */
 .dropdown {
   position: relative;
   display: inline-block;
 }
 
 .dropdown-btn {
-  background: var(--primary-light);;
+  background: var(--primary-light);
   border: none;
   cursor: pointer;
   display: flex;
@@ -316,11 +316,10 @@ body {
   z-index: 1;
   border-radius: 5px;
   overflow: hidden;
-  position: fixed;
 }
 
 .dropdown-content a {
-  color: var(--dark-blue);
+  color: #333;
   padding: 10px 15px;
   text-decoration: none;
   display: block;
@@ -337,62 +336,28 @@ body {
 }
 
 /* Modal Styles */
-/* .modal-overlay {
+.modal {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1000;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-}
-
-.modal-container {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-}
-
-.close-modal {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-} */
-
-/* Modal Styles - Não interfere com o layout principal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  overflow: auto;
 }
 
 .modal-dialog {
-  background-color: #fff;
-  margin: 5% auto;
-  padding: 20px;
+  background: var(--gray-medium);
   border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 90%;
-  max-width: 700px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  position: relative;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .modal-header {
@@ -405,18 +370,65 @@ body {
 .close-modal {
   font-size: 28px;
   cursor: pointer;
-  color: #aaa;
+  background: none;
+  border: none;
+  color: #666;
 }
 
-.close-modal:hover {
-  color: #333;
+/* Modal Form styling */
+.modal-body .form-group {
+  margin-bottom: 15px;
 }
 
-/* Evita que o body scroll quando o modal está aberto */
+.modal-body label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.modal-body input,
+.modal-body select {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus {
+  border-color: var(--primary-light);
+  outline: none;
+}
+
+select:focus {
+  border-color: var(--primary-light);
+  outline: none;
+}
+
+option {
+  background-color: var(--primary-light);
+  color: var(--primary-cyan);
+}
+
+.modal-body button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background: var(--primary-light);
+  color: var(--primary-cyan);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-body button[type="submit"]:hover {
+  background: #235e91;
+  font-weight: bold;
+}
+
 body.modal-open {
   overflow: hidden;
 }
-
 
 /* Card Section */
 .cards-section {
