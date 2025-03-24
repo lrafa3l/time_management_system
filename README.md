@@ -1,14 +1,12 @@
 # Sistema de Gestão de Horários
 
-O **Sistema de Gestão de Horários** é uma aplicação web desenvolvida para facilitar a organização e o gerenciamento de horários de equipes, salas, recursos ou eventos. Com uma interface intuitiva, o sistema permite a criação, edição e visualização de agendas de forma eficiente.
+O **Sistema de Gestão de Horários** é uma aplicação web desenvolvida para facilitar a organização e o gerenciamento dos professores e das turmas. Com uma interface intuitiva, o sistema permite a criação, edição e visualização de horários de forma eficiente.
 
 ## Funcionalidades Principais
 
 - **Cadastro de Usuários**: Diferentes níveis de acesso (administrador, gestor, usuário comum).
-- **Gestão de Horários**: Criação e edição de horários para equipes e salas.
-- **Agendamento**: Reserva de horários para eventos, reuniões ou atividades específicas.
-- **Notificações**: Alertas por e-mail ou no sistema sobre horários agendados ou alterações.
-- **Relatórios**: Geração de relatórios de utilização de recursos ou horários.
+- **Gestão de Horários**: Criação e edição de horários para as turmas e professores.
+- **Relatórios**: Geração de relatórios de utilização de horários.
 - **Integração**: Possibilidade de integração com calendários externos (Google Calendar, Outlook, etc.).
 
 ## Tecnologias Utilizadas
