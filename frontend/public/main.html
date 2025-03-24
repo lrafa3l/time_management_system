@@ -78,7 +78,7 @@
         <div class="new-event">
             <div class="new-content">
                 <a href="#" class="event-item">
-                    <i class="fa-solid fa-plus"></i>
+                    <i class="fa-solid fa-calendar-plus"></i>
                     <span>Adicionar Horário(s)</span>
                 </a>
                 <a href="#" class="event-item">
@@ -89,7 +89,108 @@
                     <i class="fa-solid fa-pen-to-square"></i>
                     <span>Editar Horário(s)</span>
                 </a>
+                
+                
             </div>
+            <!-- <div class="new">
+                <a href="./new.html" class="event-item">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Cadastrar</span>
+                </a>
+            </div> -->
+
+            <!-- <div class="new">
+                <div class="dropdown">
+                    <button class="dropdown-btn event-item">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Cadastrar</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="./cadastro_curso.html">Cadastrar Curso</a>
+                        <a href="./cadastro_sala.html">Cadastrar Sala</a>
+                        <a href="./cadastro_turma.html">Cadastrar Turma</a>
+                        <a href="./cadastro_professor.html">Cadastrar Professor</a>
+                        <a href="./cadastro_disciplina.html">Cadastrar Disciplina</a>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- <div class="new">
+                <div class="dropdown">
+                    <button class="dropdown-btn event-item">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Cadastrar</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#" data-modal="curso">Cadastrar Curso</a>
+                        <a href="#" data-modal="sala">Cadastrar Sala</a>
+                        <a href="#" data-modal="turma">Cadastrar Turma</a>
+                        <a href="#" data-modal="professor">Cadastrar Professor</a>
+                        <a href="#" data-modal="disciplina">Cadastrar Disciplina</a>
+                    </div>
+                </div>
+            </div> -->
+            
+            <!-- Modal Overlay -->
+            <!-- <div class="modal-overlay" id="modalOverlay">
+                <div class="modal-container">
+                    <button class="close-modal">&times;</button>
+                    <div class="modal-forms">
+                        <div class="modal-form" id="curso-form">
+                            <h2>Cadastrar Curso</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="curso-nome">Nome do Curso:</label>
+                                    <input type="text" id="curso-nome" required>
+                                </div>
+                                <button type="submit">Salvar</button>
+                            </form>
+                        </div>
+                        
+                        <div class="modal-form" id="sala-form">
+                            <h2>Cadastrar Sala</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="sala-nome">Nome da Sala:</label>
+                                    <input type="text" id="sala-nome" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sala-capacidade">Capacidade:</label>
+                                    <input type="number" id="sala-capacidade" required>
+                                </div>
+                                <button type="submit">Salvar</button>
+                            </form>
+                        </div>
+                </div>
+            </div> -->
+
+            <div class="new">
+                <div class="dropdown">
+                    <button class="dropdown-btn event-item">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Cadastrar</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#" class="modal-trigger" data-form="curso">Cadastrar Curso</a>
+                        <a href="#" class="modal-trigger" data-form="sala">Cadastrar Sala</a>
+                        <!-- Adicione outros itens conforme necessário -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Structure -->
+            <div id="formModal" class="modal">
+                <div class="modal-dialog">
+                    <div class="modal-header">
+                        <h3 id="modalTitle">Cadastrar</h3>
+                        <span class="close-modal">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <!-- O conteúdo do formulário será injetado aqui -->
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Dashboard Container -->
@@ -145,7 +246,30 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </div>
                                 <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
+                                    <div class="activity-title deleted">Turma GSI12AM</div>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> Yesterday, 16:08
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fa-solid fa-calendar-plus"></i>
+                                </div>
+                                <div class="activity-content ">
+                                    <div class="activity-title added">Turma GSI12AM</div>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> Yesterday, 16:08
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fa-solid fa-trash"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title deleted">Turma GSI12AM</div>
                                     <div class="activity-time">
                                         <i class="far fa-clock"></i> Yesterday, 16:08
                                     </div>
@@ -157,18 +281,7 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </div>
                                 <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
-                                    <div class="activity-time">
-                                        <i class="far fa-clock"></i> Yesterday, 16:08
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fa-solid fa-trash"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
+                                    <div class="activity-title deleted">Turma GSI12AM</div>
                                     <div class="activity-time">
                                         <i class="far fa-clock"></i> Yesterday, 16:08
                                     </div>
@@ -180,19 +293,7 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </div>
                                 <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
-                                    <div class="activity-time">
-                                        <i class="far fa-clock"></i> Yesterday, 16:08
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fa-solid fa-trash"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
+                                    <div class="activity-title deleted">Turma GSI12AM</div>
                                     <div class="activity-time">
                                         <i class="far fa-clock"></i> Yesterday, 16:08
                                     </div>
@@ -218,5 +319,159 @@
         </div>
     </div>
 </body>
+<script>
+    document.querySelector('.dropdown-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    this.parentElement.classList.toggle('active');
+});
 
+// Fechar o dropdown se clicar fora dele
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.dropdown')) {
+        document.querySelector('.dropdown').classList.remove('active');
+    }
+});
+
+// Modal Section
+// document.addEventListener('DOMContentLoaded', function() {
+//     const modalOverlay = document.getElementById('modalOverlay');
+//     const modalContent = document.getElementById('modalContent');
+//     const dropdownLinks = document.querySelectorAll('.dropdown-content a');
+    
+//     // Close modal
+//     document.querySelector('.close-modal').addEventListener('click', closeModal);
+//     modalOverlay.addEventListener('click', function(e) {
+//         if (e.target === modalOverlay) {
+//             closeModal();
+//         }
+//     });
+    
+//     // Handle dropdown link clicks
+//     dropdownLinks.forEach(link => {
+//         link.addEventListener('click', function(e) {
+//             e.preventDefault();
+//             const formType = this.getAttribute('data-modal');
+//             loadForm(formType);
+//             openModal();
+//         });
+//     });
+    
+//     function openModal() {
+//         document.body.classList.add('modal-open');
+//         modalOverlay.style.display = 'flex';
+//     }
+    
+//     function closeModal() {
+//         document.body.classList.remove('modal-open');
+//         modalOverlay.style.display = 'none';
+//     }
+    
+//     function loadForm(formType) {
+//         // Here you would load the appropriate form content
+//         // For now, we'll just show a placeholder
+//         modalContent.innerHTML = `
+//             <h2>Cadastrar ${formType.charAt(0).toUpperCase() + formType.slice(1)}</h2>
+//             <form id="${formType}-form">
+//                 <!-- Form fields would go here -->
+//                 <div class="form-group">
+//                     <label for="nome">Nome:</label>
+//                     <input type="text" id="nome" name="nome" required>
+//                 </div>
+//                 <!-- Additional fields would be specific to each form type -->
+//                 <button type="submit">Salvar</button>
+//             </form>
+//         `;
+        
+//         // Add form submission handler
+//         document.getElementById(`${formType}-form`).addEventListener('submit', function(e) {
+//             e.preventDefault();
+//             // Handle form submission here
+//             alert(`Formulário de ${formType} enviado!`);
+//             closeModal();
+//         });
+//     }
+//});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('formModal');
+    const modalBody = document.querySelector('.modal-body');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    // Fechar modal
+    document.querySelector('.close-modal').addEventListener('click', closeModal);
+    window.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+    });
+    
+    // Abrir modal com o formulário correto
+    document.querySelectorAll('.modal-trigger').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const formType = this.getAttribute('data-form');
+            loadForm(formType);
+            openModal();
+        });
+    });
+    
+    function openModal() {
+        document.body.classList.add('modal-open');
+        modal.style.display = 'block';
+    }
+    
+    function closeModal() {
+        document.body.classList.remove('modal-open');
+        modal.style.display = 'none';
+    }
+    
+    function loadForm(formType) {
+        // Atualiza o título
+        modalTitle.textContent = `Cadastrar ${formType.charAt(0).toUpperCase() + formType.slice(1)}`;
+        
+        // Aqui você pode carregar formulários diferentes para cada tipo
+        let formHTML = '';
+        
+        switch(formType) {
+            case 'curso':
+                formHTML = `
+                    <form id="cursoForm">
+                        <div class="form-group">
+                            <label for="nomeCurso">Nome do Curso</label>
+                            <input type="text" id="nomeCurso" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar</button>
+                    </form>
+                `;
+                break;
+                
+            case 'sala':
+                formHTML = `
+                    <form id="salaForm">
+                        <div class="form-group">
+                            <label for="nomeSala">Nome da Sala</label>
+                            <input type="text" id="nomeSala" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="capacidade">Capacidade</label>
+                            <input type="number" id="capacidade" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar</button>
+                    </form>
+                `;
+                break;
+            // Adicione outros casos conforme necessário
+        }
+        
+        modalBody.innerHTML = formHTML;
+        
+        // Adiciona handler para o formulário carregado
+        document.getElementById(`${formType}Form`)?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Lógica para salvar os dados
+            alert(`Dados de ${formType} salvos com sucesso!`);
+            closeModal();
+        });
+    }
+});
+
+</script>
 </html>

@@ -14,7 +14,7 @@ document.getElementById('signup-form').addEventListener('submit', async (event) 
 
     // Send data to the back-end
     try {
-        const response = await fetch('http://127.0.0.1:5000/register', {
+        const response = await fetch('http://127.0.0.1:5501/main.html', {
             method: 'POST', // Change method to POST
             headers: {
                 'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ document.getElementById('signup-form').addEventListener('submit', async (event) 
 
         if (response.ok) {
             alert('Account created successfully!');
-            window.location.href = './auth.html'; // Redirect to login page
+            window.location.href = '../public/auth.html'; // Redirect to login page
         } else {
             alert(data.error || 'Failed to create account');
         }
