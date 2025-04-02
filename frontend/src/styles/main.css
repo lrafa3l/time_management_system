@@ -316,6 +316,7 @@ body {
   z-index: 1;
   border-radius: 5px;
   overflow: hidden;
+  position: fixed;
 }
 
 .dropdown-content a {
