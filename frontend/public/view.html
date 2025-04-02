@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horário do Professor</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.5cm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .left-header {
+      width: 60%;
+    }
+
+    .right-header {
+      width: 30%;
+      text-align: center;
+      font-size: 10px;
+    }
+
+    .logo {
+      width: 60px;
+      height: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      margin-bottom: 5px;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 6px;
+      text-align: center;
+    }
+
+    .header-table {
+      width: 100%;
+      border: none;
+    }
+
+    .header-table td {
+      border: none;
+      vertical-align: middle;
+    }
+
+    .info-row td {
+      text-align: left;
+      padding: 3px;
+    }
+
+    .observation {
+      margin-top: 5px;
+      font-size: 10px;
+    }
+
+    .signature {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 10px;
+    }
+
+    .signature-box {
+      text-align: center;
+      width: 45%;
+    }
+
+    .signature-line {
+      border-top: 1px solid black;
+      margin: 5px 0;
+    }
+
+    @media print {
+      body {
+        width: 210mm;
+        height: 297mm;
+        padding: 0;
+        margin: 0;
+      }
+
+      .container {
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      table {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <table class="header-table" style="margin-bottom: 1.2cm;">
+      <tr>
+        <td style="width: 40%; vertical-align: left;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <h3 style="margin-bottom: 8px; font-size: 10px;">Visto do Director</h3>
+            <h3 style="margin: 0; border-bottom: 0.6px solid black; width: 60%; font-size: 10px;">&nbsp;</h3>
+            <h3 style="margin-top: 6px; font-size: 10px;"><b>Ferreira Manuel Fragoso Ph, D</b></h3>
+          </div>
+        </td>
+        <td style="width: 60%; text-align: center; vertical-align: middle;">
+          <div class="right-header">
+            <img src="../assets/images/ins.png" class="logo" alt="Logo">
+            <h1 style="margin: 3px 0; font-size: 10px;">REPÚBLICA DE ANGOLA</h1>
+            <h2 style="margin: 3px 0; font-size: 10px;">MINISTÉRIO DA EDUCAÇÃO</h2>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td style="width: 15%;">
+          <span>ANO LECTIVO <b>2023/2024</b></span>
+        </td>
+        <td colspan="11" style="text-align: center;">
+          <span>INSTITUTO POLITÉCNICO INDUSTRIAL DO KILAMBA KIAXI Nº 8056 "NOVA VIDA"</span>
+          <div style="font-weight: bold; margin-top: 10px;">HORÁRIO DO PROFESSOR</div>
+        </td>
+      </tr>
+      <!-- Rest of your table content remains the same -->
+      <tr class="info-row">
+        <td colspan="12">
+          <div><span>NOME:</span> <span>DIASSIUJA PAULO</span></div>
+          <div><span>UNIDADE ORGÂNICA:</span> <span>Instituto Médio Politécnico Do Kilamba Kiaxi Nº. 6053</span></div>
+          <div><span>CATEGORIA:</span> <span>Prof. Do Ens. Prim. E Sec. Do 6.º Grau</span></div>
+          <div><span>CLASSE QUE LECCIONA:</span> <span>10º / 11º / 12º</span></div>
+          <div><span>DISCIPLINA(S):</span> <span>T.L.P./ P.T.</span></div>
+          <div><span>FORMAÇÃO DO ENSINO MÉDIO:</span> <span>Electrónica e Telecomunicações</span></div>
+          <div><span>HABILITAÇÕES LITERÁR. ENSINO SUPERIOR:</span> <span>Licenciado: Telecomunicações</span></div>
+          <div><span>CARGO/FUNÇÃO:</span> <span>Professor</span></div>
+          <div><span>CONTACTO TELEFÓNICO:</span> <span>94556040</span></div>
+        </td>
+      </tr>
+      <tr colspan="12">
+        <td colspan="12" style="text-align: center; font-weight: bold;">MANHÃ</td>
+      </tr>
+      <!-- Rest of your schedule table rows... -->
+      <tr>
+        <th style="width: 5%;">Tempo</th>
+        <th style="width: 10%;">Hora</th>
+        <th style="width: 12%;">2ª Feira</th>
+        <th style="width: 5%;">Sala</th>
+        <th style="width: 12%;">3ª Feira</th>
+        <th style="width: 5%;">Sala</th>
+        <th style="width: 12%;">4ª Feira</th>
+        <th style="width: 5%;">Sala</th>
+        <th style="width: 12%;">5ª Feira</th>
+        <th style="width: 5%;">Sala</th>
+        <th style="width: 12%;">6ª Feira</th>
+        <th style="width: 5%;">Sala</th>
+      </tr>
+      <tr>
+        <td>1º</td>
+        <td>7H00-7H50</td>
+        <td>GS110AM</td>
+        <td>11</td>
+        <td></td>
+        <td></td>
+        <td>GS110AM</td>
+        <td>11</td>
+        <td>INF11CT</td>
+        <td>16</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>2º</td>
+        <td>7H55-8H45</td>
+        <td>GS110AM</td>
+        <td>12</td>
+        <td></td>
+        <td></td>
+        <td>GS110AM</td>
+        <td>11</td>
+        <td>INF11CT</td>
+        <td>16</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>3º</td>
+        <td>8H50-9H40</td>
+        <td>INF10DM</td>
+        <td>G2</td>
+        <td>INF11BT</td>
+        <td>16</td>
+        <td>INF11AT</td>
+        <td>16</td>
+        <td>INF11CT</td>
+        <td>16</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>4º</td>
+        <td>10H00-10H50</td>
+        <td>INF10DM</td>
+        <td>G2</td>
+        <td>INF11BT</td>
+        <td>16</td>
+        <td>INF11AT</td>
+        <td>16</td>
+        <td>INF10DM</td>
+        <td>G2</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>5º</td>
+        <td>10H55-11H45</td>
+        <td></td>
+        <td></td>
+        <td>INF11BT</td>
+        <td></td>
+        <td>INF11AT</td>
+        <td>16</td>
+        <td>INF12AT</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>6º</td>
+        <td>11H50-12H40</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>INF12AT</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr colspan="12">
+        <td colspan="12" style="text-align: center; font-weight: bold;">TARDE</td>
+      </tr>
+      <tr>
+        <td>1º</td>
+        <td>13H00-13H50</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>INF12BT</td>
+        <td>17</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>2º</td>
+        <td>13H55-14H45</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>INF12BT</td>
+        <td>17</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>3º</td>
+        <td>14H50-15H40</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>4º</td>
+        <td>16H00-16H50</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>5º</td>
+        <td>16H55-17H45</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+    <!-- Rest of your document... -->
+    <div class="observation" style="margin: 1.5cm 0cm; display: flex; flex-direction: column; align-items: center;">
+      <p style="margin: 5px 0;">OBSERVAÇÃO: 20T Lectivos + 4T Coord</p>
+      <p
+        style="margin: 5px 0; border-top: 1px solid #bab8b8; border-bottom: 1px solid #bab8b8; padding: 8px; width: 100%; text-align: center;">
+        TOTAL DE TEMPOS LECTIVOS:
+        24</p>
+    </div>
+
+    <div class="signature">
+      <div class="signature-box">
+        <p style="margin-bottom: 20px;">O (A) Professor(a)</p>
+        <div class="signature-line"></div>
+        <p style="margin: 0;">Eng.º Diasliua Paulo Simão</p>
+      </div>
+      <div class="signature-box">
+        <p style="margin-bottom: 20px;">A Subdirecção Pedagógica</p>
+        <div class="signature-line" style="width: 80%; margin-left: 10%; "></div>
+        <p style="margin: 0;">Eng.º Carlos Alberto Brito Teixeira da Silva</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
