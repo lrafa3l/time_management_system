@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                         <div class="form-group">
                             <label for="capacidade">Capacidade</label>
-                            <input type="number" id="capacidade" name="capacidade" required>
+                            <input type="number" id="capacidade" min=1 name="capacidade" required>
                         </div>
                         <button type="submit">Cadastrar</button>
                     </form>
