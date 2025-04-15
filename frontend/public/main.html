@@ -44,7 +44,7 @@
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Ajuda</span>
             </a>
-            <a href="./auth.html" class="nav-item">
+            <a href="./index.html" class="nav-item">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Terminar Sessão</span>
             </a>
@@ -65,10 +65,10 @@
                     <i class="fas fa-bell"></i>
                     <div class="notification-indicator"></div>
                 </div>
-                <div class="search-bar">
+                <!-- <div class="search-bar">
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Pesquisar" />
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="new-event">
@@ -85,8 +85,8 @@
                     <i class="fa-solid fa-pen-to-square"></i>
                     <span>Editar Horário(s)</span>
                 </a>
-                
-                
+
+
             </div>
 
             <div class="new">
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Modal Structure (unchanged from your code) -->
             <div id="formModal" class="modal">
                 <div class="modal-dialog">
@@ -126,13 +126,16 @@
             <div class="dashboard-main">
                 <!-- Cards Sections -->
                 <div class="cards-section">
-                    <div class="card-section">
-                        <div class="card-icon">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
+                    <a href="./schedule.html" style="text-decoration: none; color: inherit;">
+                        <div class="card-section">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <p class="card-title">Horários Feitos</p>
+                            <h2 class="card-amount">76</h2>
                         </div>
-                        <p class="card-title">Horários Feitos</p>
-                        <h2 class="card-amount">76</h2>
-                    </div>
+                    </a>
+
 
                     <div class="card-section">
                         <div class="card-icon">
@@ -239,13 +242,16 @@
                         <div class="plan-status">Capturando...</div>
                     </div>
                     <div class="plan-progress">
-                        <div class="plan-percentage">68%</div>
+                        <div class="plan-percentage" id="progress-percentage">0%</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 <script src="../src/js/modal.js"></script>
 <script src="../src/js/dropdown.js"></script>
+<script src="../src/js/trackTime.js"></script>
+
 </html>
