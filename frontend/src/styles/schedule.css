@@ -119,7 +119,7 @@
 .main-content {
 
   flex-grow: 1;
-  padding: 1rem;
+  padding: 80px;
   background-color: var(--gray-light);
 }
 

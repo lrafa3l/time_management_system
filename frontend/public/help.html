@@ -11,12 +11,23 @@
 
 
     <link rel="stylesheet" href="../src/styles/main.css" />
+    <link rel="stylesheet" href="../src/styles/transitions.css" />
     <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <body>
+
+    <!-- Loader de transição -->
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
@@ -59,17 +70,13 @@
         <!-- Header -->
         <div class="header">
             <div class="welcome-section">
-                <h1 class="welcome-title">Gestão de Horários</h1>
+                <h1 class="welcome-title">Ajuda</h1>
             </div>
 
             <div class="header-right">
                 <div class="notification-bell">
                     <i class="fas fa-bell"></i>
                     <div class="notification-indicator"></div>
-                </div>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar" />
                 </div>
             </div>
         </div>
@@ -78,5 +85,6 @@
         <div class="dashboard-container"></div>
     </div>
 </body>
+<script src="../src/js/page-transitions.js"></script>
 
 </html>

@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../src/styles/transitions.css" />
   <title>Horário do Professor</title>
   <style>
     @page {
@@ -118,7 +119,16 @@
   </style>
 </head>
 
-<body>
+<body>  
+    <!-- Loader de transição -->
+    <div class="page-transition" id="pageTransition">
+      <div class="bounce-loader">
+          <div class="bounce-ball"></div>
+          <div class="bounce-ball"></div>
+          <div class="bounce-ball"></div>
+      </div>
+  </div>
+
   <div class="container">
     <table class="header-table" style="margin-bottom: 1.2cm;">
       <tr>
@@ -361,6 +371,8 @@
       </div>
     </div>
   </div>
+
+  <script src="../src/js/page-transitions.js"></script>
 </body>
 
 </html>
