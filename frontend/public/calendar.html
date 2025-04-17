@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
     <link rel="stylesheet" href="../src/styles/calendar.css" />
+    
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -26,10 +27,20 @@
     <script src="dist/calendar.js"></script>
 
     <link rel="stylesheet" href="../src/styles/main.css" />
+    <link rel="stylesheet" href="../src/styles/transitions.css" />
     <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
+    <!-- Loader de transição -->
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
@@ -41,17 +52,13 @@
                 <i class="fas fa-home"></i>
                 <span>Página Inicial</span>
             </a>
+            <a href="./statistics.html" class="nav-item">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>Estatísticas</span>
+            </a>
             <a href="#" class="nav-item active">
                 <i class="fa-solid fa-calendar-day"></i>
                 <span>Calendário</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-comment-dots"></i>
-                <span>Mensagens</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-user-circle"></i>
-                <span>Conta</span>
             </a>
             <a href="./setting.html" class="nav-item">
                 <i class="fas fa-sliders-h"></i>
@@ -60,11 +67,11 @@
 
         </div>
         <div class="nav-menu-bottom">
-            <a href="./help.html" class="nav-item">
+            <a href="#" class="nav-item">
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Ajuda</span>
             </a>
-            <a href="./auth.html" class="nav-item">
+            <a href="./index.html" class="nav-item">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Terminar Sessão</span>
             </a>
@@ -76,8 +83,7 @@
         <!-- Header -->
         <div class="header">
             <div class="welcome-section">
-                <p class="greeting">Welcome, Lando!</p>
-                <h1 class="welcome-title">Gestão de Horários</h1>
+                <h1 class="welcome-title">Calendário</h1>
             </div>
 
             <div class="header-right">
@@ -85,27 +91,25 @@
                     <i class="fas fa-bell"></i>
                     <div class="notification-indicator"></div>
                 </div>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar" />
-                </div>
             </div>
         </div>
 
         <div class="flex gap-7 flex-col w-[70%]">
             <div class="box-main flex">
                 <i class='bx bxs-book-bookmark text-[17pt]'></i>
-                <div class="box bg-[#eeee] w-full rounded-md" style="margin-left: 1rem;">
+                <div class="box bg-[#eeee] w-full rounded-md"
+                    style="margin-left: 1rem; padding: 10px 10px; border: 0.2px solid #ccc;">
                     <input type="text" placeholder="Disciplina" class="p-[10px] outline-0 w-full">
                 </div>
             </div>
             <div class="box-main flex">
                 <i class='bx bxs-user-plus text-[17pt]'></i>
-                <div class="box bg-[#eeee] w-full rounded-md" style="margin-left: 1rem;">
+                <div class="box bg-[#eeee] w-full rounded-md"
+                    style="margin-left: 1rem; padding: 10px 10px; border: 0.2px solid #ccc;">
                     <input type="text" placeholder="Docente" class="p-[10px] outline-0 w-full">
                 </div>
             </div>
-            <div class="box-main flex">
+            <div class="flex items-center">
                 <i class='bx bxs-time text-[17pt]'></i>
                 <div class="flex">
                     <div class="flex box-main">
@@ -144,15 +148,53 @@
                 </div>
             </div>
         </div>
+        <style>
+            /* Style the editor */
+            .note-editor {
+                background-color: #eeee;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+            }
+
+            /* Style the toolbar */
+            .note-toolbar {
+                background-color: #295983;
+                border-bottom: 1px solid #ddd;
+            }
+
+            /* Style the editable area */
+            .note-editable {
+                font-family: 'Arial', sans-serif;
+                font-size: 18px;
+                color: #0f2a65;
+            }
+
+            /* Style the placeholder text */
+            .note-placeholder {
+                color: #999;
+                font-style: italic;
+            }
+
+            .note-btn {
+                background-color: #072946;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 5px 10px;
+                margin: 2px;
+            }
+
+            .note-btn:hover {
+                background-color: #072946;
+                color: #81ffd9;
+            }
+        </style>
         <div id='calendar'></div>
 </body>
-<script>
-
-</script>
 
 <script>
 
-$('#summernote').summernote({
+    $('#summernote').summernote({
         placeholder: 'Descrição',
         tabsize: 4,
         height: 300,
@@ -166,54 +208,56 @@ $('#summernote').summernote({
     });
     // Function to format the current date as YYYY-MM-DD
     function getCurrentDate() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-            const day = String(now.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
-        // Function to format the current time as HH:MM
-        function getCurrentTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
+    // Function to format the current time as HH:MM
+    function getCurrentTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
 
-        // Set the default values for the inputs
-        document.getElementById('startDate').value = getCurrentDate();
-        document.getElementById('startTime').value = getCurrentTime();
-        document.getElementById('endDate').value = getCurrentDate();
-        document.getElementById('endTime').value = getCurrentTime();
+    // Set the default values for the inputs
+    document.getElementById('startDate').value = getCurrentDate();
+    document.getElementById('startTime').value = getCurrentTime();
+    document.getElementById('endDate').value = getCurrentDate();
+    document.getElementById('endTime').value = getCurrentTime();
 
-        // Open the date/time picker when the input is clicked or focused
-        document.querySelectorAll('input[type="date"], input[type="time"]').forEach(input => {
-            input.addEventListener('click', () => {
-                input.showPicker(); // Open the native picker
-            });
-
-            input.addEventListener('focus', () => {
-                input.showPicker(); // Open the native picker
-            });
+    // Open the date/time picker when the input is clicked or focused
+    document.querySelectorAll('input[type="date"], input[type="time"]').forEach(input => {
+        input.addEventListener('click', () => {
+            input.showPicker(); // Open the native picker
         });
+
+        input.addEventListener('focus', () => {
+            input.showPicker(); // Open the native picker
+        });
+    });
 </script>
 
 <script>
 
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     var calendarEl = document.getElementById('calendar');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     var calendarEl = document.getElementById('calendar');
 
-        //     var calendar = new FullCalendar.Calendar(calendarEl, {
-        //         timeZone: 'UTC',
-        //         initialView: 'multiMonthYear',
-        //         editable: true,
-        //         events: 'https://fullcalendar.io/api/demo-feeds/events.json'
-        //     });
+    //     var calendar = new FullCalendar.Calendar(calendarEl, {
+    //         timeZone: 'UTC',
+    //         initialView: 'multiMonthYear',
+    //         editable: true,
+    //         events: 'https://fullcalendar.io/api/demo-feeds/events.json'
+    //     });
 
-        //     calendar.render();
-        // });
+    //     calendar.render();
+    // });
 
 </script>
+
+<script src="../src/js/page-transitions.js"></script>
 
 </html>

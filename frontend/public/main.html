@@ -8,12 +8,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../src/styles/main.css" />
+    <link rel="stylesheet" href="../src/styles/transitions.css" />
     <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 </head>
 
 <body>
+    <!-- Loader de transição -->
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
@@ -25,17 +35,13 @@
                 <i class="fas fa-home"></i>
                 <span>Página Inicial</span>
             </a>
+            <a href="statistics.html" class="nav-item">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>Estatísticas</span>
+            </a>
             <a href="./calendar.html" class="nav-item">
                 <i class="fa-solid fa-calendar-day"></i>
                 <span>Calendário</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-comment-dots"></i>
-                <span>Mensagens</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-user-circle"></i>
-                <span>Conta</span>
             </a>
             <a href="./setting.html" class="nav-item">
                 <i class="fas fa-sliders-h"></i>
@@ -48,7 +54,7 @@
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Ajuda</span>
             </a>
-            <a href="./auth.html" class="nav-item">
+            <a href="./index.html" class="nav-item">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Terminar Sessão</span>
             </a>
@@ -69,16 +75,12 @@
                     <i class="fas fa-bell"></i>
                     <div class="notification-indicator"></div>
                 </div>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Pesquisar" />
-                </div>
             </div>
         </div>
         <div class="new-event">
             <div class="new-content">
                 <a href="#" class="event-item">
-                    <i class="fa-solid fa-plus"></i>
+                    <i class="fa-solid fa-calendar-plus"></i>
                     <span>Adicionar Horário(s)</span>
                 </a>
                 <a href="#" class="event-item">
@@ -89,7 +91,39 @@
                     <i class="fa-solid fa-pen-to-square"></i>
                     <span>Editar Horário(s)</span>
                 </a>
+
+
             </div>
+
+            <div class="new">
+                <div class="dropdown">
+                    <button class="dropdown-btn event-item">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Cadastrar</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#" class="modal-trigger" data-form="curso">Cadastrar Curso</a>
+                        <a href="#" class="modal-trigger" data-form="sala">Cadastrar Sala</a>
+                        <a href="#" class="modal-trigger" data-form="turma">Cadastrar Turma</a>
+                        <a href="#" class="modal-trigger" data-form="professor">Cadastrar Docente</a>
+                        <a href="#" class="modal-trigger" data-form="disciplina">Cadastrar Disciplina</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Structure (unchanged from your code) -->
+            <div id="formModal" class="modal">
+                <div class="modal-dialog">
+                    <div class="modal-header">
+                        <h3 id="modalTitle">Cadastrar</h3>
+                        <span class="close-modal">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Form content will be injected here -->
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Dashboard Container -->
@@ -98,29 +132,35 @@
             <div class="dashboard-main">
                 <!-- Cards Sections -->
                 <div class="cards-section">
-                    <div class="card-section">
-                        <div class="card-icon">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
+                    <a href="./schedule.html" style="text-decoration: none; color: inherit;">
+                        <div class="card-section">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <p class="card-title">Horários Feitos</p>
+                            <h2 class="card-amount">76</h2>
                         </div>
-                        <p class="card-title">Horários Feitos</p>
-                        <h2 class="card-amount">76</h2>
-                    </div>
+                    </a>
 
-                    <div class="card-section">
-                        <div class="card-icon">
-                            <i class="fa-solid fa-users"></i>
+                    <a href="./prof.html" style="text-decoration: none; color: inherit;">
+                        <div class="card-section">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <p class="card-title">Docentes</p>
+                            <h2 class="card-amount">48</h2>
                         </div>
-                        <p class="card-title">Docentes</p>
-                        <h2 class="card-amount">48</h2>
-                    </div>
+                    </a>
 
-                    <div class="card-section">
-                        <div class="card-icon">
-                            <i class='fas fa-chalkboard-teacher'></i>
+                    <a href="./classes.html" style="text-decoration: none; color: inherit;">
+                        <div class="card-section">
+                            <div class="card-icon">
+                                <i class='fas fa-chalkboard-teacher'></i>
+                            </div>
+                            <p class="card-title">Turmas</p>
+                            <h2 class="card-amount">25</h2>
                         </div>
-                        <p class="card-title">Turmas</p>
-                        <h2 class="card-amount">25</h2>
-                    </div>
+                    </a>
                 </div>
                 <!-- Recent Activities Sections -->
                 <div class="activity-section">
@@ -145,7 +185,30 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </div>
                                 <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
+                                    <div class="activity-title deleted">Turma GSI12AM</div>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> Yesterday, 16:08
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fa-solid fa-calendar-plus"></i>
+                                </div>
+                                <div class="activity-content ">
+                                    <div class="activity-title added">Turma GSI12AM</div>
+                                    <div class="activity-time">
+                                        <i class="far fa-clock"></i> Yesterday, 16:08
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fa-solid fa-trash"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title deleted">Turma GSI12AM</div>
                                     <div class="activity-time">
                                         <i class="far fa-clock"></i> Yesterday, 16:08
                                     </div>
@@ -157,18 +220,7 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </div>
                                 <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
-                                    <div class="activity-time">
-                                        <i class="far fa-clock"></i> Yesterday, 16:08
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fa-solid fa-trash"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
+                                    <div class="activity-title deleted">Turma GSI12AM</div>
                                     <div class="activity-time">
                                         <i class="far fa-clock"></i> Yesterday, 16:08
                                     </div>
@@ -180,19 +232,7 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </div>
                                 <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
-                                    <div class="activity-time">
-                                        <i class="far fa-clock"></i> Yesterday, 16:08
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fa-solid fa-trash"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Turma GSI12AM</div>
+                                    <div class="activity-title deleted">Turma GSI12AM</div>
                                     <div class="activity-time">
                                         <i class="far fa-clock"></i> Yesterday, 16:08
                                     </div>
@@ -211,12 +251,19 @@
                         <div class="plan-status">Capturando...</div>
                     </div>
                     <div class="plan-progress">
-                        <div class="plan-percentage">68%</div>
+                        <div class="plan-percentage" id="progress-percentage">0%</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="../src/js/modal.js"></script>
+    <script src="../src/js/dropdown.js"></script>
+    <script src="../src/js/trackTime.js"></script>
+    <script src="../src/js/page-transitions.js"></script>
+
 </body>
 
 </html>

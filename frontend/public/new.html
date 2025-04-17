@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SGH</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+
+    <link rel="stylesheet" href="../src/styles/new.css" />
+    <link rel="stylesheet" href="../src/styles/main.css" />
+    <link rel="stylesheet" href="../src/styles/transitions.css" />
+    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+
+    <!-- Loader de transição -->
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../assets/images/logo.png" alt="Logo">
+        </div>
+
+        <div class="nav-menu">
+            <a href="./main.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Página Inicial</span>
+            </a>
+            <a href="./calendar.html" class="nav-item">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span>Calendário</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-comment-dots"></i>
+                <span>Mensagens</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-user-circle"></i>
+                <span>Conta</span>
+            </a>
+            <a href="./setting.html" class="nav-item">
+                <i class="fas fa-sliders-h"></i>
+                <span>Definições</span>
+            </a>
+
+        </div>
+        <div class="nav-menu-bottom">
+            <a href="./help.html" class="nav-item">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Ajuda</span>
+            </a>
+            <a href="./index.html" class="nav-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Terminar Sessão</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="welcome-section">
+                <h1 class="welcome-title">Gestão de Horários</h1>
+            </div>
+
+            <div class="header-right">
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-indicator"></div>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Container -->
+        <div class="dashboard-container"></div>
+
+        <div class="container">
+            <h1>Cadastro de Curso</h1>
+            <form id="cadastro-curso">
+                <div class="form-group">
+                    <label for="nome">Nome do Curso:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <p id="mensagem"></p>
+        </div>
+
+        <div class="container">
+            <h1>Cadastro de Sala</h1>
+            <form id="cadastro-sala">
+                <div class="form-group">
+                    <label for="nome">Nome da Sala:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="capacidade">Capacidade:</label>
+                    <input type="number" id="capacidade" name="capacidade" required>
+                </div>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <p id="mensagem"></p>
+        </div>
+
+    </div>
+</body>
+<script src="../src/js/page-transitions.js"></script>
+</html>
