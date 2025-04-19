@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="form-group">
                             <label for="classe">Classe que Leciona</label>
                             <input type="text" id="classe" name="classe" required>
-                            <small>Separe múltiplas disciplinas por barra (/)</small>
+                            <small>Separe múltiplas classes por barra (/)</small>
                         </div>
                         
                         <div class="form-group">
