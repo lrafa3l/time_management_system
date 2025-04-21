@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../src/styles/transitions.css" />
-  <title>Horário do Professor</title>
+  <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+  <title>SGH | Horário</title>
   <style>
     @page {
       size: A4;
@@ -61,6 +62,11 @@
       text-align: center;
     }
 
+    .schedule-table th,
+    .schedule-table td {
+      border: 1px solid black !important;
+    }
+
     .header-table {
       width: 100%;
       border: none;
@@ -98,12 +104,42 @@
       margin: 5px 0;
     }
 
+    .btn {
+      padding: 8px 16px;
+      margin: 0 5px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    [contenteditable="true"] {
+      padding: 2px 5px;
+      border: 1px dashed transparent;
+      min-height: 1em;
+    }
+
+    [contenteditable="true"]:focus {
+      border: 1px dashed #908e8e;
+      background-color: #f9f9f9;
+      outline: none;
+    }
+
     @media print {
       body {
         width: 210mm;
         height: 297mm;
         padding: 0;
         margin: 0;
+      }
+
+      .action-buttons {
+        display: none;
       }
 
       .container {
@@ -119,14 +155,20 @@
   </style>
 </head>
 
-<body>  
-    <!-- Loader de transição -->
-    <div class="page-transition" id="pageTransition">
-      <div class="bounce-loader">
-          <div class="bounce-ball"></div>
-          <div class="bounce-ball"></div>
-          <div class="bounce-ball"></div>
-      </div>
+<body>
+  <!-- Loader de transição -->
+  <div class="page-transition" id="pageTransition">
+    <div class="bounce-loader">
+      <div class="bounce-ball"></div>
+      <div class="bounce-ball"></div>
+      <div class="bounce-ball"></div>
+    </div>
+  </div>
+
+  <div class="action-buttons" style="margin: 20px 0; text-align: center;">
+    <button id="editBtn" class="btn">Editar</button>
+    <button id="saveBtn" class="btn" style="display: none;">Salvar</button>
+    <button id="cancelBtn" class="btn" style="display: none;">Cancelar</button>
   </div>
 
   <div class="container">
@@ -149,7 +191,7 @@
       </tr>
     </table>
 
-    <table>
+    <table class="schedule-table">
       <tr>
         <td style="width: 15%;">
           <span>ANO LECTIVO <b>2023/2024</b></span>
@@ -162,15 +204,21 @@
       <!-- Rest of your table content remains the same -->
       <tr class="info-row">
         <td colspan="12">
-          <div><span>NOME:</span> <span>Lando Rafael</span></div>
-          <div><span>UNIDADE ORGÂNICA:</span> <span>Instituto Médio Politécnico Do Kilamba Kiaxi Nº. 6053</span></div>
-          <div><span>CATEGORIA:</span> <span>Prof. Do Ens. Prim. E Sec. Do 6.º Grau</span></div>
-          <div><span>CLASSE QUE LECCIONA:</span> <span>10º / 11º / 12º</span></div>
-          <div><span>DISCIPLINA(S):</span> <span>T.L.P./ P.T.</span></div>
-          <div><span>FORMAÇÃO DO ENSINO MÉDIO:</span> <span>Electrónica e Telecomunicações</span></div>
-          <div><span>HABILITAÇÕES LITERÁR. ENSINO SUPERIOR:</span> <span>Licenciado: Telecomunicações</span></div>
-          <div><span>CARGO/FUNÇÃO:</span> <span>Professor</span></div>
-          <div><span>CONTACTO TELEFÓNICO:</span> <span>94556040</span></div>
+          <div><span>NOME:</span> <span id="nome" contenteditable="true">Lando Rafael</span></div>
+          <div><span>UNIDADE ORGÂNICA:</span> <span id="unidade_organica" contenteditable="true">Instituto Médio
+              Politécnico Do Kilamba Kiaxi Nº. 6053</span></div>
+          <div><span>CATEGORIA:</span> <span id="categoria" contenteditable="true">Prof. Do Ens. Prim. E Sec. Do 6.º
+              Grau</span></div>
+          <div><span>CLASSE QUE LECCIONA:</span> <span id="classe_leciona" contenteditable="true">10º / 11º / 12º</span>
+          </div>
+          <div><span>DISCIPLINA(S):</span> <span id="disciplinas" contenteditable="true">T.L.P./ P.T.</span></div>
+          <div><span>FORMAÇÃO DO ENSINO MÉDIO:</span> <span id="formacao_medio" contenteditable="true">Electrónica e
+              Telecomunicações</span></div>
+          <div><span>HABILITAÇÕES LITERÁR. ENSINO SUPERIOR:</span> <span id="habilitacoes_superior"
+              contenteditable="true">Licenciado: Telecomunicações</span></div>
+          <div><span>CARGO/FUNÇÃO:</span> <span id="cargo_funcao" contenteditable="true">Professor</span></div>
+          <div><span>CONTACTO TELEFÓNICO:</span> <span id="contacto_telefonico" contenteditable="true">94556040</span>
+          </div>
         </td>
       </tr>
       <tr colspan="12">
@@ -191,162 +239,230 @@
         <th style="width: 12%;">6ª Feira</th>
         <th style="width: 5%;">Sala</th>
       </tr>
+      <!-- MANHÃ -->
       <tr>
         <td>1º</td>
         <td>7H00-7H50</td>
-        <td>GS110AM</td>
-        <td>11</td>
-        <td></td>
-        <td></td>
-        <td>GS110AM</td>
-        <td>11</td>
-        <td>INF11CT</td>
-        <td>16</td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-manha-1-aula" contenteditable="true">GS110AM</td>
+        <td id="seg-manha-1-sala" contenteditable="true">11</td>
+        <!-- 3ª Feira -->
+        <td id="ter-manha-1-aula" contenteditable="true"></td>
+        <td id="ter-manha-1-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-manha-1-aula" contenteditable="true">GS110AM</td>
+        <td id="qua-manha-1-sala" contenteditable="true">11</td>
+        <!-- 5ª Feira -->
+        <td id="qui-manha-1-aula" contenteditable="true">INF11CT</td>
+        <td id="qui-manha-1-sala" contenteditable="true">16</td>
+        <!-- 6ª Feira -->
+        <td id="sex-manha-1-aula" contenteditable="true"></td>
+        <td id="sex-manha-1-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>2º</td>
         <td>7H55-8H45</td>
-        <td>GS110AM</td>
-        <td>12</td>
-        <td></td>
-        <td></td>
-        <td>GS110AM</td>
-        <td>11</td>
-        <td>INF11CT</td>
-        <td>16</td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-manha-2-aula" contenteditable="true">GS110AM</td>
+        <td id="seg-manha-2-sala" contenteditable="true">12</td>
+        <!-- 3ª Feira -->
+        <td id="ter-manha-2-aula" contenteditable="true"></td>
+        <td id="ter-manha-2-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-manha-2-aula" contenteditable="true">GS110AM</td>
+        <td id="qua-manha-2-sala" contenteditable="true">11</td>
+        <!-- 5ª Feira -->
+        <td id="qui-manha-2-aula" contenteditable="true">INF11CT</td>
+        <td id="qui-manha-2-sala" contenteditable="true">16</td>
+        <!-- 6ª Feira -->
+        <td id="sex-manha-2-aula" contenteditable="true"></td>
+        <td id="sex-manha-2-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>3º</td>
         <td>8H50-9H40</td>
-        <td>INF10DM</td>
-        <td>G2</td>
-        <td>INF11BT</td>
-        <td>16</td>
-        <td>INF11AT</td>
-        <td>16</td>
-        <td>INF11CT</td>
-        <td>16</td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-manha-3-aula" contenteditable="true">INF10DM</td>
+        <td id="seg-manha-3-sala" contenteditable="true">G2</td>
+        <!-- 3ª Feira -->
+        <td id="ter-manha-3-aula" contenteditable="true">INF11BT</td>
+        <td id="ter-manha-3-sala" contenteditable="true">16</td>
+        <!-- 4ª Feira -->
+        <td id="qua-manha-3-aula" contenteditable="true">INF11AT</td>
+        <td id="qua-manha-3-sala" contenteditable="true">16</td>
+        <!-- 5ª Feira -->
+        <td id="qui-manha-3-aula" contenteditable="true">INF11CT</td>
+        <td id="qui-manha-3-sala" contenteditable="true">16</td>
+        <!-- 6ª Feira -->
+        <td id="sex-manha-3-aula" contenteditable="true"></td>
+        <td id="sex-manha-3-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>4º</td>
         <td>10H00-10H50</td>
-        <td>INF10DM</td>
-        <td>G2</td>
-        <td>INF11BT</td>
-        <td>16</td>
-        <td>INF11AT</td>
-        <td>16</td>
-        <td>INF10DM</td>
-        <td>G2</td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-manha-4-aula" contenteditable="true">INF10DM</td>
+        <td id="seg-manha-4-sala" contenteditable="true">G2</td>
+        <!-- 3ª Feira -->
+        <td id="ter-manha-4-aula" contenteditable="true">INF11BT</td>
+        <td id="ter-manha-4-sala" contenteditable="true">16</td>
+        <!-- 4ª Feira -->
+        <td id="qua-manha-4-aula" contenteditable="true">INF11AT</td>
+        <td id="qua-manha-4-sala" contenteditable="true">16</td>
+        <!-- 5ª Feira -->
+        <td id="qui-manha-4-aula" contenteditable="true">INF10DM</td>
+        <td id="qui-manha-4-sala" contenteditable="true">G2</td>
+        <!-- 6ª Feira -->
+        <td id="sex-manha-4-aula" contenteditable="true"></td>
+        <td id="sex-manha-4-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>5º</td>
         <td>10H55-11H45</td>
-        <td></td>
-        <td></td>
-        <td>INF11BT</td>
-        <td></td>
-        <td>INF11AT</td>
-        <td>16</td>
-        <td>INF12AT</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-manha-5-aula" contenteditable="true"></td>
+        <td id="seg-manha-5-sala" contenteditable="true"></td>
+        <!-- 3ª Feira -->
+        <td id="ter-manha-5-aula" contenteditable="true">INF11BT</td>
+        <td id="ter-manha-5-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-manha-5-aula" contenteditable="true">INF11AT</td>
+        <td id="qua-manha-5-sala" contenteditable="true">16</td>
+        <!-- 5ª Feira -->
+        <td id="qui-manha-5-aula" contenteditable="true">INF12AT</td>
+        <td id="qui-manha-5-sala" contenteditable="true"></td>
+        <!-- 6ª Feira -->
+        <td id="sex-manha-5-aula" contenteditable="true"></td>
+        <td id="sex-manha-5-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>6º</td>
         <td>11H50-12H40</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>INF12AT</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-manha-6-aula" contenteditable="true"></td>
+        <td id="seg-manha-6-sala" contenteditable="true"></td>
+        <!-- 3ª Feira -->
+        <td id="ter-manha-6-aula" contenteditable="true"></td>
+        <td id="ter-manha-6-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-manha-6-aula" contenteditable="true"></td>
+        <td id="qua-manha-6-sala" contenteditable="true"></td>
+        <!-- 5ª Feira -->
+        <td id="qui-manha-6-aula" contenteditable="true">INF12AT</td>
+        <td id="qui-manha-6-sala" contenteditable="true"></td>
+        <!-- 6ª Feira -->
+        <td id="sex-manha-6-aula" contenteditable="true"></td>
+        <td id="sex-manha-6-sala" contenteditable="true"></td>
       </tr>
-      <tr colspan="12">
+
+      <!-- TARDE -->
+      <tr>
         <td colspan="12" style="text-align: center; font-weight: bold;">TARDE</td>
       </tr>
+
       <tr>
         <td>1º</td>
         <td>13H00-13H50</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>INF12BT</td>
-        <td>17</td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-tarde-1-aula" contenteditable="true"></td>
+        <td id="seg-tarde-1-sala" contenteditable="true"></td>
+        <!-- 3ª Feira -->
+        <td id="ter-tarde-1-aula" contenteditable="true"></td>
+        <td id="ter-tarde-1-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-tarde-1-aula" contenteditable="true"></td>
+        <td id="qua-tarde-1-sala" contenteditable="true"></td>
+        <!-- 5ª Feira -->
+        <td id="qui-tarde-1-aula" contenteditable="true">INF12BT</td>
+        <td id="qui-tarde-1-sala" contenteditable="true">17</td>
+        <!-- 6ª Feira -->
+        <td id="sex-tarde-1-aula" contenteditable="true"></td>
+        <td id="sex-tarde-1-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>2º</td>
         <td>13H55-14H45</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>INF12BT</td>
-        <td>17</td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-tarde-2-aula" contenteditable="true"></td>
+        <td id="seg-tarde-2-sala" contenteditable="true"></td>
+        <!-- 3ª Feira -->
+        <td id="ter-tarde-2-aula" contenteditable="true"></td>
+        <td id="ter-tarde-2-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-tarde-2-aula" contenteditable="true"></td>
+        <td id="qua-tarde-2-sala" contenteditable="true"></td>
+        <!-- 5ª Feira -->
+        <td id="qui-tarde-2-aula" contenteditable="true">INF12BT</td>
+        <td id="qui-tarde-2-sala" contenteditable="true">17</td>
+        <!-- 6ª Feira -->
+        <td id="sex-tarde-2-aula" contenteditable="true"></td>
+        <td id="sex-tarde-2-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>3º</td>
         <td>14H50-15H40</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-tarde-3-aula" contenteditable="true"></td>
+        <td id="seg-tarde-3-sala" contenteditable="true"></td>
+        <!-- 3ª Feira -->
+        <td id="ter-tarde-3-aula" contenteditable="true"></td>
+        <td id="ter-tarde-3-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-tarde-3-aula" contenteditable="true"></td>
+        <td id="qua-tarde-3-sala" contenteditable="true"></td>
+        <!-- 5ª Feira -->
+        <td id="qui-tarde-3-aula" contenteditable="true"></td>
+        <td id="qui-tarde-3-sala" contenteditable="true"></td>
+        <!-- 6ª Feira -->
+        <td id="sex-tarde-3-aula" contenteditable="true"></td>
+        <td id="sex-tarde-3-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>4º</td>
         <td>16H00-16H50</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-tarde-4-aula" contenteditable="true"></td>
+        <td id="seg-tarde-4-sala" contenteditable="true"></td>
+        <!-- 3ª Feira -->
+        <td id="ter-tarde-4-aula" contenteditable="true"></td>
+        <td id="ter-tarde-4-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-tarde-4-aula" contenteditable="true"></td>
+        <td id="qua-tarde-4-sala" contenteditable="true"></td>
+        <!-- 5ª Feira -->
+        <td id="qui-tarde-4-aula" contenteditable="true"></td>
+        <td id="qui-tarde-4-sala" contenteditable="true"></td>
+        <!-- 6ª Feira -->
+        <td id="sex-tarde-4-aula" contenteditable="true"></td>
+        <td id="sex-tarde-4-sala" contenteditable="true"></td>
       </tr>
+
       <tr>
         <td>5º</td>
         <td>16H55-17H45</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <!-- 2ª Feira -->
+        <td id="seg-tarde-5-aula" contenteditable="true"></td>
+        <td id="seg-tarde-5-sala" contenteditable="true"></td>
+        <!-- 3ª Feira -->
+        <td id="ter-tarde-5-aula" contenteditable="true"></td>
+        <td id="ter-tarde-5-sala" contenteditable="true"></td>
+        <!-- 4ª Feira -->
+        <td id="qua-tarde-5-aula" contenteditable="true"></td>
+        <td id="qua-tarde-5-sala" contenteditable="true"></td>
+        <!-- 5ª Feira -->
+        <td id="qui-tarde-5-aula" contenteditable="true"></td>
+        <td id="qui-tarde-5-sala" contenteditable="true"></td>
+        <!-- 6ª Feira -->
+        <td id="sex-tarde-5-aula" contenteditable="true"></td>
+        <td id="sex-tarde-5-sala" contenteditable="true"></td>
       </tr>
     </table>
     <!-- Rest of your document... -->
@@ -362,17 +478,102 @@
       <div class="signature-box">
         <p style="margin-bottom: 20px;">O (A) Professor(a)</p>
         <div class="signature-line"></div>
-        <p style="margin: 0;">Eng.º Diasliua Paulo Simão</p>
+        <p style="margin: 0;"><span contenteditable="true">Eng.º Diasliua Paulo Simão</span></p>
       </div>
       <div class="signature-box">
         <p style="margin-bottom: 20px;">A Subdirecção Pedagógica</p>
         <div class="signature-line" style="width: 80%; margin-left: 10%; "></div>
-        <p style="margin: 0;">Eng.º Carlos Alberto Brito Teixeira da Silva</p>
+        <p style="margin: 0;"><span contenteditable="true">Eng.º Carlos Alberto Brito Teixeira da Silva</span></p>
       </div>
     </div>
   </div>
 
+  <script>
+    // Variável para armazenar os dados originais
+    let originalData = {};
+
+    // Elementos
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const editableElements = document.querySelectorAll('[contenteditable="true"]');
+
+    // Habilitar edição
+    editBtn.addEventListener('click', () => {
+      // Salvar dados originais
+      editableElements.forEach(el => {
+        originalData[el.id || el.textContent.trim()] = el.textContent;
+      });
+
+      // Mostrar botões de salvar/cancelar
+      editBtn.style.display = 'none';
+      saveBtn.style.display = 'inline-block';
+      cancelBtn.style.display = 'inline-block';
+    });
+
+    // Salvar alterações
+    saveBtn.addEventListener('click', () => {
+      // Aqui você pode implementar a lógica para salvar no localStorage ou enviar para um servidor
+      const updatedData = {};
+
+      editableElements.forEach(el => {
+        updatedData[el.id || el.textContent.trim()] = el.textContent;
+      });
+
+      // Exemplo: salvar no localStorage
+      localStorage.setItem('horarioDocente', JSON.stringify(updatedData));
+
+      // Restaurar botões
+      editBtn.style.display = 'inline-block';
+      saveBtn.style.display = 'none';
+      cancelBtn.style.display = 'none';
+
+      alert('Alterações salvas com sucesso!');
+    });
+
+    // Cancelar edição
+    cancelBtn.addEventListener('click', () => {
+      // Restaurar valores originais
+      editableElements.forEach(el => {
+        const key = el.id || el.textContent.trim();
+        if (originalData[key]) {
+          el.textContent = originalData[key];
+        }
+      });
+
+      // Restaurar botões
+      editBtn.style.display = 'inline-block';
+      saveBtn.style.display = 'none';
+      cancelBtn.style.display = 'none';
+    });
+  </script>
   <script src="../src/js/page-transitions.js"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-3WwKHF1-f4fi5sHapRAsNr9INX0Etgo",
+      authDomain: "schedule-system-8c4b6.firebaseapp.com",
+      databaseURL: "https://schedule-system-8c4b6-default-rtdb.firebaseio.com",
+      projectId: "schedule-system-8c4b6",
+      storageBucket: "schedule-system-8c4b6.firebasestorage.app",
+      messagingSenderId: "1056197912318",
+      appId: "1:1056197912318:web:2868c9a27bcc03587e27af",
+      measurementId: "G-GHEY7QZEQ9"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+
 </body>
 
 </html>

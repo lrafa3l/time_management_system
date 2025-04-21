@@ -24,6 +24,11 @@
         </div>
     </div>
 
+    <!-- Botão de toggle para mobile -->
+    <button class="menu-toggle" id="menuToggle" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
@@ -79,7 +84,7 @@
         </div>
         <div class="new-event">
             <div class="new-content">
-                <a href="#" class="event-item">
+                <a href="./view.html" class="event-item">
                     <i class="fa-solid fa-calendar-plus"></i>
                     <span>Adicionar Horário(s)</span>
                 </a>
@@ -93,23 +98,23 @@
                 </a>
 
 
-            </div>
-
-            <div class="new">
-                <div class="dropdown">
-                    <button class="dropdown-btn event-item">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Cadastrar</span>
-                    </button>
-                    <div class="dropdown-content">
-                        <a href="#" class="modal-trigger" data-form="curso">Cadastrar Curso</a>
-                        <a href="#" class="modal-trigger" data-form="sala">Cadastrar Sala</a>
-                        <a href="#" class="modal-trigger" data-form="turma">Cadastrar Turma</a>
-                        <a href="#" class="modal-trigger" data-form="professor">Cadastrar Docente</a>
-                        <a href="#" class="modal-trigger" data-form="disciplina">Cadastrar Disciplina</a>
+                <div class="new event-item">
+                    <div class="dropdown">
+                        <button class="dropdown-btn ">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Cadastrar</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" class="modal-trigger" data-form="curso">Cadastrar Curso</a>
+                            <a href="#" class="modal-trigger" data-form="sala">Cadastrar Sala</a>
+                            <a href="#" class="modal-trigger" data-form="turma">Cadastrar Turma</a>
+                            <a href="#" class="modal-trigger" data-form="professor">Cadastrar Docente</a>
+                            <a href="#" class="modal-trigger" data-form="disciplina">Cadastrar Disciplina</a>
+                        </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Modal Structure (unchanged from your code) -->
             <div id="formModal" class="modal">
@@ -257,6 +262,61 @@
             </div>
         </div>
     </div>
+
+    
+
+    <script>
+        // Script para toggle da sidebar em mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            // Verifica se os elementos existem antes de continuar
+            if (!menuToggle || !sidebar) return;
+            
+            // Mostrar/ocultar botão de toggle baseado no tamanho da tela
+            function checkScreenSize() {
+                if (window.innerWidth <= 576) {
+                    menuToggle.style.display = 'block';
+                    
+                    // Adiciona event listener apenas quando necessário
+                    menuToggle.addEventListener('click', toggleSidebar);
+                } else {
+                    menuToggle.style.display = 'none';
+                    sidebar.classList.remove('active');
+                    
+                    // Remove event listener quando não for necessário
+                    menuToggle.removeEventListener('click', toggleSidebar);
+                }
+            }
+            
+            // Função para alternar a sidebar
+            function toggleSidebar() {
+                sidebar.classList.toggle('active');
+            }
+            
+            // Fechar sidebar ao clicar em um item (opcional)
+            function setupNavItems() {
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (window.innerWidth <= 576) {
+                            sidebar.classList.remove('active');
+                        }
+                    });
+                });
+            }
+            
+            // Verificar tamanho da tela ao carregar e redimensionar
+            checkScreenSize();
+            window.addEventListener('resize', checkScreenSize);
+            
+            // Configurar os itens de navegação
+            setupNavItems();
+        });
+
+        
+    </script>
 
     <!-- Scripts -->
     <script src="../src/js/modal.js"></script>

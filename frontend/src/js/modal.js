@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                         
                         <div class="form-group">
-                            <label for="cargo">Cargo/Função</label>
+                            <label for="cargo">Cargo / Função</label>
                             <input type="text" id="cargo" name="cargo" required>
                         </div>
                         
