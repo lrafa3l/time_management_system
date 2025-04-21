@@ -4,14 +4,14 @@ O **Sistema de Gestão de Horários** é uma aplicação web desenvolvida para f
 
 ## Funcionalidades Principais
 
-- **Cadastro de Usuários**: Diferentes níveis de acesso (administrador, gestor, usuário comum).
+- **Cadastro de Usuários**: Diferentes níveis de acesso (administrador, director, coordenador, e professor).
 - **Gestão de Horários**: Criação e edição de horários para as turmas e professores.
 - **Relatórios**: Geração de relatórios de utilização de horários.
 - **Integração**: Possibilidade de integração com calendários externos (Google Calendar, Outlook, etc.).
 
 ## Tecnologias Utilizadas
 
-- **Frontend**: HTML, CSS & JavaScript
+- **Frontend**: HTML, CSS, Tailwind CSS & JavaScript
 - **Backend**: Python
 - **Banco de Dados**: SQLite
 
