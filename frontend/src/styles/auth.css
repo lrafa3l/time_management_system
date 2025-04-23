@@ -2,6 +2,18 @@ body,
 html {
   height: 100%;
   margin: 0;
+  /* position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../../assets/images/ipikk-logo-bg.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
+  opacity: 0.07;
+  z-index: 79;
+  pointer-events: none; */
 }
 
 img {
@@ -21,7 +33,7 @@ form {
 
 input[type="email"],
 input[type="password"],
-input[type="submit"] {
+button[type="submit"] {
   width: 100%;
   padding: 10px;
   border: 2.5px solid #ccc;
@@ -47,7 +59,7 @@ input[type="password"] {
   color: #072946;
 }
 
-input[type="submit"] {
+button[type="submit"] {
   background-color: #81ffd9;
   color: #072946;
   border: none;
@@ -57,7 +69,7 @@ input[type="submit"] {
   font-size: 15px;
 }
 
-input[type="submit"]:hover {
+button[type="submit"]:hover {
   background-color: #47b896;
 }
 

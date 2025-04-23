@@ -7,11 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="../src/styles/main.css" />
     <link rel="stylesheet" href="../src/styles/transitions.css" />
+
+    <!-- Favicon -->
     <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+    <!-- Adicione os SDKs do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -72,7 +83,7 @@
         <div class="header">
             <div class="welcome-section">
                 <h1 class="welcome-title">Gestão de Horários</h1>
-                <p class="greeting">Welcome, Lando!</p>
+                <p class="greeting"></p>
             </div>
 
             <div class="header-right">
@@ -84,39 +95,38 @@
         </div>
         <div class="new-event">
             <div class="new-content">
-                <a href="./view.html" class="event-item">
+                <a href="./view.html" class="event-item role-professor">
                     <i class="fa-solid fa-calendar-plus"></i>
                     <span>Adicionar Horário(s)</span>
                 </a>
-                <a href="#" class="event-item">
+                <a href="#" class="event-item role-professor">
                     <i class="fa-solid fa-trash"></i>
                     <span>Deletar Horário(s)</span>
                 </a>
-                <a href="#" class="event-item">
+                <a href="#" class="event-item role-professor">
                     <i class="fa-solid fa-pen-to-square"></i>
                     <span>Editar Horário(s)</span>
                 </a>
 
-
-                <div class="new event-item">
+                <div class=" event-item role-professor">
                     <div class="dropdown">
                         <button class="dropdown-btn ">
                             <i class="fa-solid fa-plus"></i>
                             <span>Cadastrar</span>
                         </button>
-                        <div class="dropdown-content">
-                            <a href="#" class="modal-trigger" data-form="curso">Cadastrar Curso</a>
-                            <a href="#" class="modal-trigger" data-form="sala">Cadastrar Sala</a>
-                            <a href="#" class="modal-trigger" data-form="turma">Cadastrar Turma</a>
-                            <a href="#" class="modal-trigger" data-form="professor">Cadastrar Docente</a>
-                            <a href="#" class="modal-trigger" data-form="disciplina">Cadastrar Disciplina</a>
-                        </div>
                     </div>
                 </div>
             </div>
 
+            <div class="dropdown-content">
+                <a href="#" class="modal-trigger" data-form="curso">Cadastrar Curso</a>
+                <a href="#" class="modal-trigger" data-form="sala">Cadastrar Sala</a>
+                <a href="#" class="modal-trigger" data-form="turma">Cadastrar Turma</a>
+                <a href="#" class="modal-trigger" data-form="professor">Cadastrar Docente</a>
+                <a href="#" class="modal-trigger" data-form="disciplina">Cadastrar Disciplina</a>
+            </div>
 
-            <!-- Modal Structure (unchanged from your code) -->
+            <!-- Modal for Form -->
             <div id="formModal" class="modal">
                 <div class="modal-dialog">
                     <div class="modal-header">
@@ -263,62 +273,9 @@
         </div>
     </div>
 
-    
-
-    <script>
-        // Script para toggle da sidebar em mobile
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebar = document.querySelector('.sidebar');
-            
-            // Verifica se os elementos existem antes de continuar
-            if (!menuToggle || !sidebar) return;
-            
-            // Mostrar/ocultar botão de toggle baseado no tamanho da tela
-            function checkScreenSize() {
-                if (window.innerWidth <= 576) {
-                    menuToggle.style.display = 'block';
-                    
-                    // Adiciona event listener apenas quando necessário
-                    menuToggle.addEventListener('click', toggleSidebar);
-                } else {
-                    menuToggle.style.display = 'none';
-                    sidebar.classList.remove('active');
-                    
-                    // Remove event listener quando não for necessário
-                    menuToggle.removeEventListener('click', toggleSidebar);
-                }
-            }
-            
-            // Função para alternar a sidebar
-            function toggleSidebar() {
-                sidebar.classList.toggle('active');
-            }
-            
-            // Fechar sidebar ao clicar em um item (opcional)
-            function setupNavItems() {
-                const navItems = document.querySelectorAll('.nav-item');
-                navItems.forEach(item => {
-                    item.addEventListener('click', function() {
-                        if (window.innerWidth <= 576) {
-                            sidebar.classList.remove('active');
-                        }
-                    });
-                });
-            }
-            
-            // Verificar tamanho da tela ao carregar e redimensionar
-            checkScreenSize();
-            window.addEventListener('resize', checkScreenSize);
-            
-            // Configurar os itens de navegação
-            setupNavItems();
-        });
-
-        
-    </script>
-
     <!-- Scripts -->
+    <script src="../src/js/auth.js"></script>
+    <script src="../src/js/mobile-toggle.js"></script>
     <script src="../src/js/modal.js"></script>
     <script src="../src/js/dropdown.js"></script>
     <script src="../src/js/trackTime.js"></script>
