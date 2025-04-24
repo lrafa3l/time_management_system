@@ -1,8 +1,19 @@
 {
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.3",
+    "express": "^5.1.0",
     "flowbite": "^3.1.2",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.3"
-  }
+  },
+  "name": "time_management_system",
+  "version": "1.0.0",
+  "description": "O **Sistema de Gestão de Horários** é uma aplicação web desenvolvida para facilitar a organização e o gerenciamento dos professores e das turmas. Com uma interface intuitiva, o sistema permite a criação, edição e visualização de horários de forma eficiente.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

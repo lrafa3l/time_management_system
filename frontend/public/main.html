@@ -9,11 +9,11 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../src/styles/main.css" />
-    <link rel="stylesheet" href="../src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css" />
 
     <!-- Favicon -->
-    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -43,7 +43,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <img src="../assets/images/logo.png" alt="Logo">
+            <img src="/assets/images/logo.png" alt="Logo">
         </div>
 
         <div class="nav-menu">
@@ -51,29 +51,29 @@
                 <i class="fas fa-home"></i>
                 <span>Página Inicial</span>
             </a>
-            <a href="statistics.html" class="nav-item">
+            <a href="/estatisticas" class="nav-item">
                 <i class="fa-solid fa-chart-simple"></i>
                 <span>Estatísticas</span>
             </a>
-            <a href="./calendar.html" class="nav-item">
+            <a href="/calendario" class="nav-item">
                 <i class="fa-solid fa-calendar-day"></i>
                 <span>Calendário</span>
             </a>
-            <a href="./setting.html" class="nav-item">
+            <a href="/definicoes" class="nav-item">
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
 
         </div>
         <div class="nav-menu-bottom">
-            <a href="./help.html" class="nav-item">
+            <a href="/ajuda" class="nav-item">
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Ajuda</span>
             </a>
-            <a href="./index.html" class="nav-item">
+            <button id="logout-btn" class="nav-item">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Terminar Sessão</span>
-            </a>
+            </button>
         </div>
     </div>
 
@@ -95,7 +95,7 @@
         </div>
         <div class="new-event">
             <div class="new-content">
-                <a href="./view.html" class="event-item role-professor">
+                <a href="/horario" class="event-item role-professor">
                     <i class="fa-solid fa-calendar-plus"></i>
                     <span>Adicionar Horário(s)</span>
                 </a>
@@ -147,17 +147,17 @@
             <div class="dashboard-main">
                 <!-- Cards Sections -->
                 <div class="cards-section">
-                    <a href="./schedule.html" style="text-decoration: none; color: inherit;">
+                    <a href="/horarios-feitos" style="text-decoration: none; color: inherit;">
                         <div class="card-section">
                             <div class="card-icon">
                                 <i class="fa-solid fa-clock-rotate-left"></i>
                             </div>
                             <p class="card-title">Horários Feitos</p>
-                            <h2 class="card-amount">76</h2>
+                            <h2 class="card-amount">1</h2>
                         </div>
                     </a>
 
-                    <a href="./prof.html" style="text-decoration: none; color: inherit;">
+                    <a href="/docentes" style="text-decoration: none; color: inherit;">
                         <div class="card-section">
                             <div class="card-icon">
                                 <i class="fa-solid fa-users"></i>
@@ -167,7 +167,7 @@
                         </div>
                     </a>
 
-                    <a href="./classes.html" style="text-decoration: none; color: inherit;">
+                    <a href="/turmas" style="text-decoration: none; color: inherit;">
                         <div class="card-section">
                             <div class="card-icon">
                                 <i class='fas fa-chalkboard-teacher'></i>
@@ -274,12 +274,23 @@
     </div>
 
     <!-- Scripts -->
-    <script src="../src/js/auth.js"></script>
-    <script src="../src/js/mobile-toggle.js"></script>
-    <script src="../src/js/modal.js"></script>
-    <script src="../src/js/dropdown.js"></script>
-    <script src="../src/js/trackTime.js"></script>
-    <script src="../src/js/page-transitions.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/modal.js"></script>
+    <script src="/src/js/dropdown.js"></script>
+    <script src="/src/js/trackTime.js"></script>
+    <script src="/src/js/page-transitions.js"></script>
+    <script>
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                window.location.href = '/index';
+            }).catch((error) => {
+                console.error('Erro ao fazer logout:', error);
+            });
+        });
+
+        
+    </script>
 
 </body>
 

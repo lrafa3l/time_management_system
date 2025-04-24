@@ -10,9 +10,9 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 
-    <link rel="stylesheet" href="../src/styles/main.css" />
-    <link rel="stylesheet" href="../src/styles/transitions.css" />
-    <link rel="icon" href="../assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
@@ -30,37 +30,37 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <img src="../assets/images/logo.png" alt="Logo">
+            <img src="/assets/images/logo.png" alt="Logo">
         </div>
 
         <div class="nav-menu">
-            <a href="./main.html" class="nav-item">
+            <a href="/pagina-inicial" class="nav-item">
                 <i class="fas fa-home"></i>
                 <span>Página Inicial</span>
             </a>
-            <a href="#" class="nav-item active">
+            <a href="/estatisticas" class="nav-item active">
                 <i class="fa-solid fa-chart-simple"></i>
                 <span>Estatísticas</span>
             </a>
-            <a href="./calendar.html" class="nav-item">
+            <a href="/calendario" class="nav-item">
                 <i class="fa-solid fa-calendar-day"></i>
                 <span>Calendário</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="/definicoes" class="nav-item">
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
 
         </div>
         <div class="nav-menu-bottom">
-            <a href="./help.html" class="nav-item">
+            <a href="/ajuda" class="nav-item">
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Ajuda</span>
             </a>
-            <a href="./auth.html" class="nav-item">
+            <button id="logout-btn" class="nav-item">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Terminar Sessão</span>
-            </a>
+            </button>
         </div>
     </div>
 
@@ -85,8 +85,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="../src/js/auth.js"></script>
-    <script src="../src/js/page-transitions.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script src="/src/js/page-transitions.js"></script>
 </body>
 
 </html>

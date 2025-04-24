@@ -13,7 +13,7 @@ O **Sistema de Gestão de Horários** é uma aplicação web desenvolvida para f
 
 - **Frontend**: HTML, CSS, Tailwind CSS & JavaScript
 - **Backend**: Python
-- **Banco de Dados**: SQLite
+- **Banco de Dados**: Firebase Filestore
 
 ### Passos para Execução
 
