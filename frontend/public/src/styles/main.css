@@ -1,6 +1,6 @@
 /* ===== ROOT VARIABLES ===== */
 :root {
-  --primary-color: #71e0bf;
+  --primary-color: #29a8dc;
   --primary-light: #144b7b;
   --primary-cyan: #81ffd9;
   --primary-dark: #0f2a65;
@@ -19,13 +19,13 @@
   --border-radius: 9px;
   --dark-blue: #072946;
   --bluie: #262a39;
-  --primary-color: #53c4a2;
+  --primary-color: #29a8dc;
 }
 
 /* ===== BASE STYLES ===== */
 @font-face {
   font-family: "AfacadFlux";
-  src: url("fonts/AfacadFlux-VariableFont.ttf") format("truetype");
+  src: url("/fonts/AfacadFlux-VariableFont.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
@@ -49,13 +49,13 @@ body {
 /* ===== SIDEBAR STYLES ===== */
 .sidebar {
   width: var(--sidebar-width);
-  background: linear-gradient(
+  /* background: linear-gradient(
     #072946 0%,
     #072946 30%,
     #0e2b58 50%,
     #0e2b58 70%,
     #182c6a 100%
-  );
+  ); */
   border-right: 1px solid var(--gray-medium);
   padding: 35px 0;
   display: flex;
@@ -69,6 +69,7 @@ body {
   overflow: hidden;
   position: relative;
   height: 100vh;
+  background-color: #ffffff;
 }
 
 .sidebar::before {
@@ -92,7 +93,7 @@ body {
 }
 
 .logo img {
-  width: 220px;
+  width: 150px;
   height: auto;
 }
 
@@ -115,9 +116,9 @@ body {
   display: flex;
   align-items: center;
   padding: 14px 20px;
-  color: var(--white);
+  color: var(--primary-color);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 520;
   font-size: 15px;
   margin-bottom: 8px;
   transition: all 0.3s ease;
@@ -126,17 +127,17 @@ body {
 }
 
 .nav-item:hover {
-  background-color: var(--primary-light);
+  background-color: var(--gray-medium);
   color: var(--primary-color);
-  font-weight: bold;
+  font-weight: 600;
   transform: translateX(5px);
   cursor: pointer;
 }
 
 .nav-item.active {
-  background-color: var(--primary-light);
-  color: var(--primary-cyan);
-  font-weight: 600;
+  background-color: var(--gray-medium);
+  color: var(--primary-color);
+  font-weight: bold;
   border-left: 3px solid var(--primary-color);
 }
 
@@ -273,8 +274,9 @@ body {
   display: flex;
   align-items: center;
   padding: 14px 20px;
-  color: var(--primary-cyan);
-  background-color: var(--primary-light);
+  color: var(--white);
+  background-color: var(--primary-color);
+  /* background-color: #f0e710; */
   text-decoration: none;
   font-weight: 500;
   font-size: 15px;
@@ -355,7 +357,7 @@ body {
   right: 0;
   bottom: 0;
   background-color: rgba(0,0,0,0.5);
-  z-index: 1000;
+  z-index: 9999;
   justify-content: center;
   align-items: center;
   animation: fadeIn 0.3s;
@@ -522,12 +524,12 @@ body.modal-open {
   color: var(--text-secondary);
   margin-bottom: 8px;
 }
-.card-amount {
+.card-section .card-amount {
   font-size: 26px;
   font-weight: 700;
-  background: linear-gradient(45deg, var(--bluie), var(--dark-blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-color: var(--primary-dark);
 }
 
 /* Content Layout */
@@ -570,8 +572,8 @@ body.modal-open {
 }
 
 .plan-card {
-  background: linear-gradient(135deg, #182c6a, var(--dark-blue));
-  color: var(--primary-color);
+  background: linear-gradient(135deg, #182c6a, var(--primary-color));
+  color: var(--white);
   display: flex;
   align-items: center;
   justify-content: space-between;

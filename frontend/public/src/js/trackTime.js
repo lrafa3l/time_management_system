@@ -7,15 +7,6 @@
 
     // Update the percentage text
     document.getElementById('progress-percentage').textContent = `${Math.round(progress)}%`;
-
-    // Update the circular progress
-    const progressRing = document.querySelector('.plan-progress::before'); // Reference to the pseudo-element for the circle
-    const offset = (100 - progress) * (Math.PI * 15.9155) / 100; // Calculate the offset for the circle based on the percentage
-    progressRing.style.strokeDashoffset = offset;
-
-    // Update the day name
-    const dayNames = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-    document.getElementById('day-name').textContent = dayNames[now.getDay()]; // Display current day
 }
 
 // Update every minute to ensure the progress is accurate

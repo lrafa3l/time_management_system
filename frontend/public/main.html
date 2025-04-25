@@ -43,7 +43,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <img src="/assets/images/logo.png" alt="Logo">
+            <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
         </div>
 
         <div class="nav-menu">
@@ -59,10 +59,15 @@
                 <i class="fa-solid fa-calendar-day"></i>
                 <span>Calendário</span>
             </a>
+            <a href="/conta" class="nav-item">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Conta</span>
+            </a>
             <a href="/definicoes" class="nav-item">
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
+
 
         </div>
         <div class="nav-menu-bottom">
@@ -82,7 +87,7 @@
         <!-- Header -->
         <div class="header">
             <div class="welcome-section">
-                <h1 class="welcome-title">Gestão de Horários</h1>
+                <h1 class="welcome-title">Sistema de Gestão de Horários</h1>
                 <p class="greeting"></p>
             </div>
 
@@ -108,22 +113,21 @@
                     <span>Editar Horário(s)</span>
                 </a>
 
-                <div class=" event-item role-professor">
+                <div class="new">
                     <div class="dropdown">
-                        <button class="dropdown-btn ">
+                        <button class="dropdown-btn event-item">
                             <i class="fa-solid fa-plus"></i>
                             <span>Cadastrar</span>
                         </button>
+                        <div class="dropdown-content">
+                            <a href="#" class="modal-trigger" data-form="curso">Cadastrar Curso</a>
+                            <a href="#" class="modal-trigger" data-form="sala">Cadastrar Sala</a>
+                            <a href="#" class="modal-trigger" data-form="turma">Cadastrar Turma</a>
+                            <a href="#" class="modal-trigger" data-form="professor">Cadastrar Docente</a>
+                            <a href="#" class="modal-trigger" data-form="disciplina">Cadastrar Disciplina</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="dropdown-content">
-                <a href="#" class="modal-trigger" data-form="curso">Cadastrar Curso</a>
-                <a href="#" class="modal-trigger" data-form="sala">Cadastrar Sala</a>
-                <a href="#" class="modal-trigger" data-form="turma">Cadastrar Turma</a>
-                <a href="#" class="modal-trigger" data-form="professor">Cadastrar Docente</a>
-                <a href="#" class="modal-trigger" data-form="disciplina">Cadastrar Disciplina</a>
             </div>
 
             <!-- Modal for Form -->
@@ -275,23 +279,364 @@
 
     <!-- Scripts -->
     <script src="/src/js/auth.js"></script>
+    <script src="/src/js/filestore.js"></script>
     <script src="/src/js/mobile-toggle.js"></script>
     <script src="/src/js/modal.js"></script>
     <script src="/src/js/dropdown.js"></script>
     <script src="/src/js/trackTime.js"></script>
     <script src="/src/js/page-transitions.js"></script>
     <script>
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            auth.signOut().then(() => {
-                window.location.href = '/index';
-            }).catch((error) => {
-                console.error('Erro ao fazer logout:', error);
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function () {
+                    firebase.auth().signOut().then(() => {
+                        window.location.href = '/login';
+                    });
+                });
+            }
         });
 
-        
-    </script>
 
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Configuração do Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyA-3WwKHF1-f4fi5sHapRAsNr9INX0Etgo",
+                authDomain: "schedule-system-8c4b6.firebaseapp.com",
+                databaseURL: "https://schedule-system-8c4b6-default-rtdb.firebaseio.com",
+                projectId: "schedule-system-8c4b6",
+                storageBucket: "schedule-system-8c4b6.firebasestorage.app",
+                messagingSenderId: "1056197912318",
+                appId: "1:1056197912318:web:2868c9a27bcc03587e27af",
+                measurementId: "G-GHEY7QZEQ9"
+            };
+
+            // Inicialização segura do Firebase
+            if (!firebase.apps.length) {
+                try {
+                    firebase.initializeApp(firebaseConfig);
+                } catch (error) {
+                    console.error("Erro na inicialização do Firebase:", error);
+                    // Adicione aqui um feedback visual para o usuário
+                    return;
+                }
+            }
+
+            const db = firebase.firestore();
+
+            // Elementos da UI com verificação
+            const UI = {
+                modal: document.getElementById("formModal"),
+                modalBody: document.querySelector(".modal-body"),
+                modalTitle: document.getElementById("modalTitle"),
+                closeBtn: document.querySelector(".close-modal"),
+                triggers: document.querySelectorAll(".modal-trigger")
+            };
+
+            // Verificação de elementos críticos
+            if (!UI.modal || !UI.modalBody || !UI.modalTitle || !UI.closeBtn) {
+                console.error("Elementos essenciais da modal não encontrados!");
+                // Adicione um feedback visual se necessário
+            } else {
+                initializeModal();
+            }
+
+            // Inicialização dos eventos da modal
+            function initializeModal() {
+                UI.closeBtn.addEventListener("click", closeModal);
+
+                UI.triggers.forEach(trigger => {
+                    trigger.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        const formType = this.getAttribute("data-form");
+                        if (formType) {
+                            loadForm(formType).catch(error => {
+                                console.error("Erro ao carregar formulário:", error);
+                            });
+                            openModal();
+                        }
+                    });
+                });
+
+                // Fechar modal com ESC
+                document.addEventListener("keydown", function (e) {
+                    if (e.key === "Escape" && UI.modal.style.display === "flex") {
+                        closeModal();
+                    }
+                });
+            }
+
+            // Funções da modal
+            function openModal() {
+                document.body.classList.add("modal-open");
+                UI.modal.style.display = "flex";
+                UI.modal.querySelector("input")?.focus();
+            }
+
+            function closeModal() {
+                document.body.classList.remove("modal-open");
+                UI.modal.style.display = "none";
+            }
+
+            // Carregar formulário dinâmico
+            async function loadForm(formType) {
+                try {
+                    UI.modalTitle.textContent = `Cadastro de ${capitalizeFirstLetter(formType)}`;
+
+                    const formHTML = await generateFormHTML(formType);
+                    UI.modalBody.innerHTML = formHTML + '<p id="mensagem"></p>';
+
+                    setupFormSubmitHandler(formType);
+                } catch (error) {
+                    console.error(`Erro ao carregar formulário ${formType}:`, error);
+                    throw error;
+                }
+            }
+
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+            // Gerar HTML do formulário
+            async function generateFormHTML(formType) {
+                const forms = {
+                    curso: `
+      <form id="cadastro-curso">
+        <div class="form-group">
+          <label for="nome">Curso</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <button type="submit">Cadastrar</button>
+      </form>`,
+
+                    sala: `
+      <form id="cadastro-sala">
+        <div class="form-group">
+          <label for="nome">Sala</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label for="capacidade">Capacidade</label>
+          <input type="number" id="capacidade" min=1 name="capacidade" required>
+        </div>
+        <button type="submit">Cadastrar</button>
+      </form>`,
+
+      turma: async () => {  // ← Isso é uma função que retorna uma Promise
+    try {
+      const cursos = await loadCursos();
+      const options = cursos.map(curso => 
+        `<option value="${curso.id}">${curso.nome}</option>`
+      ).join('');
+      
+      return `
+        <form id="cadastro-turma">
+          <div class="form-group">
+            <label for="nome">Turma</label>
+            <input type="text" id="nome" name="nome" required>
+          </div>
+          <div class="form-group">
+            <label for="curso">Curso</label>
+            <select id="curso" name="curso" required>
+              <option value="">Selecione um curso</option>
+              ${options}
+            </select>
+          </div>
+          <button type="submit">Cadastrar</button>
+        </form>`;
+    } catch (error) {
+      console.error("Erro ao carregar cursos:", error);
+      return `
+        <form id="cadastro-turma">
+          <div class="form-group">
+            <label for="nome">Turma</label>
+            <input type="text" id="nome" name="nome" required>
+          </div>
+          <div class="form-group">
+            <label>Erro ao carregar cursos</label>
+          </div>
+          <button type="button" disabled>Não foi possível carregar</button>
+        </form>`;
+    }
+  },
+
+                    professor: `
+      <form id="cadastro-professor">
+        <div class="form-group">
+          <label for="nome">Nome Completo</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+              <label for="unidade">Unidade Orgânica</label>
+              <input type="text" id="unidade" name="unidade" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="categoria">Categoria</label>
+              <select id="categoria" name="categoria" required>
+                <option value="">Selecione...</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 1.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 2.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 3.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 4.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 5.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 6.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 7.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 8.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 9.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 10.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 11.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 12.º Grau</option>
+                <option value="professor">Prof. Do Ens. Prim. E Sec. Do 13.º Grau</option>
+                <option value="outra">Outra</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="classe">Classe que Leciona</label>
+              <input type="text" id="classe" name="classe" required>
+              <small>Separe múltiplas classes por barra (/)</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="disciplinas">Disciplina(s)</label>
+              <input type="text" id="disciplinas" name="disciplinas" required>
+              <small>Separe múltiplas disciplinas por barra (/)</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="formacao-medio">Formação do Ensino Médio</label>
+              <input type="text" id="formacao-medio" name="formacao-medio" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="habilitacoes">Habilitações Literár. Ensino Superior</label>
+              <input type="text" id="habilitacoes" name="habilitacoes" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="cargo">Cargo / Função</label>
+              <input type="text" id="cargo" name="cargo" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="contacto">Contacto Telefónico</label>
+              <input type="tel" id="contacto" name="contacto" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+        <button type="submit">Cadastrar</button>
+      </form>`,
+
+                    disciplina: `
+      <form id="cadastro-disciplina">
+        <div class="form-group">
+          <label for="nome">Disciplina</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <button type="submit">Cadastrar</button>
+      </form>`
+                };
+
+                if (typeof forms[formType] === 'function') {
+                    return await forms[formType]();
+                }
+                return forms[formType];
+            }
+
+            // Configurar handler de submit
+            function setupFormSubmitHandler(formType) {
+                const formId = `cadastro-${formType}`;
+                const form = document.getElementById(formId);
+
+                if (form) {
+                    form.addEventListener("submit", async (e) => {
+                        e.preventDefault();
+                        await handleFormSubmit(formType, form);
+                    });
+                } else {
+                    console.error(`Formulário ${formId} não encontrado`);
+                }
+            }
+
+            // Processar submit do formulário
+            async function handleFormSubmit(formType, form) {
+                const message = document.getElementById("mensagem");
+                if (!message) return;
+
+                try {
+                    // Verificar autenticação
+                    const user = firebase.auth().currentUser;
+                    if (!user) throw new Error('Usuário não autenticado');
+
+                    // Processar dados do formulário
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData.entries());
+                    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    data.userId = user.uid;
+
+                    // Conversões específicas
+                    if (formType === 'sala') {
+                        data.capacidade = parseInt(data.capacidade);
+                    }
+
+                    // Determinar coleção
+                    const collectionName = getCollectionName(formType);
+
+                    // Salvar no Firestore
+                    await db.collection(collectionName).add(data);
+
+                    // Feedback de sucesso
+                    showFeedback(message, `${capitalizeFirstLetter(formType)} cadastrado com sucesso!`, 'success');
+                    form.reset();
+
+                    // Fechar modal após 2 segundos
+                    setTimeout(closeModal, 2000);
+
+                } catch (error) {
+                    console.error(`Erro no cadastro de ${formType}:`, error);
+                    showFeedback(message, `Erro ao cadastrar: ${error.message}`, 'error');
+                }
+            }
+
+            // Helper functions
+            function getCollectionName(formType) {
+                const collections = {
+                    professor: 'professores',
+                    turma: 'turmas',
+                    disciplina: 'disciplinas',
+                    curso: 'cursos',
+                    sala: 'salas'
+                };
+                return collections[formType] || `${formType}s`;
+            }
+
+            function showFeedback(element, text, type) {
+                element.textContent = text;
+                element.className = type; // 'success' ou 'error'
+            }
+
+            // Carregar cursos para turmas
+            async function loadCursos() {
+                try {
+                    const snapshot = await db.collection("cursos").get();
+                    return snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        nome: doc.data().nome
+                    }));
+                } catch (error) {
+                    console.error("Erro ao carregar cursos:", error);
+                    return [];
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
