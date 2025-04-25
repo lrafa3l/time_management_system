@@ -34,7 +34,7 @@ Object.entries(rotasPersonalizadas).forEach(([rota, arquivo]) => {
 });
 
 // 2. Rota raiz
-app.get('/', (req, res) => {
+app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'public', 'index.html'));
 });
 

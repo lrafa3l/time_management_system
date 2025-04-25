@@ -43,8 +43,27 @@ body {
   display: flex;
   min-height: 100vh;
   overflow-x: hidden;
-  
+  /* position: relative; Para posicionar a marca d'água */
 }
+
+/* body::after {
+  content: "";
+  background-image: url('/assets/images/ipikk-logo-bg.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+} */
+
+/* Garanta que o conteúdo principal fique acima da marca d'água */
+
 
 /* ===== SIDEBAR STYLES ===== */
 .sidebar {
@@ -156,6 +175,8 @@ body {
   width: calc(100% - var(--sidebar-width));
   height: 100vh;
   overflow-y: auto;
+  position: relative;
+  z-index: 1;
 }
 
 /* Header */
@@ -248,6 +269,9 @@ body {
   color: var(--text-primary);
 }
 
+
+
+
 .search-bar input::placeholder {
   color: var(--gray-dark);
 }
@@ -255,6 +279,41 @@ body {
 .search-bar i {
   color: var(--gray-dark);
   font-size: 16px;
+}
+
+/* ============= HELP SECTION ============= */
+.help-chat {
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+#chat-messages {
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+#user-question {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#ask-button {
+  background: #4285f4;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#ask-button:hover {
+  background: #3367d6;
 }
 
 /*New Event*/
@@ -275,7 +334,7 @@ body {
   align-items: center;
   padding: 14px 20px;
   color: var(--white);
-  background-color: var(--primary-color);
+  background-color: var(--primary-light);
   /* background-color: #f0e710; */
   text-decoration: none;
   font-weight: 500;
@@ -294,6 +353,7 @@ body {
   border-left: 4px solid var(--primary-color);
   transform: translateY(-7px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
 }
 
 .event-item:hover::before {
@@ -722,7 +782,7 @@ body.modal-open {
   width: 80%;
   height: 80%;
   border-radius: 50%;
-  background: var(--primary-dark);
+  background: #144b7b;
 }
 .plan-progress::after {
   content: "";

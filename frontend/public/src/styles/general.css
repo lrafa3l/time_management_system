@@ -9,7 +9,7 @@ body,
 html {
   font-family: "AfacadFlux", sans-serif;
   font-weight: 400;
-  background-color: #f5f7ff;
+  background-color: #e6e9f4;
   height: 100%;
   margin: 0;
 }
@@ -24,13 +24,14 @@ html {
   flex-direction: column;
   width: 300px;
   padding: 20px;
-  background: linear-gradient(
+  /* background: linear-gradient(
     #072946 0%,
     #072946 40%,
     #0e2b58 60%,
     #0e2b58 70%,
     #182c6a 100%
-  );
+  ); */
+  background-color: #f5f7ff;
   border-right: 1px solid var(--gray-medium);
   display: flex;
   position: fixed;
@@ -38,11 +39,11 @@ html {
   left: 0;
   bottom: 0;
   z-index: 80;
-  box-shadow: 5px 0 20px rgba(0, 0, 0, 0.03);
+  box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   position: relative;
   border-radius: 12px;
-  padding-bottom: 45px;
+  padding-bottom: 25px;
 }
 
 .container::before {
@@ -55,4 +56,9 @@ html {
   bottom: -200px;
   left: -200px;
   pointer-events: none;
+}
+
+.logo {
+  width: 180px;
+  margin-bottom: 18px;
 }

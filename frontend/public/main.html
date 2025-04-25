@@ -23,6 +23,36 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+    <style>
+         <style>
+        /* MARCA D'ÁGUA - TESTE FORÇADO */
+        body {
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: "";
+            background: url('/assets/images/ipikk-logo-bg.jpg') no-repeat center center;
+            background-size: 30%; /* Ajuste conforme necessário */
+            opacity: 0.15;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Garantir que o conteúdo fique acima */
+        .main-content, .sidebar {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+    </style>
 </head>
 
 <body>
