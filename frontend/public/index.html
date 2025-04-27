@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt" class="d-flex">
-
 <head>
     <title>SGH | Iniciar Sessão</title>
     <meta charset="UTF-8">
@@ -8,17 +7,15 @@
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/src/styles/general.css">
     <link rel="stylesheet" href="/src/styles/auth.css">
-    <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <!-- Adicione os SDKs do Firebase -->
+    <!-- Firebase SDK (versão mais recente para compatibilidade) -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 </head>
-
 <body class="d-flex">
-
     <!-- Loader de transição -->
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
@@ -46,10 +43,15 @@
                 </div>
             </div>
             <div class="signin-btn">
-                <button type="submit" class="submit">Iniciar Sessão</button>
+                <button type="submit" class="submit">
+                    <span class="button-text">Iniciar Sessão</span>
+                    <span class="spinner" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                </button>
             </div>
         </form>
-        <div id="errorMessage" style="color: red; text-align: center; margin-top: 15px;"></div>
+        <div id="error-message" style="color: red; text-align: center; margin-top: 15px;"></div>
         <div class="back-to-login">
             <!-- <a href="./index.html" class="login-click"><i class="fa-solid fa-arrow-left"></i> Voltar</a> -->
         </div>
@@ -58,8 +60,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="/src/js/auth.js"></script>
+    <script defer src="/src/js/auth.js"></script>
     <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/logOut.js"></script>
 </body>
-
 </html>

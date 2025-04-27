@@ -1,3 +1,10 @@
+@font-face {
+    font-family: "AfacadFlux";
+    src: url("/fonts/AfacadFlux-VariableFont_slnt,wght.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+}
+
 .page-transition {
     position: fixed;
     top: 0;
@@ -34,13 +41,28 @@
     animation: bounce 0.6s infinite ease-in-out;
 }
 
-.bounce-ball:nth-child(1) { animation-delay: 0s; }
-.bounce-ball:nth-child(2) { animation-delay: 0.2s; }
-.bounce-ball:nth-child(3) { animation-delay: 0.4s; }
+.bounce-ball:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.bounce-ball:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.bounce-ball:nth-child(3) {
+    animation-delay: 0.4s;
+}
 
 @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-25px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-25px);
+    }
 }
 
 #contentWrapper {

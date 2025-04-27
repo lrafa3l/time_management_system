@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "AfacadFlux";
+  src: url("/fonts/AfacadFlux-VariableFont_slnt,wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
 body,
 html {
   height: 100%;
@@ -85,23 +92,32 @@ button[type="submit"]:hover {
   color: #072946;
 }
 
-a {
-  text-decoration: none;
+.submit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #29a8dc;
   color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 10px;
 }
 
-a:visited {
+.submit.loading .button-text {
+  display: none;
+}
+
+.submit.loading .spinner {
+  display: inline-block !important;
+}
+
+.spinner {
+  font-size: 16px;
   color: white;
-}
-
-.sign-up {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 13.5px;
-}
-
-.sign-up a:hover {
-  color: #47b896;
 }
 
 .forgot {

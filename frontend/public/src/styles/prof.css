@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #71e0bf;
+    --primary-color: #29a8dc;
     --primary-light: #144b7b;
     --primary-cyan: #81ffd9;
     --primary-dark: #0f2a65;
@@ -18,7 +18,8 @@
     --border-radius: 9px;
     --dark-blue: #072946;
     --bluie: #262a39;
-}
+    --primary-color: #29a8dc;
+  }
 
 .docente-card {
     background-color: var(--dark-blue);

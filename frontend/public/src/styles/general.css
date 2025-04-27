@@ -1,6 +1,6 @@
 @font-face {
   font-family: "AfacadFlux";
-  src: url("fonts/AfacadFlux-VariableFont.ttf") format("truetype");
+  src: url("/fonts/AfacadFlux-VariableFont_slnt,wght.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
@@ -51,7 +51,7 @@ html {
   position: absolute;
   width: 400px;
   height: 400px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(238, 233, 11, 0.7);
   border-radius: 50%;
   bottom: -200px;
   left: -200px;

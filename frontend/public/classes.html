@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>SGH | Turmas/title>
+    <title>SGH | Turmas</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -12,30 +12,35 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="/src/styles/schedule.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
+
+    <!-- Adicione os SDKs do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <style>
-       /* Estilos para o CRUD de Turmas */
-.turmas-table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-}
+        /* Estilos para o CRUD de Turmas */
+        .turmas-table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
 
-.btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors;
-}
+        .btn-primary {
+            @apply bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors;
+        }
 
-.btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition-colors;
-}
+        .btn-secondary {
+            @apply bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition-colors;
+        }
 
-.btn-danger {
-    @apply bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition-colors;
-}
+        .btn-danger {
+            @apply bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition-colors;
+        }
 
-.btn-edit {
-    @apply bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm transition-colors mr-2;
-}
+        .btn-edit {
+            @apply bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm transition-colors mr-2;
+        }
     </style>
 </head>
 
@@ -107,89 +112,95 @@
             </div>
 
             <!-- Adicione isso dentro do <div class="main-content"> -->
-<section class="antialiased">
-    <div>
-        <!-- CRUD Header -->
-        <div class="flex justify-between items-center mb-6">
-            <button id="createTurmaButton" class="btn-primary">
-                <i class="fas fa-plus mr-2"></i> Nova Turma
-            </button>
-        </div>
+            <section class="antialiased">
+                <div>
+                    <!-- CRUD Header -->
+                    <div class="flex justify-between items-center mb-6">
+                        <button id="createTurmaButton" class="btn-primary">
+                            <i class="fas fa-plus mr-2"></i> Nova Turma
+                        </button>
+                    </div>
 
-        <!-- Turmas Table -->
-        <div class="bg-white dark:bg-[#072946] shadow-md sm:rounded-lg overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full turmas-table">
-                    <thead class="bg-gray-50 dark:bg-gray-700">
-                        <tr>
-                            <th class="px-6 py-3 text-left">Turma</th>
-                            <th class="px-6 py-3 text-left">Sala</th>
-                            <th class="px-6 py-3 text-left">Ano Letivo</th>
-                            <th class="px-6 py-3 text-right">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                        <!-- Dados serão carregados via JavaScript -->
-                    </tbody>
-                </table>
+                    <!-- Turmas Table -->
+                    <div class="bg-white dark:bg-[#072946] shadow-md sm:rounded-lg overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full turmas-table">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left">Turma</th>
+                                        <th class="px-6 py-3 text-left">Sala</th>
+                                        <th class="px-6 py-3 text-left">Ano Letivo</th>
+                                        <th class="px-6 py-3 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Dados serão carregados via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modal de Criação/Edição -->
+            <div id="turmaModal" class="hidden fixed inset-0 z-[9999]">
+                <div class="absolute inset-0 bg-black/70"></div>
+                <div class="relative flex items-center justify-center h-full">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalTitle">Adicionar
+                                Turma</h3>
+
+                            <form id="turmaForm" class="mt-4 space-y-4">
+                                <input type="hidden" id="turmaId">
+
+                                <div>
+                                    <label for="turmaNome"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Turma*</label>
+                                    <input type="text" id="turmaNome" required
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                </div>
+
+                                <div>
+                                    <label for="turmaSala"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sala*</label>
+                                    <input type="text" id="turmaSala" required
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                </div>
+
+                                <div>
+                                    <label for="turmaAno"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ano
+                                        Letivo*</label>
+                                    <select id="turmaAno" required
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                        <option value="">Selecione...</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex justify-end space-x-3 pt-4">
+                                    <button type="button" onclick="closeTurmaModal()"
+                                        class="btn-secondary">Cancelar</button>
+                                    <button type="submit" class="btn-primary">Salvar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</section>
 
-<!-- Modal de Criação/Edição -->
-<div id="turmaModal" class="hidden fixed inset-0 z-[9999]">
-    <div class="absolute inset-0 bg-black/70"></div>
-    <div class="relative flex items-center justify-center h-full">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4">
-            <div class="p-6">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalTitle">Adicionar Turma</h3>
-                
-                <form id="turmaForm" class="mt-4 space-y-4">
-                    <input type="hidden" id="turmaId">
-                    
-                    <div>
-                        <label for="turmaNome" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Turma*</label>
-                        <input type="text" id="turmaNome" required
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                    </div>
-                    
-                    <div>
-                        <label for="turmaSala" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sala*</label>
-                        <input type="text" id="turmaSala" required
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                    </div>
-                    
-                    <div>
-                        <label for="turmaAno" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ano Letivo*</label>
-                        <select id="turmaAno" required
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                            <option value="">Selecione...</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                        </select>
-                    </div>
-                    
-                    <div class="flex justify-end space-x-3 pt-4">
-                        <button type="button" onclick="closeTurmaModal()" class="btn-secondary">Cancelar</button>
-                        <button type="submit" class="btn-primary">Salvar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-        </div>
-    </div>
-
-    
 
     <!-- Scripts -->
-    <script src="/src/js/auth.js"></script>
+    <script defer src="/src/js/auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script src="/src/js/page-transitions.js"></script>
     <script src="/src/js/turmasCRUD.js"></script>
+    <script src="/src/js/logOut.js"></script>
 </body>
 
 </html>

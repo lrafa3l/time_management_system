@@ -1,4 +1,3 @@
-// Script para toggle da sidebar em mobile
 document.addEventListener('DOMContentLoaded', function () {
     const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.querySelector('.sidebar');
@@ -15,16 +14,19 @@ document.addEventListener('DOMContentLoaded', function () {
             menuToggle.addEventListener('click', toggleSidebar);
         } else {
             menuToggle.style.display = 'none';
+            menuToggle.style.zIndex = '80';
             sidebar.classList.remove('active');
+            menuToggle.classList.remove('active'); // Remove active do botão
 
             // Remove event listener quando não for necessário
             menuToggle.removeEventListener('click', toggleSidebar);
         }
     }
 
-    // Função para alternar a sidebar
+    // Função para alternar a sidebar e o ícone do botão
     function toggleSidebar() {
         sidebar.classList.toggle('active');
+        menuToggle.classList.toggle('active'); // Alterna a classe active no botão
     }
 
     // Fechar sidebar ao clicar em um item (opcional)
@@ -34,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             item.addEventListener('click', function () {
                 if (window.innerWidth <= 576) {
                     sidebar.classList.remove('active');
+                    menuToggle.classList.remove('active'); // Volta para o ícone de barras
                 }
             });
         });

@@ -14,36 +14,64 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-document.getElementById('loginForm').addEventListener('submit', (e) => {
+// Função para tentar login com retries em caso de falha de rede
+async function attemptLogin(auth, email, password, retries = 3, delay = 1000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            return userCredential;
+        } catch (error) {
+            if (error.code === 'auth/network-request-failed' && i < retries - 1) {
+                console.warn(`Tentativa ${i + 1} falhou. Tentando novamente em ${delay}ms...`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            } else {
+                throw error;
+            }
+        }
+    }
+}
+
+// Manipula o evento de submit do formulário de login
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // Adiciona a classe loading ao botão
+    const button = document.querySelector('.submit');
+    button.classList.add('loading');
+    button.disabled = true; // Desativa o botão para evitar cliques repetidos
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    // Autenticação com email e senha
-    auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            // Login bem-sucedido
-            const user = userCredential.user;
-            console.log('Usuário logado:', user);
-            window.location.href = '/pagina-inicial'; // Redireciona para a página principal
-        })
-        .catch((error) => {
-            // Tratamento de erros
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error('Erro no login:', errorMessage);
+    try {
+        const userCredential = await attemptLogin(auth, email, password);
+        const user = userCredential.user;
 
-            // Exibe mensagem de erro para o usuário
-            document.getElementById('error-message').textContent = getFriendlyErrorMessage(errorCode);
-        });
+        // Atualiza a UI com os dados do usuário (opcional)
+        setupUI({ email: user.email, name: user.displayName });
+
+        console.log('Usuário logado:', user);
+        window.location.href = '/pagina-inicial'; // Redireciona para main.html
+    } catch (error) {
+        // Remove a classe loading e reativa o botão
+        button.classList.remove('loading');
+        button.disabled = false;
+
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error('Erro no login:', errorMessage);
+
+        // Exibe mensagem de erro amigável
+        document.getElementById('error-message').textContent = getFriendlyErrorMessage(errorCode);
+    }
 });
 
 // Atualiza a UI com os dados do usuário
 function setupUI(userData) {
-    // Atualiza nome do usuário
-    document.querySelector(".greeting").textContent = `Bem-vindo, ${userData.name || userData.email.split('@')[0]}!`;
-
+    const greeting = document.querySelector(".greeting");
+    if (greeting) {
+        greeting.textContent = `Bem-vindo, ${userData.name || userData.email.split('@')[0]}!`;
+    }
 }
 
 // Função para traduzir códigos de erro em mensagens amigáveis
@@ -59,8 +87,9 @@ function getFriendlyErrorMessage(errorCode) {
             return 'Senha incorreta.';
         case 'auth/too-many-requests':
             return 'Muitas tentativas de login. Tente novamente mais tarde.';
+        case 'auth/network-request-failed':
+            return 'Falha na rede. Verifique sua conexão ou tente novamente.';
         default:
             return 'Ocorreu um erro durante o login. Tente novamente.';
     }
 }
-

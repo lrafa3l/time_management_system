@@ -1,5 +1,5 @@
 :root {
-  --primary-color: #71e0bf;
+  --primary-color: #29a8dc;
   --primary-light: #144b7b;
   --primary-cyan: #81ffd9;
   --primary-dark: #0f2a65;
@@ -15,18 +15,21 @@
   --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   --sidebar-width: 280px;
   --header-height: 80px;
-  --border-radius: 18px;
+  --border-radius: 9px;
   --dark-blue: #072946;
   --bluie: #262a39;
+  --primary-color: #29a8dc;
 }
 
 .sidebar {
   width: var(--sidebar-width);
-  background: linear-gradient(#072946 0%,
-      #072946 30%,
-      #0e2b58 50%,
-      #0e2b58 70%,
-      #182c6a 100%);
+  /* background: linear-gradient(
+    #072946 0%,
+    #072946 30%,
+    #0e2b58 50%,
+    #0e2b58 70%,
+    #182c6a 100%
+  ); */
   border-right: 1px solid var(--gray-medium);
   padding: 35px 0;
   display: flex;
@@ -35,10 +38,12 @@
   top: 0;
   left: 0;
   bottom: 0;
-  z-index: 80;
+  z-index: 1;
   box-shadow: 5px 0 20px rgba(0, 0, 0, 0.03);
   overflow: hidden;
   position: relative;
+  height: 100vh;
+  background-color: #ffffff;
 }
 
 .sidebar::before {
@@ -46,11 +51,12 @@
   position: absolute;
   width: 400px;
   height: 400px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(238, 233, 11, 0.7);
   border-radius: 50%;
   bottom: -200px;
   left: -200px;
   pointer-events: none;
+  z-index: -1;
 }
 
 .logo {
@@ -61,7 +67,7 @@
 }
 
 .logo img {
-  width: 220px;
+  width: 150px;
   height: auto;
 }
 
@@ -69,7 +75,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 0 15px;
+  padding: 15px;
 }
 
 .nav-menu-bottom {
@@ -84,27 +90,28 @@
   display: flex;
   align-items: center;
   padding: 14px 20px;
-  color: var(--white);
+  color: var(--primary-color);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 520;
   font-size: 15px;
   margin-bottom: 8px;
   transition: all 0.3s ease;
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   border-left: 3px solid transparent;
 }
 
 .nav-item:hover {
-  background-color: var(--primary-light);
+  background-color: var(--gray-medium);
   color: var(--primary-color);
-  font-weight: bold;
+  font-weight: 600;
   transform: translateX(5px);
+  cursor: pointer;
 }
 
 .nav-item.active {
-  background-color: var(--primary-light);
-  color: var(--primary-cyan);
-  font-weight: 600;
+  background-color: var(--gray-medium);
+  color: var(--primary-color);
+  font-weight: bold;
   border-left: 3px solid var(--primary-color);
 }
 
@@ -117,7 +124,6 @@
 
 /* Main Content Styles */
 .main-content {
-
   flex-grow: 1;
   padding: 80px;
   background-color: var(--gray-light);

@@ -1,169 +1,175 @@
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <title>SGH | Ajuda</title>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<head>
+    <title>SGH | Ajuda</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 
-        <link rel="stylesheet" href="/src/styles/main.css" />
-        <link rel="stylesheet" href="/src/styles/transitions.css" />
-        <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    </head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <body>
+    <!-- Adicione os SDKs do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+</head>
 
-        <!-- Loader de transição -->
-        <div class="page-transition" id="pageTransition">
-            <div class="bounce-loader">
-                <div class="bounce-ball"></div>
-                <div class="bounce-ball"></div>
-                <div class="bounce-ball"></div>
-            </div>
+<body>
+
+    <!-- Loader de transição -->
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
         </div>
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo">
-                <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
-            </div>
+        <div class="nav-menu">
+            <a href="/pagina-inicial" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Página Inicial</span>
+            </a>
+            <a href="/estatisticas" class="nav-item">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>Estatísticas</span>
+            </a>
+            <a href="/calendario" class="nav-item">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span>Calendário</span>
+            </a>
+            <a href="/conta" class="nav-item">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Conta</span>
+            </a>
+            <a href="/definicoes" class="nav-item">
+                <i class="fas fa-sliders-h"></i>
+                <span>Definições</span>
+            </a>
 
-            <div class="nav-menu">
-                <a href="/pagina-inicial" class="nav-item">
-                    <i class="fas fa-home"></i>
-                    <span>Página Inicial</span>
-                </a>
-                <a href="/estatisticas" class="nav-item">
-                    <i class="fa-solid fa-chart-simple"></i>
-                    <span>Estatísticas</span>
-                </a>
-                <a href="/calendario" class="nav-item">
-                    <i class="fa-solid fa-calendar-day"></i>
-                    <span>Calendário</span>
-                </a>
-                <a href="/conta" class="nav-item">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <span>Conta</span>
-                </a>
-                <a href="/definicoes" class="nav-item">
-                    <i class="fas fa-sliders-h"></i>
-                    <span>Definições</span>
-                </a>
-
-            </div>
-            <div class="nav-menu-bottom">
-                <a href="#" class="nav-item active">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span>Ajuda</span>
-                </a>
-                <button id="logout-btn" class="nav-item">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>Terminar Sessão</span>
-                </button>
-            </div>
         </div>
+        <div class="nav-menu-bottom">
+            <a href="#" class="nav-item active">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Ajuda</span>
+            </a>
+            <button id="logout-btn" class="nav-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Terminar Sessão</span>
+            </button>
+        </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Header -->
-            <div class="header">
-                <div class="welcome-section">
-                    <h1 class="welcome-title">Ajuda</h1>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="welcome-section">
+                <h1 class="welcome-title">Ajuda</h1>
+            </div>
+
+            <div class="header-right">
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-indicator"></div>
                 </div>
-
-                <div class="header-right">
-                    <div class="notification-bell">
-                        <i class="fas fa-bell"></i>
-                        <div class="notification-indicator"></div>
-                    </div>
-                </div>
             </div>
-
-            <!-- Dashboard Container -->
-            <div class="dashboard-container"></div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai/dist/gemini-api.js"></script>
-    </body>
-    <!-- <script src="/src/js/auth.js"></script> -->
-     <!-- Adicione isso ANTES do seu help.js -->
+
+        <!-- Dashboard Container -->
+        <div class="dashboard-container"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai/dist/gemini-api.js"></script>
+</body>
+<!-- <script src="/src/js/auth.js"></script> -->
+<!-- Adicione isso ANTES do seu help.js -->
 <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai"></script>
 <script>
-  // Garante que a API está carregada antes de usar
-  window.initGemini = async () => {
-    if (!window.google || !window.google.generativeai) {
-      await new Promise(resolve => {
-        const script = document.createElement('script');
-        script.src = "https://cdn.jsdelivr.net/npm/@google/generative-ai";
-        script.onload = resolve;
-        document.head.appendChild(script);
-      });
-    }
-    return window.google.generativeai;
-  };
+    // Garante que a API está carregada antes de usar
+    window.initGemini = async () => {
+        if (!window.google || !window.google.generativeai) {
+            await new Promise(resolve => {
+                const script = document.createElement('script');
+                script.src = "https://cdn.jsdelivr.net/npm/@google/generative-ai";
+                script.onload = resolve;
+                document.head.appendChild(script);
+            });
+        }
+        return window.google.generativeai;
+    };
 </script>
-    <script>
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // Carrega a API de forma assíncrona
-        const { GoogleGenerativeAI } = await initGemini();
-        
-        // Configuração (EM PRODUÇÃO, use backend Node.js para a chave!)
-        const apiKey = 'AIzaSyAxP9hKs7ZtMCcrpAVqud7XZW7I_oE9GTo'; 
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Carrega a API de forma assíncrona
+            const { GoogleGenerativeAI } = await initGemini();
 
-        // Elementos do DOM
-        const chatContainer = `
+            // Configuração (EM PRODUÇÃO, use backend Node.js para a chave!)
+            const apiKey = 'AIzaSyAxP9hKs7ZtMCcrpAVqud7XZW7I_oE9GTo';
+            const genAI = new GoogleGenerativeAI(apiKey);
+            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+            // Elementos do DOM
+            const chatContainer = `
         <div class="help-chat">
             <h2>Como podemos ajudar?</h2>
             <div id="chat-messages"></div>
             <input type="text" id="user-input" placeholder="Digite sua dúvida...">
             <button id="send-btn">Enviar</button>
         </div>`;
-        document.querySelector('.dashboard-container').innerHTML = chatContainer;
+            document.querySelector('.dashboard-container').innerHTML = chatContainer;
 
-        // Funções do chat
-        const addMessage = (sender, text) => {
-            const chat = document.getElementById('chat-messages');
-            chat.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
-            chat.scrollTop = chat.scrollHeight;
-        };
+            // Funções do chat
+            const addMessage = (sender, text) => {
+                const chat = document.getElementById('chat-messages');
+                chat.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
+                chat.scrollTop = chat.scrollHeight;
+            };
 
-        document.getElementById('send-btn').addEventListener('click', async () => {
-            const input = document.getElementById('user-input');
-            const question = input.value.trim();
-            
-            if (question) {
-                addMessage("Você", question);
-                input.value = '';
-                
-                try {
-                    const result = await model.generateContent(question);
-                    const response = await result.response;
-                    addMessage("Assistente", response.text());
-                } catch (error) {
-                    console.error("Erro:", error);
-                    addMessage("Assistente", "❌ Erro ao processar sua pergunta");
+            document.getElementById('send-btn').addEventListener('click', async () => {
+                const input = document.getElementById('user-input');
+                const question = input.value.trim();
+
+                if (question) {
+                    addMessage("Você", question);
+                    input.value = '';
+
+                    try {
+                        const result = await model.generateContent(question);
+                        const response = await result.response;
+                        addMessage("Assistente", response.text());
+                    } catch (error) {
+                        console.error("Erro:", error);
+                        addMessage("Assistente", "❌ Erro ao processar sua pergunta");
+                    }
                 }
-            }
-        });
+            });
 
-    } catch (error) {
-        console.error("Falha ao carregar a API:", error);
-        document.querySelector('.dashboard-container').innerHTML = `
+        } catch (error) {
+            console.error("Falha ao carregar a API:", error);
+            document.querySelector('.dashboard-container').innerHTML = `
             <div class="error">
                 <p>O serviço de ajuda está temporariamente indisponível.</p>
             </div>
         `;
-    }
-});
-    </script>
-    <script src="/src/js/page-transitions.js"></script>
+        }
+    });
+</script>
+<script src="/src/js/page-transitions.js"></script>
+<script src="/src/js/logOut.js"></script>
 
-    </html>
+</html>

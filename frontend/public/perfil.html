@@ -15,6 +15,11 @@
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Adicione os SDKs do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <style>
         /* Estilos para a seção da conta */
 
@@ -159,6 +164,11 @@
         </div>
     </div>
 
+    <!-- Botão de toggle para mobile -->
+    <button class="menu-toggle" id="menuToggle" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
@@ -219,11 +229,11 @@
         <!-- Dashboard Container -->
         <div class="dash-container">
             <!-- Seção do Perfil Principal -->
-                <div class="profile-header">
-                    <div class="profile-avatar">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
                 </div>
+            </div>
 
             <!-- Seção de Dados Pessoais -->
             <div class="account-section">
@@ -356,6 +366,8 @@
 </body>
 <script src="/src/js/auth.js"></script>
 <script src="/src/js/firestore.js"></script>
+<script src="/src/js/mobile-toggle.js"></script>
 <script src="/src/js/page-transitions.js"></script>
+<script src="/src/js/logOut.js"></script>
 
 </html>
