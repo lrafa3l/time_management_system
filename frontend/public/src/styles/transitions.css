@@ -5,6 +5,13 @@
     font-style: normal;
 }
 
+* {
+    /* margin: 0;
+    padding: 0;
+    box-sizing: border-box; */
+    font-family: "AfacadFlux", sans-serif;
+}
+
 .page-transition {
     position: fixed;
     top: 0;

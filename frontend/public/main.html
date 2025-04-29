@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>SGH | Página Inicial</title>
     <meta charset="UTF-8" />
@@ -15,6 +16,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
@@ -326,7 +328,7 @@
                     turma: async () => {
                         try {
                             const cursos = await loadCursos();
-                            const cursoOptions = cursos.map(curso => 
+                            const cursoOptions = cursos.map(curso =>
                                 `<option value="${curso.id}">${curso.nome}</option>`
                             ).join('');
                             return `
@@ -442,7 +444,7 @@
                     horario: async () => {
                         try {
                             const professores = await loadProfessores();
-                            const options = professores.map(professor => 
+                            const options = professores.map(professor =>
                                 `<option value="${professor.id}">${professor.nome}</option>`
                             ).join('');
                             return `
@@ -564,14 +566,11 @@
                 console.log('Cursos:', cursos);
                 const eligibleTurmas = turmas.filter(turma => {
                     const turmaClasse = turma.classe || '';
-                    const curso = cursos.find(c => c.id === turma.curso);
-                    const turmaDisciplinas = curso && curso.disciplinas ? curso.disciplinas.split('/').map(d => d.trim()) : [];
-                    console.log(`Turma ${turma.nome} - Curso: ${curso?.nome}, Classe: ${turmaClasse}, Disciplinas:`, turmaDisciplinas);
-                    return professorClasses.includes(turmaClasse) && 
-                           turmaDisciplinas.some(d => professorDisciplinas.includes(d));
+                    console.log(`Turma ${turma.nome} - Classe: ${turmaClasse}`);
+                    return professorClasses.includes(turmaClasse);
                 });
                 console.log('Turmas Elegíveis:', eligibleTurmas);
-                if (eligibleTurmas.length === 0) throw new Error('Nenhuma turma compatível com as classes ou disciplinas do professor');
+                if (eligibleTurmas.length === 0) throw new Error('Nenhuma turma compatível com as classes do professor');
                 const dayOff = days[Math.floor(Math.random() * days.length)];
                 const workingDays = days.filter(day => day !== dayOff);
                 const periodsPerDay = Math.ceil(24 / workingDays.length);
@@ -674,4 +673,5 @@
         });
     </script>
 </body>
+
 </html>

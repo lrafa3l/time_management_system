@@ -12,8 +12,8 @@ O **Sistema de Gestão de Horários** é uma aplicação web desenvolvida para f
 ## Tecnologias Utilizadas
 
 - **Frontend**: HTML, CSS, Tailwind CSS & JavaScript
-- **Backend**: Python
-- **Banco de Dados**: Firebase Filestore
+- **Backend**: Node.js, Express.js
+- **Banco de Dados**: Filestore Database (Google Firebase)
 
 ### Passos para Execução
 

@@ -329,7 +329,8 @@ body {
 }
 
 .event-item:hover {
-  border-left: 4px solid var(--primary-color);
+  /* border-left: 4px solid var(--primary-color); */
+  background-color: var(--primary-color);
   transform: translateY(-7px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
@@ -364,7 +365,7 @@ body {
 }
 
 .dropdown-content a {
-  color: #333;
+  color: var(--dark-blue);
   padding: 10px 15px;
   text-decoration: none;
   display: block;
@@ -373,7 +374,7 @@ body {
 
 .dropdown-content a:hover {
   background-color: var(--primary-light);
-  color: var(--primary-cyan);
+  color: var(--white);
 }
 
 .dropdown.active .dropdown-content {
@@ -481,14 +482,16 @@ select:focus {
 
 option {
   background-color: var(--primary-light);
-  color: var(--primary-cyan);
+  color: var(--white);
+  border-radius: var(--border-radius);
 }
 
 .modal-body button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background: var(--primary-light);
-  color: var(--primary-cyan);
+  background: var(--primary-color);
+  color: var(--white);
+  font-weight: bold;
   border: none;
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -551,7 +554,7 @@ body.modal-open {
   justify-content: center;
   margin-bottom: 20px;
   background-color: var(--primary-light);
-  color: var(--primary-color);
+  color: var(--white);
   font-size: 20px;
   transition: all 0.3s ease;
 }
