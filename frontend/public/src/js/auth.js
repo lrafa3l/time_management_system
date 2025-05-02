@@ -89,6 +89,8 @@ function getFriendlyErrorMessage(errorCode) {
             return 'Muitas tentativas de login. Tente novamente mais tarde.';
         case 'auth/network-request-failed':
             return 'Falha na rede. Verifique sua conexão ou tente novamente.';
+        case 'auth/invalid-login-credentials':
+            return 'E-mail ou palavra-passe inválido. Tente novamente.';
         default:
             return 'Ocorreu um erro durante o login. Tente novamente.';
     }
