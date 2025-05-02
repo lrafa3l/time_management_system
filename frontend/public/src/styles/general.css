@@ -23,14 +23,8 @@ html {
 .container {
   flex-direction: column;
   width: 300px;
+  height: 410px;
   padding: 20px;
-  /* background: linear-gradient(
-    #072946 0%,
-    #072946 40%,
-    #0e2b58 60%,
-    #0e2b58 70%,
-    #182c6a 100%
-  ); */
   background-color: #f5f7ff;
   border-right: 1px solid var(--gray-medium);
   display: flex;
