@@ -1113,43 +1113,6 @@ body.modal-open {
   }
 }
 
-/* Botão para toggle da sidebar em mobile */
-.menu-toggle {
-  display: block;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.menu-toggle .menu-icon,
-.menu-toggle .close-icon {
-  transition: opacity 0.3s ease;
-}
-
-.menu-toggle.active .menu-icon {
-  opacity: 0;
-  display: none;
-}
-
-.menu-toggle.active .close-icon {
-  opacity: 1;
-  display: block;
-  color: white;
-}
-
 /* Ajustes para a barra de rolagem */
 ::-webkit-scrollbar {
   width: 6px;
