@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cardsPerPage = 6;
     let allProfessores = [];
     let filteredProfessores = [];
+    let disciplinasMap = {}; // Store disciplines map globally
 
     // Color scheme for avatars
     const avatarColors = [
@@ -44,12 +45,12 @@ document.addEventListener("DOMContentLoaded", function () {
     async function fetchDisciplinas() {
         try {
             const snapshot = await db.collection('disciplinas').get();
-            const disciplinasMap = {};
+            const map = {};
             snapshot.forEach(doc => {
-                disciplinasMap[doc.id] = doc.data().nome || 'Sem Nome';
+                map[doc.id] = doc.data().nome || 'Sem Nome';
             });
-            console.log('Disciplinas Map:', disciplinasMap);
-            return disciplinasMap;
+            console.log('Disciplinas Map:', map);
+            return map;
         } catch (error) {
             console.error('Erro ao carregar disciplinas:', error);
             return {};
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            const disciplinasMap = await fetchDisciplinas();
+            disciplinasMap = await fetchDisciplinas(); // Store globally
             const snapshot = await db.collection('professores')
                 .where('userId', '==', user.uid)
                 .orderBy('nome')
@@ -88,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
             filteredProfessores = [...allProfessores];
             console.log('Professores Data:', allProfessores.map(p => ({ nome: p.nome, disciplinas: p.disciplinas })));
 
-            renderPage(1, disciplinasMap);
+            renderPage(1);
             console.log('Dispatching dataLoaded: success');
             document.dispatchEvent(new Event('dataLoaded'));
         } catch (error) {
@@ -104,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Render professor cards for the current page
-    function renderProfessores(professores, disciplinasMap, startIndex) {
+    function renderProfessores(professores, startIndex) {
         docentesList.innerHTML = '';
         professores.forEach((professor, index) => {
             // Get initials from nome
@@ -221,11 +222,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Render current page
-    function renderPage(page, disciplinasMap = null) {
+    function renderPage(page) {
         const startIndex = (page - 1) * cardsPerPage;
         const endIndex = startIndex + cardsPerPage;
         const pageProfessores = filteredProfessores.slice(startIndex, endIndex);
-        renderProfessores(pageProfessores, disciplinasMap || {}, startIndex);
+        renderProfessores(pageProfessores, startIndex);
         renderPagination(filteredProfessores.length);
     }
 
