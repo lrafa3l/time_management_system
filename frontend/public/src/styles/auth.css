@@ -95,6 +95,7 @@ button[type="submit"]:hover {
 .spinner {
   font-size: 16px;
   color: white;
+  display: none;
 }
 
 #error-message {

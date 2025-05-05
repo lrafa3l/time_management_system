@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="/src/styles/schedule.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/toggle.css" />
     <link rel="stylesheet" href="/src/styles/prof.css" />
 
     <!-- Adicione os SDKs do Firebase -->
@@ -30,6 +31,11 @@
             <div class="bounce-ball"></div>
         </div>
     </div>
+
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fa-solid fa-bars menu-icon"></i>
+        <i class="fa-solid fa-xmark close-icon"></i>
+    </button>
 
     <!-- Sidebar -->
     <div class="layout-wrapper">
@@ -363,6 +369,7 @@
     <script defer src="/src/js/auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script src="/src/js/page-transitions.js"></script>
+    <script src="src/js/mobile-toggle.js"></script>
     <script src="/src/js/logOut.js"></script>
 </body>
 

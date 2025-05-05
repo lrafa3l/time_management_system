@@ -20,6 +20,7 @@
   --dark-blue: #072946;
   --bluie: #262a39;
   --primary-color: #29a8dc;
+  --water: #d7faff;
 }
 
 /* ===== BASE STYLES ===== */
@@ -48,13 +49,6 @@ body {
 /* ===== SIDEBAR STYLES ===== */
 .sidebar {
   width: var(--sidebar-width);
-  /* background: linear-gradient(
-    #072946 0%,
-    #072946 30%,
-    #0e2b58 50%,
-    #0e2b58 70%,
-    #182c6a 100%
-  ); */
   border-right: 1px solid var(--gray-medium);
   padding: 35px 0;
   display: flex;
@@ -126,7 +120,7 @@ body {
 }
 
 .nav-item:hover {
-  background-color: var(--gray-medium);
+  background-color: var(--water);
   color: var(--primary-color);
   font-weight: 600;
   transform: translateX(5px);
@@ -134,7 +128,7 @@ body {
 }
 
 .nav-item.active {
-  background-color: var(--gray-medium);
+  background-color: var(--water);
   color: var(--primary-color);
   font-weight: bold;
   border-left: 3px solid var(--primary-color);
@@ -589,7 +583,7 @@ body.modal-open {
 
 .dashboard-main {
   display: grid;
-  gap: 30px;
+  gap: 20px;
 }
 
 /* Activities Section */
@@ -602,7 +596,7 @@ body.modal-open {
 .plan-card {
   background-color: var(--white);
   border-radius: var(--border-radius);
-  padding: 25px;
+  padding: 20px;
   box-shadow: var(--card-shadow);
 }
 
@@ -644,7 +638,7 @@ body.modal-open {
 .section-title {
   font-size: 20px;
   font-weight: 600;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   position: relative;
   display: inline-block;
 }
@@ -698,7 +692,7 @@ body.modal-open {
 .activity-item:hover .activity-icon {
   transform: scale(1.1);
   background-color: var(--primary-light);
-  color: var(--primary-color);
+  color: var(--white);
 }
 
 .activity-icon img {
@@ -1113,43 +1107,6 @@ body.modal-open {
   }
 }
 
-/* Botão para toggle da sidebar em mobile */
-.menu-toggle {
-  display: block;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.menu-toggle .menu-icon,
-.menu-toggle .close-icon {
-  transition: opacity 0.3s ease;
-}
-
-.menu-toggle.active .menu-icon {
-  opacity: 0;
-  display: none;
-}
-
-.menu-toggle.active .close-icon {
-  opacity: 1;
-  display: block;
-  color: white;
-}
-
 /* Ajustes para a barra de rolagem */
 ::-webkit-scrollbar {
   width: 6px;
@@ -1166,6 +1123,11 @@ body.modal-open {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-color);
+}
+
+::selection {
+  background-color: var(--primary-color);
+  color: var(--white);
 }
 
 /* Correção específica para header-right */
