@@ -20,6 +20,7 @@
   --dark-blue: #072946;
   --bluie: #262a39;
   --primary-color: #29a8dc;
+  --water: #d7faff;
 }
 
 /* ===== BASE STYLES ===== */
@@ -126,7 +127,7 @@ body {
 }
 
 .nav-item:hover {
-  background-color: var(--gray-medium);
+  background-color: var(--water);
   color: var(--primary-color);
   font-weight: 600;
   transform: translateX(5px);
@@ -134,7 +135,7 @@ body {
 }
 
 .nav-item.active {
-  background-color: var(--gray-medium);
+  background-color: var(--water);
   color: var(--primary-color);
   font-weight: bold;
   border-left: 3px solid var(--primary-color);
@@ -1129,6 +1130,11 @@ body.modal-open {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-color);
+}
+
+::selection {
+  background-color: var(--primary-color);
+  color: var(--white);
 }
 
 /* Correção específica para header-right */
