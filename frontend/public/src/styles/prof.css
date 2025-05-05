@@ -79,7 +79,7 @@ option {
     border-radius: var(--border-radius);
 }
 
-#prof {
+#search {
     display: flex;
     justify-content: center;
     align-items: center;
