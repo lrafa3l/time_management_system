@@ -18,7 +18,6 @@
     --border-radius: 9px;
     --dark-blue: #072946;
     --bluie: #262a39;
-    --primary-color: #29a8dc;
 }
 
 .docente-card {
@@ -83,6 +82,10 @@ option {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.pagination-nav a {
+    transition: all 0.2s ease;
 }
 
 /* ========== RESPONSIVE STYLES ========== */
@@ -156,9 +159,10 @@ option {
         max-width: 100%;
     }
 
-    .pagination {
-        flex-direction: column;
-        gap: 10px;
+    .pagination-nav {
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
     }
 
     .header {
