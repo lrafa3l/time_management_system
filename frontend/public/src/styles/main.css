@@ -886,9 +886,6 @@ body.modal-open {
 }
 
 @media (max-width: 768px) {
-  .main-content {
-    padding: 20px;
-  }
 
   .header {
     flex-direction: column;
@@ -904,8 +901,6 @@ body.modal-open {
   }
 
 }
-
-/* Melhorias ao CSS existente */
 
 /* Ajustes gerais para mobile */
 @media (max-width: 768px) {
@@ -968,8 +963,8 @@ body.modal-open {
 
 @media (max-width: 576px) {
   .plan-card {
-    width: 100%;
-    max-width: 300px;
+    /* width: 100%; */
+    max-width: 250px;
     margin: 20px auto;
     padding: 20px;
     flex-direction: column;
@@ -1036,7 +1031,7 @@ body.modal-open {
     grid-template-columns: 1fr !important;
     width: 100%;
     max-width: 100%;
-    gap: 15px;
+    /* gap: 15px; */
     margin: 0;
     /* padding: 0 15px; */
     display: flex;
@@ -1086,11 +1081,6 @@ body.modal-open {
 
 /* Ajustes para telas pequenas (mobile) */
 @media (max-width: 576px) {
-  .cards-section {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
@@ -1183,8 +1173,8 @@ body.modal-open {
 @media (max-width: 768px) {
   .card-section {
     padding: 0 5px;
-    width: 110px;
-    height: 165px;
+    width: 100px;
+    height: 155px;
     color: var(--primary-dark);
   }
 
@@ -1245,6 +1235,7 @@ body.modal-open {
     flex-direction: column;
     align-items: center;
     padding: 15px;
+    /* padding: 0; */
     width: 100%;
     margin-left: 0;
   }
@@ -1333,10 +1324,6 @@ body.modal-open {
     transform: translateX(0);
   }
 
-  .main-content {
-    margin-left: 0;
-  }
-
   .dashboard-sidebar {
     width: 100%;
     padding: 0;
@@ -1368,8 +1355,9 @@ body.modal-open {
 
   .dashboard-main,
   .dashboard-sidebar {
-    width: 100%;
+    width: 330px;
     padding: 15px 5px;
+    margin: 0 auto;
   }
 
   .dashboard-main {
@@ -1381,14 +1369,15 @@ body.modal-open {
     width: 100%;
     grid-template-columns: 1fr;
     margin: 0;
-    gap: 10px;
+    gap: 8px;
   }
 
   .activity-section {
     width: 100%;
     grid-template-columns: 1fr;
     margin: 0;
-    padding: 0 5px;
+    padding: 0;
     gap: 10px;
+    width: 318px;
   }
 }
