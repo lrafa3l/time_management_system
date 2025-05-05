@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/src/styles/toggle.css" />
     <link rel="stylesheet" href="/src/styles/prof.css" />
 
-    <!-- Adicione os SDKs do Firebase -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
@@ -93,269 +93,49 @@
                 </div>
             </div>
 
-            <!-- Para centralizar a section na main-content -->
-            <!-- <style>
-                .main-content {
-                display: flex;
-                }
-                
-                section {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                }   
-            </style> -->
-
             <!-- Docentes Table -->
             <section class="p-4 sm:p-6 flex justify-center align-items-center">
                 <div class="w-full max-w-7xl mx-auto">
-                    <!-- Search and Filters -->
-                    <div class="mb-6 flex flex-col md:flex-row gap-4">
+                    <!-- Search -->
+                    <div class="mb-6 flex flex-col md:flex-row gap-4"  id="prof">
                         <div class="w-full md:w-2/3">
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <i class="fas fa-search text-[#29a8dc]"></i>
                                 </div>
                                 <input type="text" id="search-docentes"
-                                    class=" text-gray-900 text-sm rounded-lg focus:ring-[#29a8dc] focus:border-[#29a8dc] block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#29a8dc] dark:focus:border-[#29a8dc]"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#29a8dc] focus:border-[#29a8dc] block w-full pl-10 p-2.5 dark:placeholder-gray-400 dark:text-[#144b7b] dark:focus:ring-[#29a8dc] dark:focus:border-[#29a8dc]"
                                     placeholder="Pesquisar docentes...">
                             </div>
-                        </div>
-                        <div class="w-full md:w-1/3">
-                            <select id="filter-department"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#29a8dc] dark:focus:border-[#29a8dc]">
-                                <option value="">Todas as coordenações</option>
-                                <option value="tecnologias-moveis">Tecnologias de Móveis</option>
-                                <option value="informatica">Informática</option>
-                                <option value="construcao-civil">Construção Civil</option>
-                            </select>
                         </div>
                     </div>
 
                     <!-- Docentes List -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Docente Card 1 -->
-                        <div class="docente-card bg-white dark:bg-[#ffffff] rounded-lg shadow p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                                        <span class="text-blue-600 dark:text-blue-300 font-medium text-lg">GF</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="name text-lg font-semibold text-gray-900 dark:text-white truncate">Gualter
-                                        Francisco</h3>
-                                    <p class="text-sm text-gray-500 dark:text-[#29a8dc] truncate">Matemática</p>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <i class="fas fa-envelope text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-[#29a8dc] dark:text-[#29a8dc]">gualter@escola.edu</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-phone text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">+244 912 345 678</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex space-x-2">
-                                <button
-                                    class="contact-btn flex-1 bg-[#29a8dc] font-semibold hover:bg-[#2195c3] text-[#ffffff] py-2 px-4 rounded-lg text-sm flex items-center justify-center">
-                                     Ver mais
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Docente Card 2 -->
-                        <div class="docente-card bg-white dark:bg-[#ffffff] rounded-lg shadow p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center">
-                                        <span class="text-yellow-600 dark:text-yellow-300 font-medium text-lg">GQ</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="name text-lg font-semibold text-gray-900 dark:text-white truncate">Guilherme
-                                        Quileba</h3>
-                                    <p class="text-sm text-gray-500 dark:text-[#29a8dc] truncate">Química</p>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <i class="fas fa-envelope text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">guilherme@escola.edu</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-phone text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">+244 915 678 901</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex space-x-2">
-                                <button
-                                    class="contact-btn flex-1 bg-[#29a8dc] font-semibold hover:bg-[#2195c3] text-[#ffffff] py-2 px-4 rounded-lg text-sm flex items-center justify-center">
-                                     Ver mais
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Docente Card 3 -->
-                        <div class="docente-card bg-white dark:bg-[#ffffff] rounded-lg shadow p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center">
-                                        <span class="text-red-600 dark:text-red-300 font-medium text-lg">IS</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="name text-lg font-semibold text-gray-900 dark:text-white truncate">Iveth
-                                        Saluvo
-                                    </h3>
-                                    <p class="text-sm text-gray-500 dark:text-[#29a8dc] truncate">TIC</p>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <i class="fas fa-envelope text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">iveth@escola.edu</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-phone text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">+244 916 789 012</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex space-x-2">
-                                <button
-                                    class="contact-btn flex-1 bg-[#29a8dc] font-semibold hover:bg-[#2195c3] text-[#ffffff] py-2 px-4 rounded-lg text-sm flex items-center justify-center">
-                                     Ver mais
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Docente Card 4 -->
-                        <div class="docente-card bg-white dark:bg-[#ffffff] rounded-lg shadow p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-                                        <span class="text-indigo-600 dark:text-indigo-300 font-medium text-lg">YM</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="name text-lg font-semibold text-gray-900 dark:text-white truncate">Yola
-                                        Inácio</h3>
-                                    <p class="text-sm text-gray-500 dark:text-[#29a8dc] truncate">Português</p>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <i class="fas fa-envelope text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">yolanda@escola.edu</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-phone text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">+244 917 890 123</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex space-x-2">
-                                <button
-                                    class="contact-btn flex-1 bg-[#29a8dc] font-semibold hover:bg-[#2195c3] text-[#ffffff] py-2 px-4 rounded-lg text-sm flex items-center justify-center">
-                                     Ver mais
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Docente Card 5 -->
-                        <div class="docente-card bg-white dark:bg-[#ffffff] rounded-lg shadow p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                                        <span class="text-green-600 dark:text-green-300 font-medium text-lg">MJ</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="name text-lg font-semibold text-gray-900 dark:text-white truncate">Manuel João
-                                    </h3>
-                                    <p class="text-sm text-gray-500 dark:text-[#29a8dc] truncate">Física</p>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <i class="fas fa-envelope text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">manuel.joao@escola.edu</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-phone text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">+244 923 456 789</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex space-x-2">
-                                <button
-                                    class="contact-btn flex-1 bg-[#29a8dc] font-semibold hover:bg-[#2195c3] text-[#ffffff] py-2 px-4 rounded-lg text-sm flex items-center justify-center">
-                                     Ver mais
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Docente Card 6 -->
-                        <div class="docente-card bg-white dark:bg-[#ffffff] rounded-lg shadow p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-                                        <span class="text-purple-600 dark:text-purple-300 font-medium text-lg">RS</span>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="name text-lg font-semibold text-gray-900 dark:text-white truncate">Diassilua
-                                        Paulo
-                                    </h3>
-                                    <p class="text-sm text-gray-500 dark:text-[#29a8dc] truncate">Informática</p>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <i class="fas fa-envelope text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">diassilua@escola.edu</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-phone text-[#29a8dc] mr-2"></i>
-                                    <span class="text-sm text-gray-600 dark:text-[#29a8dc]">+244 934 567 890</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex space-x-2">
-                                <button
-                                    class="contact-btn flex-1 bg-[#29a8dc] font-semibold hover:bg-[#2195c3] text-[#ffffff] py-2 px-4 rounded-lg text-sm flex items-center justify-center">
-                                     Ver mais
-                                </button>
-                            </div>
-                        </div>
+                        <!-- Cards will be dynamically inserted here -->
                     </div>
 
                     <!-- Pagination -->
                     <div class="mt-8 flex justify-center">
                         <nav class="inline-flex rounded-md shadow">
                             <a href="#"
-                                class="px-3 py-2 rounded-l-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-gray-50 dark:hover:bg-gray-700">
+                                class="px-3 py-2 rounded-l-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-[#d7faff] dark:hover:bg-[#d7faff]">
                                 <i class="fas fa-chevron-left"></i>
                             </a>
                             <a href="#"
-                                class="px-4 py-2 border-t border-b border-gray-300 bg-white dark:bg-[#ffffff] text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30">
+                                class="px-4 py-2 border-t border-b border-gray-300 bg-white dark:bg-[#ffffff] text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-[#d7faff]">
                                 1
                             </a>
                             <a href="#"
-                                class="px-4 py-2 border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-gray-50 dark:hover:bg-gray-700">
+                                class="px-4 py-2 border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-gray-50 dark:hover:bg-[#d7faff]">
                                 2
                             </a>
                             <a href="#"
-                                class="px-4 py-2 border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-gray-50 dark:hover:bg-gray-700">
+                                class="px-4 py-2 border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-gray-50 dark:hover:bg-[#d7faff]">
                                 3
                             </a>
                             <a href="#"
-                                class="px-3 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-gray-50 dark:hover:bg-gray-700">
+                                class="px-3 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-gray-50 dark:hover:bg-[#d7faff]">
                                 <i class="fas fa-chevron-right"></i>
                             </a>
                         </nav>
@@ -369,8 +149,9 @@
     <script defer src="/src/js/auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script src="/src/js/page-transitions.js"></script>
-    <script src="src/js/mobile-toggle.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
     <script src="/src/js/logOut.js"></script>
+    <script defer src="/src/js/professores.js"></script>
 </body>
 
 </html>

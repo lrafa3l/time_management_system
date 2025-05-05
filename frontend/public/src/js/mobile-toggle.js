@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             menuToggle.style.display = 'none';
-            menuToggle.style.zIndex = '80';
+            menuToggle.style.zIndex = '100';
             sidebar.classList.remove('active');
             menuToggle.classList.remove('active');
             console.log('Reset: Button classes:', menuToggle.classList);

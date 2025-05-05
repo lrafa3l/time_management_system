@@ -101,7 +101,6 @@ button[type="submit"]:hover {
 #error-message {
   color: red;
   text-align: center;
-  /* margin-top: 15px; */
   z-index: 1;
 }
 
