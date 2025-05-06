@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Mostrar/ocultar botão de toggle baseado no tamanho da tela
     function checkScreenSize() {
-        if (window.innerWidth <= 576) {
+        if (window.innerWidth <= 768) {
             menuToggle.style.display = 'block';
             // Adiciona o event listener apenas se ainda não foi adicionado
             if (!menuToggle.dataset.listenerAdded) {

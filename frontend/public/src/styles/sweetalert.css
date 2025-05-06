@@ -1,0 +1,56 @@
+/* SweetAlert2 Custom Styles */
+.my-swal-popup {
+    background-color: var(--gray-light); /* #f5f7ff */
+    border-radius: var(--border-radius); /* 9px */
+    box-shadow: var(--card-shadow); /* 0 10px 25px rgba(0, 0, 0, 0.05) */
+    padding: 20px;
+    font-family: "AfacadFlux", sans-serif;
+}
+
+.my-swal-title {
+    color: var(--text-primary); /* #0f2a65 */
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.my-swal-text {
+    color: var(--text-secondary); /* #6c7380 */
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.my-swal-button {
+    background-color: var(--primary-color); /* #29a8dc */
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: 110px;
+    height: 45px;
+}
+
+.my-swal-button:hover {
+    background-color: var(--primary-light); /* #144b7b */
+}
+
+.swal2-icon.swal2-error {
+    border-color: var(--danger); /* #f36c6c */
+    color: var(--danger);
+}
+
+.swal2-icon.swal2-success {
+    border-color: var(--success); /* #2dbf78 */
+    color: var(--success);
+}
+
+.swal2-backdrop {
+    background: rgba(0, 0, 0, 0.5); /* Matches modal backdrop */
+}
+
+.swal2-container {
+    z-index: 998; /* Below main.css modal (999) */
+}

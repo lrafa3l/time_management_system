@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
         initializeModal();
     }
 
-    // Array para armazenar disciplinas ou salas temporariamente
     let tempItems = [];
 
     function initializeModal() {
@@ -41,13 +40,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 e.preventDefault();
                 const formType = this.getAttribute("data-form");
                 if (formType) {
-                    tempItems = []; // Resetar itens temporários
+                    tempItems = [];
                     loadForm(formType).catch(error => {
                         console.error("Erro ao carregar formulário:", error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Erro',
-                            text: 'Erro ao carregar formulário. Tente novamente.'
+                            text: 'Erro ao carregar formulário. Tente novamente.',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#29a8dc',
+                            customClass: {
+                                popup: 'my-swal-popup',
+                                title: 'my-swal-title',
+                                content: 'my-swal-text',
+                                confirmButton: 'my-swal-button'
+                            },
+                            backdrop: 'rgba(0, 0, 0, 0.5)'
                         });
                     });
                     openModal();
@@ -71,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.remove("modal-open");
         UI.modal.style.display = "none";
         UI.modalBody.innerHTML = '';
-        tempItems = []; // Limpar itens temporários
+        tempItems = [];
     }
 
     async function loadForm(formType) {
@@ -150,11 +158,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="added-items" id="added-salas"></div>
                     <div class="form-group">
                         <label for="nome">Sala</label>
-                        <input type="text" id="nome" name="nome" required>
+                        <input type="text" id="nome" name="nome">
                     </div>
                     <div class="form-group">
                         <label for="capacidade">Capacidade</label>
-                        <input type="number" id="capacidade" min="1" name="capacidade" required>
+                        <input type="number" id="capacidade" min="1" name="capacidade">
                     </div>
                     <div class="button-group">
                         <button type="button" id="add-btn">Adicionar</button>
@@ -346,7 +354,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const formId = `cadastro-${formType}`;
         const form = document.getElementById(formId);
         if (form) {
-            // Configurar evento de submit para o botão Salvar
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
                 if (formType === 'horario') {
@@ -358,13 +365,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-            // Configurar evento para o botão Adicionar (para disciplina e sala)
             if (formType === 'disciplina' || formType === 'sala') {
                 const addBtn = form.querySelector('#add-btn');
                 const nomeInput = form.querySelector('#nome');
                 const capacidadeInput = form.querySelector('#capacidade');
 
-                // Adicionar item ao pressionar Enter
                 nomeInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
@@ -380,12 +385,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 }
 
-                // Adicionar item ao clicar no botão Adicionar
                 addBtn.addEventListener('click', () => {
                     addItem(formType, form);
                 });
 
-                // Configurar remoção de itens
                 const addedItemsDiv = form.querySelector(`#added-${formType}s`);
                 addedItemsDiv.addEventListener('click', (e) => {
                     if (e.target.classList.contains('remove-item')) {
@@ -413,7 +416,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Erro',
-                    text: 'O campo nome não pode estar vazio!'
+                    text: 'O campo nome não pode estar vazio!',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#29a8dc',
+                    customClass: {
+                        popup: 'my-swal-popup',
+                        title: 'my-swal-title',
+                        content: 'my-swal-text',
+                        confirmButton: 'my-swal-button'
+                    },
+                    backdrop: 'rgba(0, 0, 0, 0.5)'
                 });
                 return;
             }
@@ -422,7 +434,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Erro',
-                    text: 'O campo nome é obrigatório!'
+                    text: 'O campo nome é obrigatório!',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#29a8dc',
+                    customClass: {
+                        popup: 'my-swal-popup',
+                        title: 'my-swal-title',
+                        content: 'my-swal-text',
+                        confirmButton: 'my-swal-button'
+                    },
+                    backdrop: 'rgba(0, 0, 0, 0.5)'
                 });
                 return;
             }
@@ -430,24 +451,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Erro',
-                    text: 'O campo capacidade é obrigatório!'
+                    text: 'O campo capacidade é obrigatório!',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#29a8dc',
+                    customClass: {
+                        popup: 'my-swal-popup',
+                        title: 'my-swal-title',
+                        content: 'my-swal-text',
+                        confirmButton: 'my-swal-button'
+                    },
+                    backdrop: 'rgba(0, 0, 0, 0.5)'
                 });
                 return;
             }
         }
 
-        // Adicionar ao array temporário
         tempItems.push({
             nome: data.nome,
             capacidade: formType === 'sala' ? parseInt(data.capacidade) : undefined,
             nomeNormalized: normalizeString(data.nome)
         });
 
-        // Atualizar a exibição dos itens adicionados
         const addedItemsDiv = form.querySelector(`#added-${formType}s`);
         updateAddedItems(formType, addedItemsDiv);
 
-        // Limpar campos
         form.querySelector('#nome').value = '';
         if (formType === 'sala') {
             form.querySelector('#capacidade').value = '';
@@ -473,7 +500,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const user = firebase.auth().currentUser;
             if (!user) throw new Error('Usuário não autenticado');
-            if (tempItems.length === 0) throw new Error('Adicione pelo menos uma disciplina para salvar');
+            if (tempItems.length === 0) throw new Error('Nada adicionado');
 
             const collectionName = getCollectionName(formType);
             const batch = db.batch();
@@ -498,6 +525,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon: 'success',
                 title: 'Sucesso!',
                 text: `${tempItems.length} ${formType === 'sala' ? 'salas' : 'disciplinas'} cadastradas com sucesso!`,
+                confirmButtonText: 'Continuar',
+                confirmButtonColor: '#2dbf78',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-button'
+                },
+                backdrop: 'rgba(0, 0, 0, 0.5)',
                 timer: 2000,
                 showConfirmButton: false
             });
@@ -510,7 +546,16 @@ document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Erro',
-                text: `Erro ao cadastrar: ${error.message}`
+                text: `Erro ao cadastrar: ${error.message}`,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#29a8dc',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-button'
+                },
+                backdrop: 'rgba(0, 0, 0, 0.5)'
             });
         } finally {
             submitBtn.disabled = false;
@@ -588,7 +633,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-            // Substituir valores de <select> pelo texto das opções
             const selects = form.querySelectorAll('select');
             selects.forEach(select => {
                 if (select.name && select.selectedOptions[0]) {
@@ -624,6 +668,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon: 'success',
                 title: 'Sucesso!',
                 text: `${capitalizeFirstLetter(formType)} cadastrado com sucesso!`,
+                confirmButtonText: 'Continuar',
+                confirmButtonColor: '#2dbf78',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-button'
+                },
+                backdrop: 'rgba(0, 0, 0, 0.5)',
                 timer: 2000,
                 showConfirmButton: false
             });
@@ -634,7 +687,16 @@ document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Erro',
-                text: `Erro ao cadastrar: ${error.message}`
+                text: `Erro ao cadastrar: ${error.message}`,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#29a8dc',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-button'
+                },
+                backdrop: 'rgba(0, 0, 0, 0.5)'
             });
         } finally {
             submitBtn.disabled = false;
@@ -659,6 +721,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon: 'success',
                 title: 'Sucesso!',
                 text: 'Horário gerado com sucesso!',
+                confirmButtonText: 'Continuar',
+                confirmButtonColor: '#2dbf78',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-button'
+                },
+                backdrop: 'rgba(0, 0, 0, 0.5)',
                 timer: 2000,
                 showConfirmButton: false
             });
@@ -672,7 +743,16 @@ document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Erro',
-                text: `Erro ao gerar horário: ${error.message}`
+                text: `Erro ao gerar horário: ${error.message}`,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#29a8dc',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-button'
+                },
+                backdrop: 'rgba(0, 0, 0, 0.5)'
             });
         } finally {
             submitBtn.disabled = false;
