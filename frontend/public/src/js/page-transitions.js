@@ -1,4 +1,3 @@
-// page-transitions.js
 document.addEventListener('DOMContentLoaded', function() {
     const transitionElement = document.getElementById('pageTransition');
     const contentWrapper = document.getElementById('contentWrapper');
@@ -9,7 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
         fadeInDuration: 500,
         fadeOutDuration: 700,
         minimumLoaderTime: 1200,
-        contentFadeDelay: 300
+        contentFadeDelay: 300,
+        minDataDelay: 500, // Ensure transition is visible
+        maxDataWait: 5000 // Timeout for data loading
     };
     
     function showContent() {
@@ -73,7 +74,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    if (document.readyState === 'complete') {
+    // Check if on /docentes page
+    if (window.location.pathname === '/docentes' || window.location.pathname === '/docentes.html') {
+        const startTime = Date.now();
+        const dataLoadTimeout = setTimeout(() => {
+            console.warn('Data load timeout, showing content');
+            showContent();
+        }, config.maxDataWait);
+        
+        document.addEventListener('dataLoaded', () => {
+            console.log('dataLoaded event received');
+            const elapsed = Date.now() - startTime;
+            const remainingDelay = config.minDataDelay - elapsed;
+            // Ensure minimum visibility
+            setTimeout(() => {
+                clearTimeout(dataLoadTimeout);
+                showContent();
+            }, remainingDelay > 0 ? remainingDelay : 0);
+        }, { once: true });
+    } else if (document.readyState === 'complete') {
         showContent();
     } else {
         window.addEventListener('load', showContent);

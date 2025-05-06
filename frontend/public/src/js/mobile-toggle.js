@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Mostrar/ocultar botão de toggle baseado no tamanho da tela
     function checkScreenSize() {
-        if (window.innerWidth <= 576) {
+        if (window.innerWidth <= 768) {
             menuToggle.style.display = 'block';
             // Adiciona o event listener apenas se ainda não foi adicionado
             if (!menuToggle.dataset.listenerAdded) {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             menuToggle.style.display = 'none';
-            menuToggle.style.zIndex = '80';
+            menuToggle.style.zIndex = '100';
             sidebar.classList.remove('active');
             menuToggle.classList.remove('active');
             console.log('Reset: Button classes:', menuToggle.classList);
