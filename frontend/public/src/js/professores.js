@@ -21,13 +21,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const docentesList = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
     const searchInput = document.getElementById('search-docentes');
     const paginationNav = document.querySelector('.pagination-nav');
+    const professorModal = document.getElementById('professor-modal');
+
+    // Check DOM elements
+    if (!docentesList) console.error('Docentes list not found');
+    if (!searchInput) console.error('Search input not found');
+    if (!paginationNav) console.error('Pagination nav not found');
+    if (!professorModal) console.error('Professor modal not found');
 
     // Pagination state
     let currentPage = 1;
     const cardsPerPage = 6;
     let allProfessores = [];
     let filteredProfessores = [];
-    let disciplinasMap = {}; // Store disciplines map globally
+    let disciplinasMap = {};
 
     // Color scheme for avatars
     const avatarColors = [
@@ -57,26 +64,88 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Show professor details in modal
+    function showProfessorModal(professor) {
+        if (!professorModal) {
+            console.error('Professor modal element not found');
+            return;
+        }
+
+        console.log('Showing modal for:', professor.nome);
+        console.log('Professor classe:', professor.classes);
+        const initials = professor.nome
+            .split(' ')
+            .slice(0, 2)
+            .map(word => word[0])
+            .join('')
+            .toUpperCase();
+
+        const disciplinaNome = Array.isArray(professor.disciplinas) && professor.disciplinas.length > 0
+            ? professor.disciplinas
+                .map(id => disciplinasMap[id] || 'Desconhecida')
+                .filter(nome => nome !== 'Desconhecida')
+                .join(', ') || 'Não informado'
+            : 'Não informado';
+
+        const classeLeciona = Array.isArray(professor.classes) && professor.classes.length > 0
+            ? professor.classes.join(', ') || 'Não informado'
+            : 'Não informado';
+        console.log('Classe Leciona:', classeLeciona);
+
+        try {
+            document.getElementById('modal-professor-initials').textContent = initials;
+            document.getElementById('modal-professor-name').textContent = professor.nome || 'Não informado';
+            document.getElementById('modal-professor-fullname').textContent = professor.nome || 'Não informado';
+            document.getElementById('modal-professor-email').textContent = professor.email || 'Não informado';
+            document.getElementById('modal-professor-contacto').textContent = professor.contacto || 'Não informado';
+            document.getElementById('modal-professor-formacao-medio').textContent = professor.formacaoMedio || 'Não informado';
+            document.getElementById('modal-professor-habilitacoes-superior').textContent = professor.habilitacoes || 'Não informado';
+            document.getElementById('modal-professor-unidade-organica').textContent = professor.unidade || 'Não informado';
+            document.getElementById('modal-professor-categoria').textContent = professor.categoria || 'Não informado';
+            document.getElementById('modal-professor-classe-leciona').textContent = classeLeciona;
+            document.getElementById('modal-professor-disciplinas').textContent = disciplinaNome;
+            document.getElementById('modal-professor-cargo-funcao').textContent = professor.cargo || 'Não informado';
+            professorModal.classList.remove('hidden');
+            console.log('Modal shown');
+        } catch (e) {
+            console.error('Error populating modal:', e);
+        }
+    }
+
+    // Hide modal
+    function hideProfessorModal() {
+        if (professorModal) {
+            professorModal.classList.add('hidden');
+            console.log('Modal hidden');
+        }
+    }
+
     // Fetch and render professors
     async function loadProfessores() {
+        console.log('Starting loadProfessores');
         try {
             const user = firebase.auth().currentUser;
             if (!user) {
                 console.error('Usuário não autenticado');
-                docentesList.innerHTML = '<p class="text-center text-gray-500">Por favor, inicie sessão.</p>';
+                if (docentesList) {
+                    docentesList.innerHTML = '<p class="text-center text-gray-500">Por favor, inicie sessão.</p>';
+                }
                 console.log('Dispatching dataLoaded: no user');
                 document.dispatchEvent(new Event('dataLoaded'));
                 return;
             }
 
-            disciplinasMap = await fetchDisciplinas(); // Store globally
+            disciplinasMap = await fetchDisciplinas();
             const snapshot = await db.collection('professores')
                 .where('userId', '==', user.uid)
                 .orderBy('nome')
                 .get();
 
             if (snapshot.empty) {
-                docentesList.innerHTML = '<p class="text-center text-gray-500">Nenhum docente encontrado.</p>';
+                console.log('No professors found');
+                if (docentesList) {
+                    docentesList.innerHTML = '<p class="text-center text-gray-500">Nenhum docente encontrado.</p>';
+                }
                 console.log('Dispatching dataLoaded: empty snapshot');
                 document.dispatchEvent(new Event('dataLoaded'));
                 return;
@@ -87,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ...doc.data()
             }));
             filteredProfessores = [...allProfessores];
-            console.log('Professores Data:', allProfessores.map(p => ({ nome: p.nome, disciplinas: p.disciplinas })));
+            console.log('Professores Data:', allProfessores.map(p => ({ nome: p.nome, disciplinas: p.disciplinas, classe: p.classes })));
 
             renderPage(1);
             console.log('Dispatching dataLoaded: success');
@@ -98,7 +167,9 @@ document.addEventListener("DOMContentLoaded", function () {
             if (error.code === 'failed-precondition' && error.message.includes('index')) {
                 errorMessage = 'Erro: Índice do Firestore necessário. Crie o índice no Firebase Console e tente novamente.';
             }
-            docentesList.innerHTML = `<p class="text-center text-red-500">${errorMessage}</p>`;
+            if (docentesList) {
+                docentesList.innerHTML = `<p class="text-center text-red-500">${errorMessage}</p>`;
+            }
             console.log('Dispatching dataLoaded: error');
             document.dispatchEvent(new Event('dataLoaded'));
         }
@@ -106,9 +177,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Render professor cards for the current page
     function renderProfessores(professores, startIndex) {
+        console.log('Rendering professors:', professores.length);
+        if (!docentesList) {
+            console.error('Docentes list element missing');
+            return;
+        }
         docentesList.innerHTML = '';
         professores.forEach((professor, index) => {
-            // Get initials from nome
             const initials = professor.nome
                 .split(' ')
                 .slice(0, 2)
@@ -116,21 +191,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 .join('')
                 .toUpperCase();
 
-            // Get discipline names (join multiple if present)
-            let disciplinaNome = 'N/A';
-            if (Array.isArray(professor.disciplinas) && professor.disciplinas.length > 0) {
-                const nomes = professor.disciplinas
+            const disciplinaNome = Array.isArray(professor.disciplinas) && professor.disciplinas.length > 0
+                ? professor.disciplinas
                     .map(id => disciplinasMap[id] || 'Desconhecida')
-                    .filter(nome => nome !== 'Desconhecida');
-                disciplinaNome = nomes.length > 0 ? nomes.join(', ') : 'N/A';
-            }
+                    .filter(nome => nome !== 'Desconhecida')
+                    .join(', ') || 'N/A'
+                : 'N/A';
             console.log(`Professor ${professor.nome}: Disciplinas=${JSON.stringify(professor.disciplinas)}, Nome=${disciplinaNome}`);
 
-            // Rotate through avatar colors, accounting for page
             const colorIndex = (startIndex + index) % avatarColors.length;
             const color = avatarColors[colorIndex];
 
-            // Generate card HTML
             const card = `
                 <div class="docente-card bg-white dark:bg-[#ffffff] rounded-lg shadow p-6" data-nome="${professor.nome.toLowerCase()}">
                     <div class="flex items-center space-x-4 mb-4">
@@ -161,12 +232,23 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </div>
             `;
-            docentesList.insertAdjacentHTML('beforeend', card);
+            try {
+                docentesList.insertAdjacentHTML('beforeend', card);
+                const button = docentesList.querySelector(`.docente-card:last-child .contact-btn`);
+                button.addEventListener('click', () => {
+                    console.log('Ver mais clicked for:', professor.nome);
+                    showProfessorModal(professor);
+                });
+            } catch (e) {
+                console.error('Error rendering card for', professor.nome, ':', e);
+            }
         });
+        console.log('Finished rendering professors');
     }
 
     // Render pagination controls
     function renderPagination(totalItems) {
+        console.log('Rendering pagination for', totalItems, 'items');
         if (!paginationNav) {
             console.error('Pagination nav not found');
             return;
@@ -174,7 +256,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const totalPages = Math.ceil(totalItems / cardsPerPage);
         paginationNav.innerHTML = '';
 
-        // Previous button
         const prevButton = document.createElement('a');
         prevButton.href = '#';
         prevButton.className = `px-3 py-2 rounded-l-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-[#d7faff] dark:hover:bg-[#d7faff] ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`;
@@ -187,7 +268,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         paginationNav.appendChild(prevButton);
 
-        // Page numbers
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = document.createElement('a');
             pageButton.href = '#';
@@ -200,10 +280,10 @@ document.addEventListener("DOMContentLoaded", function () {
             paginationNav.appendChild(pageButton);
         }
 
-        // Next button
         const nextButton = document.createElement('a');
         nextButton.href = '#';
-        nextButton.className = `px-3 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-[#d7faff] dark:hover:bg-[#d7faff] ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
+        const nextButtonClasses = `px-3 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-[#d7faff] dark:hover:bg-[#d7faff] ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
+        nextButton.className = nextButtonClasses;
         nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
         if (currentPage < totalPages) {
             nextButton.addEventListener('click', (e) => {
@@ -212,10 +292,12 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
         paginationNav.appendChild(nextButton);
+        console.log('Pagination rendered');
     }
 
     // Change page and render
     function changePage(page) {
+        console.log('Changing to page:', page);
         const totalPages = Math.ceil(filteredProfessores.length / cardsPerPage);
         currentPage = Math.max(1, Math.min(page, totalPages));
         renderPage(currentPage);
@@ -223,6 +305,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Render current page
     function renderPage(page) {
+        console.log('Rendering page:', page);
         const startIndex = (page - 1) * cardsPerPage;
         const endIndex = startIndex + cardsPerPage;
         const pageProfessores = filteredProfessores.slice(startIndex, endIndex);
@@ -232,8 +315,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Search functionality
     function setupSearch() {
+        if (!searchInput) {
+            console.error('Search input not found');
+            return;
+        }
         searchInput.addEventListener('input', function () {
             const searchTerm = this.value.toLowerCase();
+            console.log('Search term:', searchTerm);
             filteredProfessores = allProfessores.filter(professor =>
                 professor.nome.toLowerCase().includes(searchTerm)
             );
@@ -242,13 +330,36 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Setup modal close buttons
+    function setupModalCloseButtons() {
+        const closeIconButtons = document.querySelectorAll('.modal-close-btn');
+        const closeFooterButtons = document.querySelectorAll('.modal-footer-close-btn');
+        closeIconButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                console.log('Close icon clicked');
+                hideProfessorModal();
+            });
+        });
+        closeFooterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                console.log('Fechar button clicked');
+                hideProfessorModal();
+            });
+        });
+    }
+
     // Initialize
     firebase.auth().onAuthStateChanged(user => {
+        console.log('Auth state changed:', user ? user.uid : 'no user');
         if (user) {
             loadProfessores();
             setupSearch();
+            setupModalCloseButtons();
         } else {
-            docentesList.innerHTML = '<p class="text-center text-gray-500">Por favor, inicie sessão.</p>';
+            console.log('No user, showing login message');
+            if (docentesList) {
+                docentesList.innerHTML = '<p class="text-center text-gray-500">Por favor, inicie sessão.</p>';
+            }
             console.log('Dispatching dataLoaded: no user (init)');
             document.dispatchEvent(new Event('dataLoaded'));
         }

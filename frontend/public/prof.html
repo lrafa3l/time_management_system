@@ -6,10 +6,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+
+    <script src="/src/js/professores.js" defer></script>
+
+    <!-- FlowBite Styles -->
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/src/styles/schedule.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
@@ -97,14 +109,14 @@
             <section class="p-4 sm:p-6 flex justify-center align-items-center">
                 <div class="w-full max-w-7xl mx-auto">
                     <!-- Search -->
-                    <div class="mb-6 flex flex-col md:flex-row gap-4" id="search">
+                    <div class="mb-[32px] flex flex-col md:flex-row gap-4" id="search">
                         <div class="w-full md:w-2/3">
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <i class="fas fa-search text-[#29a8dc]"></i>
                                 </div>
                                 <input type="text" id="search-docentes"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#29a8dc] focus:border-[#29a8dc] block w-full pl-10 p-2.5 dark:placeholder-gray-400 dark:text-[#144b7b] dark:focus:ring-[#29a8dc] dark:focus:border-[#29a8dc]"
+                                    class="bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#29a8dc] focus:border-[#29a8dc] block w-full pl-10 p-2.5 dark:placeholder-gray-400 dark:text-[#144b7b] dark:focus:ring-[#29a8dc] dark:focus:border-[#29a8dc]"
                                     placeholder="Pesquisar docentes...">
                             </div>
                         </div>
@@ -123,6 +135,99 @@
                     </div>
                 </div>
             </section>
+        </div>
+    </div>
+
+    <!-- Professor Modal -->
+    <div id="professor-modal"
+        class="hidden fixed inset-0 z-1002 overflow-auto bg-gray-900/50 flex items-center justify-center">
+        <div class="relative bg-white dark:bg-[#ffffff] rounded-lg shadow p-6 max-w-2xl w-full m-4">
+            <!-- Modal header -->
+            
+                <!-- <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Detalhes do Professor</h3> -->
+                <button type="button" class="modal-close-btn text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    aria-label="Close">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            
+            <!-- Modal body -->
+            <div class="profile-header flex justify-center">
+                <div class="profile-avatar">
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto">
+                        <span id="modal-professor-initials"
+                            class="text-blue-600 dark:text-blue-300 font-medium text-2xl"></span>
+                    </div>
+                    <h2 id="modal-professor-name"
+                        class="mt-4 mb-4 text-lg font-semibold text-gray-900 dark:text-[#144b7b] text-center"></h2>
+                </div>
+            </div>
+            <div class="account-section mb-6">
+                <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center gap-2">
+                    <i class="fas fa-user-tie text-[#29a8dc]"></i> Dados Pessoais
+                </h2>
+                <div class="account-details">
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Nome Completo:</span>
+                        <span id="modal-professor-fullname" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Email:</span>
+                        <span id="modal-professor-email" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Contacto Telefónico:</span>
+                        <span id="modal-professor-contacto" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Formação do Ensino Médio:</span>
+                        <span id="modal-professor-formacao-medio" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Habilitações do Ensino
+                            Superior:</span>
+                        <span id="modal-professor-habilitacoes-superior"
+                            class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="account-section">
+                <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center gap-2">
+                    <i class="fas fa-briefcase text-[#29a8dc]"></i> Dados Profissionais
+                </h2>
+                <div class="account-details">
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Unidade Orgânica:</span>
+                        <span id="modal-professor-unidade-organica" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Categoria:</span>
+                        <span id="modal-professor-categoria" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Classe que Leciona:</span>
+                        <span id="modal-professor-classe-leciona" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Disciplina(s):</span>
+                        <span id="modal-professor-disciplinas" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                    <div class="detail-item flex py-3 border-b border-gray-200">
+                        <span class="detail-label font-semibold text-gray-600 w-48">Cargo/Função:</span>
+                        <span id="modal-professor-cargo-funcao" class="detail-value text-gray-900 flex-1"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex justify-end mt-6">
+                <button type="button"
+                    class="modal-footer-close-btn bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">
+                    Fechar
+                </button>
+            </div>
         </div>
     </div>
 

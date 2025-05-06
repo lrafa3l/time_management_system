@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     const db = firebase.firestore();
     const UI = {
-        modal: document.getElementById("formModal"),
+        modal: document.getElementById("index"),
         modalBody: document.querySelector(".modal-body"),
         modalTitle: document.getElementById("modalTitle"),
         closeBtn: document.querySelector(".close-modal"),
@@ -30,6 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         initializeModal();
     }
+
+    // Array para armazenar disciplinas ou salas temporariamente
+    let tempItems = [];
+
     function initializeModal() {
         UI.closeBtn.addEventListener("click", closeModal);
         UI.triggers.forEach(trigger => {
@@ -37,8 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 e.preventDefault();
                 const formType = this.getAttribute("data-form");
                 if (formType) {
+                    tempItems = []; // Resetar itens temporários
                     loadForm(formType).catch(error => {
                         console.error("Erro ao carregar formulário:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro',
+                            text: 'Erro ao carregar formulário. Tente novamente.'
+                        });
                     });
                     openModal();
                 }
@@ -50,27 +60,32 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
     function openModal() {
         document.body.classList.add("modal-open");
         UI.modal.style.display = "flex";
         UI.modal.querySelector("input")?.focus();
     }
+
     function closeModal() {
         document.body.classList.remove("modal-open");
         UI.modal.style.display = "none";
         UI.modalBody.innerHTML = '';
+        tempItems = []; // Limpar itens temporários
     }
+
     async function loadForm(formType) {
         try {
             UI.modalTitle.textContent = getModalTitle(formType);
             const formHTML = await generateFormHTML(formType);
-            UI.modalBody.innerHTML = formHTML + '<p id="mensagem"></p>';
+            UI.modalBody.innerHTML = formHTML;
             setupFormSubmitHandler(formType);
         } catch (error) {
             console.error(`Erro ao carregar formulário ${formType}:`, error);
             throw error;
         }
     }
+
     function getModalTitle(formType) {
         const titles = {
             curso: 'Cadastro de Curso',
@@ -82,12 +97,14 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         return titles[formType] || `Cadastro de ${capitalizeFirstLetter(formType)}`;
     }
+
     function normalizeString(str) {
         return str
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
     }
+
     async function generateFormHTML(formType) {
         const forms = {
             curso: async () => {
@@ -111,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     ${disciplinaCheckboxes || '<p>Nenhuma disciplina disponível</p>'}
                                 </div>
                             </div>
-                            <button type="submit">Cadastrar</button>
+                            <button type="submit" id="submit-btn">Cadastrar <span class="spinner"></span></button>
                         </form>`;
                 } catch (error) {
                     console.error("Erro ao carregar disciplinas:", error);
@@ -130,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             sala: `
                 <form id="cadastro-sala">
+                    <div class="added-items" id="added-salas"></div>
                     <div class="form-group">
                         <label for="nome">Sala</label>
                         <input type="text" id="nome" name="nome" required>
@@ -138,7 +156,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         <label for="capacidade">Capacidade</label>
                         <input type="number" id="capacidade" min="1" name="capacidade" required>
                     </div>
-                    <button type="submit">Cadastrar</button>
+                    <div class="button-group">
+                        <button type="button" id="add-btn">Adicionar</button>
+                        <button type="submit" id="save-btn">Salvar <span class="spinner"></span></button>
+                    </div>
                 </form>`,
             turma: async () => {
                 try {
@@ -163,13 +184,13 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <label for="classe">Classe</label>
                                 <select id="classe" name="classe" required>
                                     <option value="">Selecione a classe</option>
-                                    <option value="10">10ª</option>
-                                    <option value="11">11ª</option>
-                                    <option value="12">12ª</option>
-                                    <option value="13">13ª</option>
+                                    <option value="10ª">10ª</option>
+                                    <option value="11ª">11ª</option>
+                                    <option value="12ª">12ª</option>
+                                    <option value="13ª">13ª</option>
                                 </select>
                             </div>
-                            <button type="submit">Cadastrar</button>
+                            <button type="submit" id="submit-btn">Cadastrar <span class="spinner"></span></button>
                         </form>`;
                 } catch (error) {
                     console.error("Erro ao carregar cursos:", error);
@@ -244,8 +265,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="formacao-medio">Formação do Ensino Médio</label>
-                                <input type="text" id="formacao-medio" name="formacao-medio" required>
+                                <label for="formacaoMedio">Formação do Ensino Médio</label>
+                                <input type="text" id="formacaoMedio" name="formacaoMedio" required>
                             </div>
                             <div class="form-group">
                                 <label for="habilitacoes">Habilitações Literár. Ensino Superior</label>
@@ -263,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <label for="email">E-mail</label>
                                 <input type="email" id="email" name="email" required>
                             </div>
-                            <button type="submit">Cadastrar</button>
+                            <button type="submit" id="submit-btn">Cadastrar <span class="spinner"></span></button>
                         </form>`;
                 } catch (error) {
                     console.error("Erro ao carregar disciplinas:", error);
@@ -282,11 +303,15 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             disciplina: `
                 <form id="cadastro-disciplina">
+                    <div class="added-items" id="added-disciplinas"></div>
                     <div class="form-group">
                         <label for="nome">Disciplina</label>
-                        <input type="text" id="nome" name="nome" required>
+                        <input type="text" id="nome" name="nome">
                     </div>
-                    <button type="submit">Cadastrar</button>
+                    <div class="button-group">
+                        <button type="button" id="add-btn">Adicionar</button>
+                        <button type="submit" id="save-btn">Salvar <span class="spinner"></span></button>
+                    </div>
                 </form>`,
             horario: async () => {
                 try {
@@ -303,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     ${options}
                                 </select>
                             </div>
-                            <button type="submit">Gerar Horário</button>
+                            <button type="submit" id="submit-btn">Gerar Horário <span class="spinner"></span></button>
                         </form>`;
                 } catch (error) {
                     console.error("Erro ao carregar professores:", error);
@@ -316,22 +341,183 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         return forms[formType];
     }
+
     function setupFormSubmitHandler(formType) {
         const formId = `cadastro-${formType}`;
         const form = document.getElementById(formId);
         if (form) {
+            // Configurar evento de submit para o botão Salvar
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
                 if (formType === 'horario') {
                     await handleGenerateHorarioSubmit(form);
+                } else if (formType === 'disciplina' || formType === 'sala') {
+                    await handleMultipleItemsSubmit(formType, form);
                 } else {
                     await handleFormSubmit(formType, form);
                 }
             });
+
+            // Configurar evento para o botão Adicionar (para disciplina e sala)
+            if (formType === 'disciplina' || formType === 'sala') {
+                const addBtn = form.querySelector('#add-btn');
+                const nomeInput = form.querySelector('#nome');
+                const capacidadeInput = form.querySelector('#capacidade');
+
+                // Adicionar item ao pressionar Enter
+                nomeInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addItem(formType, form);
+                    }
+                });
+                if (capacidadeInput) {
+                    capacidadeInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addItem(formType, form);
+                        }
+                    });
+                }
+
+                // Adicionar item ao clicar no botão Adicionar
+                addBtn.addEventListener('click', () => {
+                    addItem(formType, form);
+                });
+
+                // Configurar remoção de itens
+                const addedItemsDiv = form.querySelector(`#added-${formType}s`);
+                addedItemsDiv.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('remove-item')) {
+                        const index = parseInt(e.target.dataset.index);
+                        tempItems.splice(index, 1);
+                        updateAddedItems(formType, addedItemsDiv);
+                    }
+                });
+            }
         } else {
             console.error(`Formulário ${formId} não encontrado`);
         }
     }
+
+    function addItem(formType, form) {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        if (formType === 'disciplina') {
+            data.nome = data.nome.trim();
+            if (!data.nome) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'O campo nome não pode estar vazio!'
+                });
+                return;
+            }
+        } else if (formType === 'sala') {
+            if (!data.nome) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'O campo nome é obrigatório!'
+                });
+                return;
+            }
+            if (!data.capacidade) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'O campo capacidade é obrigatório!'
+                });
+                return;
+            }
+        }
+
+        // Adicionar ao array temporário
+        tempItems.push({
+            nome: data.nome,
+            capacidade: formType === 'sala' ? parseInt(data.capacidade) : undefined,
+            nomeNormalized: normalizeString(data.nome)
+        });
+
+        // Atualizar a exibição dos itens adicionados
+        const addedItemsDiv = form.querySelector(`#added-${formType}s`);
+        updateAddedItems(formType, addedItemsDiv);
+
+        // Limpar campos
+        form.querySelector('#nome').value = '';
+        if (formType === 'sala') {
+            form.querySelector('#capacidade').value = '';
+        }
+        form.querySelector('#nome').focus();
+    }
+
+    function updateAddedItems(formType, addedItemsDiv) {
+        addedItemsDiv.innerHTML = tempItems.map((item, index) => `
+            <div class="item">
+                <span>${item.nome}${formType === 'sala' ? ` (Capacidade: ${item.capacidade})` : ''}</span>
+                <span class="remove-item" data-index="${index}">×</span>
+            </div>
+        `).join('');
+    }
+
+    async function handleMultipleItemsSubmit(formType, form) {
+        const submitBtn = form.querySelector('#save-btn');
+        const spinner = submitBtn.querySelector('.spinner');
+        submitBtn.disabled = true;
+        spinner.style.display = 'block';
+
+        try {
+            const user = firebase.auth().currentUser;
+            if (!user) throw new Error('Usuário não autenticado');
+            if (tempItems.length === 0) throw new Error('Adicione pelo menos uma disciplina para salvar');
+
+            const collectionName = getCollectionName(formType);
+            const batch = db.batch();
+
+            for (const item of tempItems) {
+                const docData = {
+                    nome: item.nome,
+                    nomeNormalized: item.nomeNormalized,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    userId: user.uid
+                };
+                if (formType === 'sala') {
+                    docData.capacidade = item.capacidade;
+                }
+                await checkForDuplicate(formType, docData, user.uid);
+                const docRef = db.collection(collectionName).doc();
+                batch.set(docRef, docData);
+            }
+
+            await batch.commit();
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: `${tempItems.length} ${formType === 'sala' ? 'salas' : 'disciplinas'} cadastradas com sucesso!`,
+                timer: 2000,
+                showConfirmButton: false
+            });
+            tempItems = [];
+            form.querySelector(`#added-${formType}s`).innerHTML = '';
+            form.reset();
+            setTimeout(closeModal, 2000);
+        } catch (error) {
+            console.error(`Erro no cadastro de ${formType}:`, error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: `Erro ao cadastrar: ${error.message}`
+            });
+        } finally {
+            submitBtn.disabled = false;
+            spinner.style.display = 'none';
+        }
+    }
+
     async function checkForDuplicate(formType, data, userId) {
         const collectionName = getCollectionName(formType);
         if (formType === 'professor') {
@@ -378,9 +564,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
+
     async function handleFormSubmit(formType, form) {
-        const message = document.getElementById("mensagem");
-        if (!message) return;
+        const submitBtn = form.querySelector('#submit-btn');
+        const spinner = submitBtn.querySelector('.spinner');
+        submitBtn.disabled = true;
+        spinner.style.display = 'block';
+
         try {
             const user = firebase.auth().currentUser;
             if (!user) throw new Error('Usuário não autenticado');
@@ -397,6 +587,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     data[key] = value;
                 }
             });
+
+            // Substituir valores de <select> pelo texto das opções
+            const selects = form.querySelectorAll('select');
+            selects.forEach(select => {
+                if (select.name && select.selectedOptions[0]) {
+                    data[select.name] = select.selectedOptions[0].text;
+                }
+            });
+
             if (disciplinas.length > 0) {
                 data.disciplinas = disciplinas;
             }
@@ -405,6 +604,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (formType === 'professor' && classes.length === 0) {
                 throw new Error('Selecione pelo menos uma classe');
+            }
+            if (formType === 'professor' && disciplinas.length === 0) {
+                throw new Error('Selecione pelo menos uma disciplina');
             }
             data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
             data.userId = user.uid;
@@ -418,17 +620,34 @@ document.addEventListener("DOMContentLoaded", function () {
             await checkForDuplicate(formType, data, user.uid);
             const collectionName = getCollectionName(formType);
             await db.collection(collectionName).add(data);
-            showFeedback(message, `${capitalizeFirstLetter(formType)} cadastrado com sucesso!`, 'success');
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: `${capitalizeFirstLetter(formType)} cadastrado com sucesso!`,
+                timer: 2000,
+                showConfirmButton: false
+            });
             form.reset();
             setTimeout(closeModal, 2000);
         } catch (error) {
             console.error(`Erro no cadastro de ${formType}:`, error);
-            showFeedback(message, `Erro ao cadastrar: ${error.message}`, 'error');
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: `Erro ao cadastrar: ${error.message}`
+            });
+        } finally {
+            submitBtn.disabled = false;
+            spinner.style.display = 'none';
         }
     }
+
     async function handleGenerateHorarioSubmit(form) {
-        const message = document.getElementById("mensagem");
-        if (!message) return;
+        const submitBtn = form.querySelector('#submit-btn');
+        const spinner = submitBtn.querySelector('.spinner');
+        submitBtn.disabled = true;
+        spinner.style.display = 'block';
+
         try {
             const user = firebase.auth().currentUser;
             if (!user) throw new Error('Usuário não autenticado');
@@ -436,7 +655,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = Object.fromEntries(formData.entries());
             const professorId = data.professor;
             await generateProfessorSchedule(professorId, user.uid);
-            showFeedback(message, 'Horário gerado com sucesso!', 'success');
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Horário gerado com sucesso!',
+                timer: 2000,
+                showConfirmButton: false
+            });
             form.reset();
             setTimeout(() => {
                 closeModal();
@@ -444,9 +669,17 @@ document.addEventListener("DOMContentLoaded", function () {
             }, 2000);
         } catch (error) {
             console.error('Erro ao gerar horário:', error);
-            showFeedback(message, `Erro ao gerar horário: ${error.message}`, 'error');
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: `Erro ao gerar horário: ${error.message}`
+            });
+        } finally {
+            submitBtn.disabled = false;
+            spinner.style.display = 'none';
         }
     }
+
     async function generateProfessorSchedule(professorId, userId) {
         const timeSlots = [
             { period: '1º', time: '7H00-7H50', session: 'manhã' },
@@ -467,8 +700,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const professor = professorDoc.data();
         const professorDisciplinas = professor.disciplinas || [];
         const professorClasses = professor.classes || [];
-        console.log('Disciplinas do Professor:', professorDisciplinas);
-        console.log('Classes do Professor:', professorClasses);
         const turmasSnapshot = await db.collection('turmas').get();
         const cursosSnapshot = await db.collection('cursos').get();
         const salasSnapshot = await db.collection('salas').get();
@@ -477,14 +708,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const cursos = cursosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const salas = salasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const disciplinas = disciplinasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        console.log('Turmas:', turmas);
-        console.log('Cursos:', cursos);
         const eligibleTurmas = turmas.filter(turma => {
             const turmaClasse = turma.classe || '';
-            console.log(`Turma ${turma.nome} - Classe: ${turmaClasse}`);
             return professorClasses.includes(turmaClasse);
         });
-        console.log('Turmas Elegíveis:', eligibleTurmas);
         if (eligibleTurmas.length === 0) throw new Error('Nenhuma turma compatível com as classes do professor');
         const dayOff = days[Math.floor(Math.random() * days.length)];
         const workingDays = days.filter(day => day !== dayOff);
@@ -498,7 +725,7 @@ document.addEventListener("DOMContentLoaded", function () {
         for (const day of workingDays) {
             let periodsAssigned = 0;
             const availableSlots = [...timeSlots];
-            while (periodsAssigned < periodsPerDay && availableSlots.length > 0 && periodsAssigned < 24 - schedule.length) {
+            while (periodsAssigned < periodsPerDay && availableSlots.length > 0 && schedule.length < 24) {
                 const slotIndex = Math.floor(Math.random() * availableSlots.length);
                 const slot = availableSlots.splice(slotIndex, 1)[0];
                 const key = `${day}-${slot.time}`;
@@ -542,9 +769,11 @@ document.addEventListener("DOMContentLoaded", function () {
         await batch.commit();
         return schedule;
     }
+
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
     function getCollectionName(formType) {
         const collections = {
             professor: 'professores',
@@ -556,10 +785,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         return collections[formType] || `${formType}s`;
     }
-    function showFeedback(element, text, type) {
-        element.textContent = text;
-        element.className = type;
-    }
+
     async function loadCursos() {
         try {
             const snapshot = await db.collection("cursos").get();
@@ -573,6 +799,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return [];
         }
     }
+
     async function loadProfessores() {
         try {
             const snapshot = await db.collection("professores").get();
@@ -585,12 +812,14 @@ document.addEventListener("DOMContentLoaded", function () {
             return [];
         }
     }
+
     async function loadDisciplinas() {
         try {
             const snapshot = await db.collection("disciplinas").get();
             return snapshot.docs.map(doc => ({
                 id: doc.id,
-                nome: doc.data().nome
+                nome: doc.data().nome || 'Sem nome',
+                nomeNormalized: doc.data().nomeNormalized || normalizeString(doc.data().nome || '')
             }));
         } catch (error) {
             console.error("Erro ao carregar disciplinas:", error);

@@ -88,6 +88,11 @@ option {
     transition: all 0.2s ease;
 }
 
+.detail-value {
+    text-align: right;
+    color: var(--dark-blue);
+}
+
 /* ========== RESPONSIVE STYLES ========== */
 @media (max-width: 1400px) {
     .dashboard-container {
