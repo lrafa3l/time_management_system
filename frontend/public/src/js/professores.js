@@ -22,12 +22,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById('search-docentes');
     const paginationNav = document.querySelector('.pagination-nav');
     const professorModal = document.getElementById('professor-modal');
+    const professorForm = document.getElementById('professor-form');
+    const editButton = document.getElementById('edit-professor-btn');
+    const deleteButton = document.getElementById('delete-professor-btn');
 
     // Check DOM elements
     if (!docentesList) console.error('Docentes list not found');
     if (!searchInput) console.error('Search input not found');
     if (!paginationNav) console.error('Pagination nav not found');
     if (!professorModal) console.error('Professor modal not found');
+    if (!professorForm) console.error('Professor form not found');
+    if (!editButton) console.error('Edit button not found');
+    if (!deleteButton) console.error('Delete button not found');
 
     // Pagination state
     let currentPage = 1;
@@ -35,6 +41,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let allProfessores = [];
     let filteredProfessores = [];
     let disciplinasMap = {};
+    let isEditMode = false;
+    let currentProfessorId = null;
 
     // Color scheme for avatars
     const avatarColors = [
@@ -64,6 +72,149 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Map discipline names to IDs
+    function getDisciplinaIds(names) {
+        if (!names) return [];
+        const nameArray = names.split(',').map(s => s.trim());
+        const ids = [];
+        for (const name of nameArray) {
+            const id = Object.keys(disciplinasMap).find(key => disciplinasMap[key].toLowerCase() === name.toLowerCase());
+            if (id) ids.push(id);
+        }
+        return ids;
+    }
+
+    // Toggle edit mode
+    function toggleEditMode(professor) {
+        isEditMode = !isEditMode;
+        const detailValues = document.querySelectorAll('.detail-value');
+        const detailInputs = document.querySelectorAll('.detail-input');
+        
+        if (isEditMode) {
+            // Switch to edit mode
+            detailValues.forEach(span => span.classList.add('hidden'));
+            detailInputs.forEach(input => input.classList.remove('hidden'));
+            editButton.textContent = 'Salvar';
+            editButton.classList.add('bg-green-500', 'hover:bg-green-600');
+            editButton.classList.remove('bg-[#29a8dc]', 'hover:bg-[#2195c3]');
+            // Populate inputs
+            document.getElementById('edit-professor-fullname').value = professor.nome || '';
+            document.getElementById('edit-professor-email').value = professor.email || '';
+            document.getElementById('edit-professor-contacto').value = professor.contacto || '';
+            document.getElementById('edit-professor-formacao-medio').value = professor.formacaoMedio || '';
+            document.getElementById('edit-professor-habilitacoes-superior').value = professor.habilitacoes || '';
+            document.getElementById('edit-professor-unidade-organica').value = professor.unidade || '';
+            document.getElementById('edit-professor-categoria').value = professor.categoria || '';
+            document.getElementById('edit-professor-classe-leciona').value = Array.isArray(professor.classes) ? professor.classes.join(', ') : '';
+            document.getElementById('edit-professor-disciplinas').value = Array.isArray(professor.disciplinas) ? professor.disciplinas.map(id => disciplinasMap[id] || 'Desconhecida').join(', ') : '';
+            document.getElementById('edit-professor-cargo-funcao').value = professor.cargo || '';
+        } else {
+            // Switch back to view mode
+            detailValues.forEach(span => span.classList.remove('hidden'));
+            detailInputs.forEach(input => input.classList.add('hidden'));
+            editButton.textContent = 'Editar';
+            editButton.classList.remove('bg-green-500', 'hover:bg-green-600');
+            editButton.classList.add('bg-[#29a8dc]', 'hover:bg-[#2195c3]');
+        }
+    }
+
+    // Show loading spinner
+    function showLoadingSpinner() {
+        Swal.fire({
+            title: 'Processando...',
+            html: '<div class="swal-spinner"></div>',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'my-swal-popup',
+                title: 'my-swal-title'
+            }
+        });
+    }
+
+    // Save professor changes
+    async function saveProfessorChanges() {
+        showLoadingSpinner();
+        const formData = new FormData(professorForm);
+        const updatedData = {
+            nome: formData.get('nome') || '',
+            email: formData.get('email') || '',
+            contacto: formData.get('contacto') || '',
+            formacaoMedio: formData.get('formacaoMedio') || '',
+            habilitacoes: formData.get('habilitacoes') || '',
+            unidade: formData.get('unidade') || '',
+            categoria: formData.get('categoria') || '',
+            classes: formData.get('classes') ? formData.get('classes').split(',').map(s => s.trim()) : [],
+            disciplinas: getDisciplinaIds(formData.get('disciplinas')),
+            cargo: formData.get('cargo') || '',
+            userId: firebase.auth().currentUser.uid
+        };
+
+        try {
+            await db.collection('professores').doc(currentProfessorId).set(updatedData, { merge: true });
+            Swal.fire({
+                title: 'Sucesso!',
+                text: 'Docente atualizado(a) com sucesso.',
+                icon: 'success',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-confirm-button'
+                }
+            });
+            hideProfessorModal();
+            await loadProfessores();
+        } catch (error) {
+            console.error('Erro ao atualizar docente:', error);
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível atualizar o(a) docente. Tente novamente.',
+                icon: 'error',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-confirm-button'
+                }
+            });
+        }
+    }
+
+    // Delete professor
+    async function deleteProfessor(professorId) {
+        showLoadingSpinner();
+        try {
+            await db.collection('professores').doc(professorId).delete();
+            Swal.fire({
+                title: 'Sucesso!',
+                text: 'Docente deletado(a) com sucesso.',
+                icon: 'success',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-confirm-button'
+                }
+            });
+            hideProfessorModal();
+            await loadProfessores();
+        } catch (error) {
+            console.error('Erro ao deletar docente:', error);
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível deletar o(a) docente. Tente novamente.',
+                icon: 'error',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-confirm-button'
+                }
+            });
+        }
+    }
+
     // Show professor details in modal
     function showProfessorModal(professor) {
         if (!professorModal) {
@@ -72,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         console.log('Showing modal for:', professor.nome);
-        console.log('Professor classe:', professor.classes);
+        currentProfessorId = professor.id;
         const initials = professor.nome
             .split(' ')
             .slice(0, 2)
@@ -90,7 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const classeLeciona = Array.isArray(professor.classes) && professor.classes.length > 0
             ? professor.classes.join(', ') || 'Não informado'
             : 'Não informado';
-        console.log('Classe Leciona:', classeLeciona);
 
         try {
             document.getElementById('modal-professor-initials').textContent = initials;
@@ -106,6 +256,12 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('modal-professor-disciplinas').textContent = disciplinaNome;
             document.getElementById('modal-professor-cargo-funcao').textContent = professor.cargo || 'Não informado';
             professorModal.classList.remove('hidden');
+            isEditMode = false;
+            editButton.textContent = 'Editar';
+            editButton.classList.remove('bg-green-500', 'hover:bg-green-600');
+            editButton.classList.add('bg-[#29a8dc]', 'hover:bg-[#2195c3]');
+            document.querySelectorAll('.detail-value').forEach(span => span.classList.remove('hidden'));
+            document.querySelectorAll('.detail-input').forEach(input => input.classList.add('hidden'));
             console.log('Modal shown');
         } catch (e) {
             console.error('Error populating modal:', e);
@@ -116,6 +272,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function hideProfessorModal() {
         if (professorModal) {
             professorModal.classList.add('hidden');
+            isEditMode = false;
+            currentProfessorId = null;
             console.log('Modal hidden');
         }
     }
@@ -348,6 +506,42 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Setup edit and delete buttons
+    function setupModalActionButtons() {
+        editButton.addEventListener('click', () => {
+            if (isEditMode) {
+                saveProfessorChanges();
+            } else {
+                const professor = allProfessores.find(p => p.id === currentProfessorId);
+                if (professor) {
+                    toggleEditMode(professor);
+                }
+            }
+        });
+
+        deleteButton.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Tem certeza que deseja deletar?',
+                text: 'Esta ação não pode ser desfeita.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, deletar',
+                cancelButtonText: 'Não',
+                customClass: {
+                    popup: 'my-swal-popup',
+                    title: 'my-swal-title',
+                    content: 'my-swal-text',
+                    confirmButton: 'my-swal-cancel-button',
+                    cancelButton: 'my-swal-button'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteProfessor(currentProfessorId);
+                }
+            });
+        });
+    }
+
     // Initialize
     firebase.auth().onAuthStateChanged(user => {
         console.log('Auth state changed:', user ? user.uid : 'no user');
@@ -355,6 +549,7 @@ document.addEventListener("DOMContentLoaded", function () {
             loadProfessores();
             setupSearch();
             setupModalCloseButtons();
+            setupModalActionButtons();
         } else {
             console.log('No user, showing login message');
             if (docentesList) {
