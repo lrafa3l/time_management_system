@@ -134,7 +134,10 @@
                                 <i class="fa-solid fa-clock-rotate-left"></i>
                             </div>
                             <p class="card-title">Horários Feitos</p>
-                            <h2 class="card-amount">1</h2>
+                            <h2 class="card-amount" id="horarioNumber">
+                                <span class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                                <span class="countH hidden">0</span>
+                            </h2>
                         </div>
                     </a>
                     <a href="/docentes" style="text-decoration: none; color: inherit;">
@@ -145,7 +148,7 @@
                             <p class="card-title">Docentes</p>
                             <h2 class="card-amount" id="docentesNumber">
                                 <span class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></span>
-                                <span class="count hidden">0</span>
+                                <span class="countD hidden">0</span>
                             </h2>
                         </div>
                     </a>
@@ -155,7 +158,10 @@
                                 <i class='fas fa-chalkboard-teacher'></i>
                             </div>
                             <p class="card-title">Turmas</p>
-                            <h2 class="card-amount">25</h2>
+                            <h2 class="card-amount" id="turmaNumber">
+                                <span class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                                <span class="countT hidden">0</span>
+                            </h2>
                         </div>
                     </a>
                 </div>
@@ -245,6 +251,8 @@
     <script src="/src/js/logOut.js"></script>
     <script src="/src/js/cadastro.js"></script>
     <script defer src="/src/js/docentesCounter.js"></script>
+    <script defer src="/src/js/turmaCounter.js"></script>
+    <script defer src="/src/js/horarioCounter.js"></script>
 </body>
 
 </html>

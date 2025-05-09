@@ -300,25 +300,7 @@ body {
   gap: 10px;
 }
 
-.event-item {
-  display: flex;
-  align-items: center;
-  padding: 14px 20px;
-  color: var(--white);
-  background-color: var(--primary-light);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 15px;
-  margin-bottom: 8px;
-  border-radius: var(--border-radius);
-  border-left: 3px solid transparent;
-  box-shadow: var(--card-shadow);
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
+.event-item,
 .new {
   display: flex;
   align-items: center;
@@ -338,18 +320,20 @@ body {
   overflow: hidden;
 }
 
-.event-item:hover {
-  /* border-left: 4px solid var(--primary-color); */
+.event-item:hover,
+.new:hover {
   background-color: var(--primary-color);
   transform: translateY(-7px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-.event-item:hover::before {
+.event-item:hover::before,
+.new:hover::before {
   height: 100%;
 }
 
-.event-item i {
+.event-item i,
+.new i {
   margin-right: 15px;
   font-size: 18px;
   width: 24px;
