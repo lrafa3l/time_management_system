@@ -1,31 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt">
 <head>
     <title>SGH | Definições</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-
-    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="/src/styles/schedule.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
-    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
-
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!-- Adicione os SDKs do Firebase -->
+    <link rel="stylesheet" href="/src/styles/sweetalert.css" />
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-
 <body>
-
-    <!-- Loader de transição -->
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
             <div class="bounce-ball"></div>
@@ -33,18 +25,14 @@
             <div class="bounce-ball"></div>
         </div>
     </div>
-
     <button class="menu-toggle" id="menuToggle">
         <i class="fa-solid fa-bars menu-icon"></i>
         <i class="fa-solid fa-xmark close-icon"></i>
     </button>
-
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
             <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
         </div>
-
         <div class="nav-menu">
             <a href="/pagina-inicial" class="nav-item">
                 <i class="fas fa-home"></i>
@@ -66,7 +54,10 @@
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
-
+            <a href="/admin" class="nav-item">
+                <i class="fas fa-user-shield"></i>
+                <span>Administração</span>
+            </a>
         </div>
         <div class="nav-menu-bottom">
             <a href="/ajuda" class="nav-item">
@@ -79,15 +70,11 @@
             </button>
         </div>
     </div>
-
-    <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
         <div class="header">
             <div class="welcome-section">
                 <h1 class="welcome-title">Definições</h1>
             </div>
-
             <div class="header-right">
                 <div class="notification-bell">
                     <i class="fas fa-bell"></i>
@@ -95,16 +82,33 @@
                 </div>
             </div>
         </div>
-
-        <!-- Dashboard Container -->
-        <div class="dashboard-container"></div>
+        <div class="dashboard-container max-w-2xl mx-auto mt-6">
+            <div class="account-section bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center gap-2">
+                    <i class="fas fa-key text-[#29a8dc]"></i> Alterar Senha
+                </h2>
+                <form id="password-form">
+                    <div class="mb-4">
+                        <label for="current-password" class="block text-sm font-medium text-gray-700">Senha Atual</label>
+                        <input type="password" id="current-password" name="currentPassword" class="mt-1 block w-full p-2 border rounded" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="new-password" class="block text-sm font-medium text-gray-700">Nova Senha</label>
+                        <input type="password" id="new-password" name="newPassword" class="mt-1 block w-full p-2 border rounded" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirmar Nova Senha</label>
+                        <input type="password" id="confirm-password" name="confirmPassword" class="mt-1 block w-full p-2 border rounded" required />
+                    </div>
+                    <button type="submit" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Alterar Senha</button>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <!-- Scripts -->
     <script src="/src/js/auth.js"></script>
     <script src="/src/js/page-transitions.js"></script>
     <script src="/src/js/mobile-toggle.js"></script>
     <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/setting.js"></script>
 </body>
-
 </html>

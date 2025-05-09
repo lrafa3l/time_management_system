@@ -29,6 +29,7 @@ const rotasPersonalizadas = {
     '/definicoes': 'setting.html',
     '/horario': 'view.html',
     '/horarios-feitos': 'schedule.html',
+    '/admin': 'admin.html',
     '/conta': 'perfil.html',
     '/estatisticas': 'statistics.html'
 };

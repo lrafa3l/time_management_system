@@ -1,9 +1,12 @@
 /* Estilos para a seção da conta */
+.welcome-title {
+    margin-bottom: 8px !important;
+}
 
 .dash-container {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 0;
     margin: 0 auto;
     max-width: 900px;
     width: 100%;
@@ -54,8 +57,18 @@
 }
 
 .detail-value {
-    color: #1f2937;
+    color: #072946;
     flex: 1;
+    text-align: right;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin: 0 auto;
+    max-width: 900px;
+    width: 100%;
 }
 
 /* Estilos do Perfil */
@@ -70,12 +83,13 @@
 
 .profile-header {
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
 }
 
 .profile-avatar i {
     font-size: 4.5rem;
     color: #29a8dc;
+    margin-bottom: 0.7rem;
 }
 
 .profile-header h2 {
@@ -88,24 +102,15 @@
     color: #6b7280;
 }
 
-.detail-item {
+.profile-actions {
     display: flex;
-    justify-content: space-between;
-    padding: 1rem 0;
-    border-bottom: 1px solid #e5e7eb;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
-.detail-label {
-    font-weight: 600;
-    color: #4b5563;
-}
-
-.detail-value {
-    color: #1f2937;
-}
-
-#edit-profile-btn {
-    width: 100%;
+#edit-profile-btn, #cancel-profile-btn {
+    width: 30%;
     padding: 0.75rem;
     font-size: 1rem;
 }
@@ -123,6 +128,15 @@
     
     .profile-header {
         text-align: center;
-        margin-bottom: 0;
+        margin-bottom: 10px;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #edit-profile-btn, #cancel-profile-btn {
+        width: 50%;
     }
 }

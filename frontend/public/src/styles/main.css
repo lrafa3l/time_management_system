@@ -8,7 +8,8 @@
   --gray-light: #f5f7ff;
   --gray-medium: #e6e9f4;
   --gray-dark: #828795;
-  --danger: #f36c6c;
+  --danger: #dc3030;
+  --danger-dark: #d32f2f;
   --success: #2dbf78;
   --white: #ffffff;
   --text-primary: #0f2a65;
@@ -299,8 +300,7 @@ body {
   gap: 10px;
 }
 
-.event-item,
-.new {
+.event-item {
   display: flex;
   align-items: center;
   padding: 14px 20px;
@@ -319,8 +319,7 @@ body {
   overflow: hidden;
 }
 
-.event-item:hover,
-.new:hover {
+.event-item:hover {
   background-color: var(--primary-color);
   transform: translateY(-7px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
@@ -331,15 +330,14 @@ body {
   height: 100%;
 }
 
-.event-item i,
-.new i {
+.event-item i {
   margin-right: 15px;
   font-size: 18px;
   width: 24px;
   text-align: center;
 }
 
-/* ===== DROPDOWN STYLES ===== */
+/* DROPDOWN STYLES */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -351,8 +349,7 @@ body {
   background-color: #f9f9f9;
   min-width: 200px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 100;
-  /* Reduced z-index */
+  z-index: 1;
   border-radius: var(--border-radius);
   overflow: hidden;
   position: fixed;
@@ -1111,6 +1108,10 @@ label.checkbox-label {
     margin-right: 10px;
   }
 
+  button.dropdown-btn.event-item {
+    height: 73px !important;
+  }
+
 }
 
 @media (max-width: 992px) {
@@ -1203,6 +1204,10 @@ label.checkbox-label {
     margin-right: 10px;
   }
 
+  button.dropdown-btn.event-item {
+    height: 73px !important;
+  }
+
 }
 
 /* Ajustes gerais para mobile */
@@ -1243,16 +1248,27 @@ label.checkbox-label {
     padding: 15px;
   }
 
+  .new-content {
+    height: 100%;
+  }
+
+  button.dropdown-btn.event-item {
+    height: 66px !important;
+  }
+
   .new-event {
     flex-direction: column;
     gap: 15px;
     margin: 20px 0;
   }
 
-  .event-item,
-  .new {
+  .event-item {
     padding: 12px 15px;
     font-size: 14px;
+  }
+
+  .new {
+    height: 100%;
   }
 
   .dropdown-content {
@@ -1402,7 +1418,8 @@ label.checkbox-label {
     gap: 10px;
     width: 100%;
     -webkit-overflow-scrolling: touch;
-    padding: 10px 0;
+    padding: 0;
+    height: 50px;
   }
 
   .new-content::-webkit-scrollbar {
@@ -1429,6 +1446,10 @@ label.checkbox-label {
   .dropdown {
     width: 100%;
     max-width: 250px;
+  }
+
+  button.dropdown-btn.event-item {
+    height: 50px !important;
   }
 
   .dropdown-btn {
@@ -1641,10 +1662,10 @@ label.checkbox-label {
     flex-direction: row;
     flex-wrap: nowrap;
     overflow-x: auto;
+    justify-content: center;
+    align-items: center;
     gap: 10px;
-    width: 100%;
     -webkit-overflow-scrolling: touch;
-    padding: 10px 0;
   }
 
   .new-content::-webkit-scrollbar {
@@ -1661,15 +1682,20 @@ label.checkbox-label {
 
   .event-item,
   .new {
-    width: 100%;
-    max-width: 250px;
+    width: 50px;
+    display: flex;
     justify-content: center;
+    align-items: center;
     margin: 0;
   }
 
   .dropdown {
     width: 100%;
     max-width: 250px;
+  }
+
+  button.dropdown-btn.event-item {
+    height: 42px !important;
   }
 
   .dropdown-btn {
@@ -1702,7 +1728,8 @@ label.checkbox-label {
     font-size: 18px;
   }
 
-  .close-modal {
+  .close-modal,
+  .plan-percentage {
     font-size: 24px;
   }
 
@@ -1734,10 +1761,6 @@ label.checkbox-label {
     font-size: 22px;
   }
 
-  .plan-percentage {
-    font-size: 24px;
-  }
-
   .nav-item span,
   .premium-box h3 {
     display: flex;
@@ -1757,20 +1780,6 @@ label.checkbox-label {
     margin: 0;
   }
 
-  .cards-section {
-    grid-template-columns: 1fr !important;
-    width: 100px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: auto;
-    margin: 0;
-    padding: 0;
-    gap: 8px;
-  }
-
   .card-section {
     padding: 0 5px;
     width: 90px;
@@ -1782,22 +1791,21 @@ label.checkbox-label {
     align-items: center;
   }
 
-  .dashboard-main {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 320px;
-    margin: 0 15px;
-    padding: 0 15px;
+  .card-icon {
+    margin-bottom: 10px;
   }
 
+  .card-title {
+    margin-bottom: 6px;
+  }
+
+  .dashboard-main,
   .dashboard-sidebar {
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    width: 315px;
+    width: 320px;
     margin: 0 15px;
     padding: 0 15px;
   }

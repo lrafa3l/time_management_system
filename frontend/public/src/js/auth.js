@@ -1,4 +1,3 @@
-// Configuração do Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyA-3WwKHF1-f4fi5sHapRAsNr9INX0Etgo",
     authDomain: "schedule-system-8c4b6.firebaseapp.com",
@@ -13,6 +12,7 @@ const firebaseConfig = {
 // Inicializa Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 // Função para tentar login com retries em caso de falha de rede
 async function attemptLogin(auth, email, password, retries = 3, delay = 1000) {
@@ -31,6 +31,48 @@ async function attemptLogin(auth, email, password, retries = 3, delay = 1000) {
     }
 }
 
+// Função para garantir que documentos users e professores existem
+async function ensureUserDocuments(user) {
+    try {
+        const userRef = db.collection('users').doc(user.uid);
+        const professorRef = db.collection('professores').doc(user.uid);
+        
+        // Verifica users document
+        const userDoc = await userRef.get();
+        if (!userDoc.exists) {
+            console.log(`Criando users document para ${user.uid}`);
+            await userRef.set({
+                role: 'user' // Default role
+            });
+        }
+
+        // Verifica professores document
+        const professorDoc = await professorRef.get();
+        if (!professorDoc.exists) {
+            console.log(`Criando professores document para ${user.uid}`);
+            await professorRef.set({
+                nome: '',
+                nomeNormalized: '',
+                email: user.email || '',
+                emailNormalized: (user.email || '').toLowerCase(),
+                contacto: '',
+                formacaoMedio: '',
+                habilitacoes: '',
+                unidade: '',
+                categoria: '',
+                classes: [],
+                disciplinas: [],
+                cargo: '',
+                userId: user.uid,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao garantir documentos do usuário:', error);
+        throw new Error('Falha ao configurar dados do usuário.');
+    }
+}
+
 // Manipula o evento de submit do formulário de login
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -38,7 +80,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     // Adiciona a classe loading ao botão
     const button = document.querySelector('.submit');
     button.classList.add('loading');
-    button.disabled = true; // Desativa o botão para evitar cliques repetidos
+    button.disabled = true;
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -47,11 +89,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         const userCredential = await attemptLogin(auth, email, password);
         const user = userCredential.user;
 
-        // Atualiza a UI com os dados do usuário (opcional)
-        setupUI({ email: user.email, name: user.displayName });
+        // Garante que documentos existem
+        await ensureUserDocuments(user);
 
-        console.log('Usuário logado:', user);
-        window.location.href = '/pagina-inicial'; // Redireciona para main.html
+        console.log('Usuário logado:', user.email);
+        window.location.href = '/pagina-inicial';
     } catch (error) {
         // Remove a classe loading e reativa o botão
         button.classList.remove('loading');
@@ -59,20 +101,12 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.error('Erro no login:', errorMessage);
+        console.error('Erro no login:', errorCode, errorMessage);
 
         // Exibe mensagem de erro amigável
         document.getElementById('error-message').textContent = getFriendlyErrorMessage(errorCode);
     }
 });
-
-// Atualiza a UI com os dados do usuário
-function setupUI(userData) {
-    const greeting = document.querySelector(".greeting");
-    if (greeting) {
-        greeting.textContent = `Bem-vindo, ${userData.name || userData.email.split('@')[0]}!`;
-    }
-}
 
 // Função para traduzir códigos de erro em mensagens amigáveis
 function getFriendlyErrorMessage(errorCode) {
