@@ -7,153 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
+    <!-- Box Icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-
+    <!-- Custom CSSC -->
     <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/perfil.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 
+    <!-- Taiwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <!-- Adicione os SDKs do Firebase -->
+    <!-- SDKs do Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <style>
-        /* Estilos para a seção da conta */
 
-        .dash-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin: 0 auto;
-            max-width: 900px;
-            width: 100%;
-        }
-
-        .account-section {
-            background: white;
-            border-radius: 9px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .account-details {
-            margin-top: 1rem;
-        }
-
-        .account-section h2 {
-            color: #29a8dc;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .account-section h2 i {
-            color: #29a8dc;
-            font-size: 1.2rem;
-        }
-
-        /* Estilos para os itens de detalhe */
-        .detail-item {
-            display: flex;
-            padding: 1rem 0;
-            border-bottom: 1px solid #e5e7eb;
-            flex-wrap: wrap;
-        }
-
-        .detail-label {
-            font-weight: 600;
-            color: #4b5563;
-            width: 250px;
-        }
-
-        .detail-value {
-            color: #1f2937;
-            flex: 1;
-        }
-
-        /* Estilos do Perfil */
-        .profile-card {
-            background: white;
-            border-radius: 9px;
-            padding: 1.1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .profile-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-avatar i {
-            font-size: 4.5rem;
-            color: #29a8dc;
-        }
-
-        .profile-header h2 {
-            margin: 0.5rem 0 0;
-            color: #1f2937;
-        }
-        
-        .profile-header p {
-            margin: 0;
-            color: #6b7280;
-        }
-        
-        .profile-details {
-        }
-        
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .detail-label {
-            font-weight: 600;
-            color: #4b5563;
-        }
-        
-        .detail-value {
-            color: #1f2937;
-        }
-        
-        #edit-profile-btn {
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .detail-item {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .detail-label {
-                width: 100%;
-            }
-            
-            .profile-header {
-                text-align: center;
-                margin-bottom: 0;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -295,83 +166,12 @@
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-    <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyA-3WwKHF1-f4fi5sHapRAsNr9INX0Etgo",
-            authDomain: "schedule-system-8c4b6.firebaseapp.com",
-            databaseURL: "https://schedule-system-8c4b6-default-rtdb.firebaseio.com",
-            projectId: "schedule-system-8c4b6",
-            storageBucket: "schedule-system-8c4b6.firebasestorage.app",
-            messagingSenderId: "1056197912318",
-            appId: "1:1056197912318:web:2868c9a27bcc03587e27af",
-            measurementId: "G-GHEY7QZEQ9"
-        };
-
-        // Inicialização do Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-
-        const db = firebase.firestore();
-
-        // Função para carregar e exibir os dados
-        async function loadUserData() {
-            const user = firebase.auth().currentUser;
-
-            if (!user) {
-                console.log("Usuário não autenticado");
-                window.location.href = '/login';
-                return;
-            }
-
-            try {
-                const doc = await db.collection('users').doc(user.uid).get();
-
-                if (doc.exists) {
-                    const userData = doc.data();
-
-                    // Preencher seção de Dados Pessoais
-                    document.getElementById('account-name').textContent = userData.name || 'Não informado';
-                    document.getElementById('account-email').textContent = user.email || 'Não informado';
-                    document.getElementById('account-phone').textContent = userData.contacto || 'Não informado';
-                    document.getElementById('account-formacao-medio').textContent = userData.formacaoMedio || 'Não informado';
-                    document.getElementById('account-habilitacoes-superior').textContent = userData.habilitacoesSuperior || 'Não informado';
-
-                    // Preencher seção de Dados Profissionais
-                    document.getElementById('account-unidade-organica').textContent = userData.unidadeOrganica || 'Não informado';
-                    document.getElementById('account-categoria').textContent = userData.categoria || 'Não informado';
-                    document.getElementById('account-classe-leciona').textContent = userData.classeLeciona || 'Não informado';
-                    document.getElementById('account-disciplinas').textContent = userData.disciplinas || 'Não informado';
-                    document.getElementById('account-cargo-funcao').textContent = userData.role || 'Não informado';
-
-                } else {
-                    console.log("Documento não encontrado");
-                }
-            } catch (error) {
-                console.error("Erro ao carregar dados:", error);
-            }
-        }
-
-        // Carregar dados quando a página estiver pronta
-        document.addEventListener('DOMContentLoaded', () => {
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    loadUserData();
-                } else {
-                    window.location.href = '/login';
-                }
-            });
-        });
-    </script>
+    <!-- Scripts -->
+    <script src="/src/js/auth.js"></script>
+    <script src="/src/js/firestore.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/perfil.js"></script>
 </body>
-<script src="/src/js/auth.js"></script>
-<script src="/src/js/firestore.js"></script>
-<script src="/src/js/mobile-toggle.js"></script>
-<script src="/src/js/page-transitions.js"></script>
-<script src="/src/js/logOut.js"></script>
-
 </html>
