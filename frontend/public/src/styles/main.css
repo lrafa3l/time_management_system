@@ -319,6 +319,25 @@ body {
   overflow: hidden;
 }
 
+.new {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  color: var(--white);
+  background-color: var(--primary-light);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 8px;
+  border-radius: var(--border-radius);
+  border-left: 3px solid transparent;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
 .event-item:hover {
   /* border-left: 4px solid var(--primary-color); */
   background-color: var(--primary-color);
@@ -1149,19 +1168,13 @@ label.checkbox-label {
     font-size: 20px;
   }
 
-  .event-item {
+  .event-item,
+  .new {
     margin: 0;
   }
 
   .dropdown {
     display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  button.dropdown-btn {
-    display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
   }
@@ -1253,16 +1266,10 @@ label.checkbox-label {
     margin: 20px 0;
   }
 
-  .event-item {
+  .event-item,
+  .new {
     padding: 12px 15px;
     font-size: 14px;
-  }
-
-  .dropdown-btn {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    height: 100%;
   }
 
   .dropdown-content {
@@ -1427,7 +1434,8 @@ label.checkbox-label {
     margin: 0;
   }
 
-  .event-item {
+  .event-item,
+  .new {
     width: 100%;
     max-width: 250px;
     justify-content: center;
@@ -1455,7 +1463,6 @@ label.checkbox-label {
     margin: 0;
     padding: 0;
     gap: 10px;
-    /* width: 318px; */
   }
 
   .modal-dialog {
@@ -1669,7 +1676,8 @@ label.checkbox-label {
     margin: 0;
   }
 
-  .event-item {
+  .event-item,
+  .new {
     width: 100%;
     max-width: 250px;
     justify-content: center;
@@ -1791,9 +1799,7 @@ label.checkbox-label {
     align-items: center;
   }
 
-  .dashboard-main,
-  .dashboard-sidebar,
-  .dashboard-container {
+  .dashboard-main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -1801,6 +1807,24 @@ label.checkbox-label {
     width: 320px;
     margin: 0 15px;
     padding: 0 15px;
+  }
+
+  .dashboard-sidebar {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 315px;
+    margin: 0 15px;
+    padding: 0 15px;
+  }
+
+  .dashboard-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
   }
 
   .section-title {

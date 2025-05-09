@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -17,7 +16,7 @@ app.use(cors({
 app.use(express.static(path.join(__dirname, 'frontend', 'public'), {
     setHeaders: (res, path) => {
         console.log(`Servindo arquivo estático: ${path}`);
-    }
+        }
 }));
 
 // Rotas personalizadas (mapeamento explícito)
