@@ -14,8 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
         firebase.initializeApp(firebaseConfig);
     }
     const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    const passwordForm = document.getElementById('password-form');
+    const settingsForm = document.getElementById('settings-form');
 
     function showLoadingSpinner() {
         Swal.fire({
@@ -27,49 +28,94 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    passwordForm.addEventListener('submit', async (e) => {
+    // Accordion toggle functionality
+    document.querySelectorAll('.toggle-section').forEach(header => {
+        header.addEventListener('click', () => {
+            const targetId = header.getAttribute('data-target');
+            const content = document.getElementById(targetId);
+            const isOpen = content.style.display === 'block';
+            document.querySelectorAll('.section-content').forEach(c => {
+                c.style.display = 'none';
+            });
+            content.style.display = isOpen ? 'none' : 'block';
+        });
+    });
+
+    // Load user settings
+    async function loadSettings() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const settingsDoc = await db.collection('users').doc(user.uid).collection('settings').doc('preferences').get();
+            if (settingsDoc.exists) {
+                const settings = settingsDoc.data();
+                document.getElementById('calendar-view').value = settings.calendarView || 'weekly';
+                document.getElementById('profile-visible').checked = settings.profileVisible || false;
+                document.getElementById('schedule-alerts').checked = settings.scheduleAlerts || false;
+            }
+        } catch (error) {
+            console.error('Erro ao carregar configurações:', error);
+        }
+    }
+
+    // Save settings
+    settingsForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formData = new FormData(passwordForm);
+        const formData = new FormData(settingsForm);
         const currentPassword = formData.get('currentPassword');
         const newPassword = formData.get('newPassword');
         const confirmPassword = formData.get('confirmPassword');
-
-        if (newPassword !== confirmPassword) {
-            Swal.fire({
-                title: 'Erro!',
-                text: 'As novas senhas não coincidem.',
-                icon: 'error',
-                customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
-            });
-            return;
-        }
-
-        if (newPassword.length < 6) {
-            Swal.fire({
-                title: 'Erro!',
-                text: 'A nova senha deve ter pelo menos 6 caracteres.',
-                icon: 'error',
-                customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
-            });
-            return;
-        }
+        const calendarView = formData.get('calendarView');
+        const profileVisible = formData.get('profileVisible') === 'on';
+        const scheduleAlerts = formData.get('scheduleAlerts') === 'on';
 
         showLoadingSpinner();
+
         try {
             const user = auth.currentUser;
-            const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
-            await user.reauthenticateWithCredential(credential);
-            await user.updatePassword(newPassword);
+            // Update password if provided
+            if (currentPassword && newPassword && confirmPassword) {
+                if (newPassword !== confirmPassword) {
+                    Swal.fire({
+                        title: 'Erro!',
+                        text: 'As novas senhas não coincidem.',
+                        icon: 'error',
+                        customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+                    });
+                    return;
+                }
+                if (newPassword.length < 6) {
+                    Swal.fire({
+                        title: 'Erro!',
+                        text: 'A nova senha deve ter pelo menos 6 caracteres.',
+                        icon: 'error',
+                        customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+                    });
+                    return;
+                }
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+                await user.reauthenticateWithCredential(credential);
+                await user.updatePassword(newPassword);
+            }
+
+            // Save settings to Firestore
+            await db.collection('users').doc(user.uid).collection('settings').doc('preferences').set({
+                calendarView,
+                profileVisible,
+                scheduleAlerts
+            }, { merge: true });
+
             Swal.fire({
                 title: 'Sucesso!',
-                text: 'Senha alterada com sucesso.',
+                text: 'Configurações salvas com sucesso.',
                 icon: 'success',
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
             });
-            passwordForm.reset();
+            settingsForm.reset();
+            loadSettings();
         } catch (error) {
-            console.error('Erro ao alterar senha:', error);
-            let message = 'Não foi possível alterar a senha. Tente novamente.';
+            console.error('Erro ao salvar configurações:', error);
+            let message = 'Não foi possível salvar as configurações. Tente novamente.';
             if (error.code === 'auth/wrong-password') {
                 message = 'A senha atual está incorreta.';
             }
@@ -83,7 +129,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     auth.onAuthStateChanged((user) => {
-        if (!user) {
+        if (user) {
+            loadSettings();
+        } else {
             window.location.href = '/login';
         }
     });

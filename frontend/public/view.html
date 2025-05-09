@@ -3,11 +3,20 @@
     <title>SGH | Horário</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/cursor-follower.css" />
+
+    <!-- Favicon -->
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+    <!-- PDF Gen -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @page {
@@ -376,6 +385,7 @@
         </div>
     </div>
     <script src="/src/js/page-transitions.js"></script>
+    <script defer src="/src/js/cursor-follower.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const firebaseConfig = {
