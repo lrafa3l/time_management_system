@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt">
 <head>
     <title>SGH | Página Inicial</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
     <link rel="stylesheet" href="/src/styles/main.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
     <link rel="stylesheet" href="/src/styles/cursor-follower.css" />
     <link rel="stylesheet" href="/src/styles/sweetalert.css" />
-
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
@@ -22,7 +19,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-
 <body>
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
@@ -80,7 +76,7 @@
         <div class="header">
             <div class="welcome-section">
                 <h1 class="welcome-title">Sistema de Gestão de Horários</h1>
-                <p class="greeting"></p>
+                <p class="greeting text-[#144b7b] text-base">Bem-vindo, ...</p>
             </div>
             <div class="header-right">
                 <div class="notification-bell">
@@ -91,7 +87,6 @@
         </div>
         <div class="new-event">
             <div class="new-content">
-                
                 <div class="new">
                     <div class="dropdown">
                         <button class="dropdown-btn event-item">
@@ -107,7 +102,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <a href="#" class="event-item role-professor modal-trigger" data-form="horario">
                     <i class="fa-solid fa-calendar-plus"></i>
                     <span>Adicionar Horário</span>
@@ -128,7 +122,7 @@
                         <span class="close-modal">×</span>
                     </div>
                     <div class="modal-body">
-                        <!-- Modal para o Cadastro será injected ici -->
+                        <!-- Modal para o Cadastro será injected aqui -->
                     </div>
                 </div>
             </div>
@@ -263,5 +257,4 @@
     <script defer src="/src/js/docentesCounter.js"></script>
     <script defer src="/src/js/turmaCounter.js"></script>
 </body>
-
 </html>

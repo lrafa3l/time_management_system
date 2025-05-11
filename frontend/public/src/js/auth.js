@@ -51,8 +51,8 @@ async function ensureUserDocuments(user) {
         if (!professorDoc.exists) {
             console.log(`Criando professores document para ${user.uid}`);
             await professorRef.set({
-                nome: '',
-                nomeNormalized: '',
+                nome: user.displayName || '',
+                nomeNormalized: (user.displayName || '').toLowerCase(),
                 email: user.email || '',
                 emailNormalized: (user.email || '').toLowerCase(),
                 contacto: '',
@@ -74,7 +74,7 @@ async function ensureUserDocuments(user) {
 }
 
 // Manipula o evento de submit do formulário de login
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
+document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Adiciona a classe loading ao botão
@@ -129,3 +129,28 @@ function getFriendlyErrorMessage(errorCode) {
             return 'Ocorreu um erro durante o login. Tente novamente.';
     }
 }
+
+// Monitora estado de autenticação para atualizar saudação
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        try {
+            const professorDoc = await db.collection('professores').doc(user.uid).get();
+            const greeting = document.querySelector('.greeting');
+            if (!greeting) return; // Evita erro se .greeting não existe na página
+
+            if (professorDoc.exists && professorDoc.data().nome) {
+                greeting.textContent = `Bem-vindo, ${professorDoc.data().nome}!`;
+            } else if (user.displayName) {
+                greeting.textContent = `Bem-vindo, ${user.displayName}!`;
+            } else {
+                greeting.textContent = `Bem-vindo, ${user.email.split('@')[0]}!`;
+            }
+        } catch (error) {
+            console.error('Erro ao carregar dados do usuário:', error);
+            const greeting = document.querySelector('.greeting');
+            if (greeting) greeting.textContent = 'Bem-vindo, Usuário!';
+        }
+    } else {
+        window.location.href = '/login';
+    }
+});
