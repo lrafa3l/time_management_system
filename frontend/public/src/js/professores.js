@@ -376,11 +376,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="space-y-3">
                         <div class="flex items-center">
                             <i class="fas fa-envelope text-[#29a8dc] mr-2"></i>
-                            <span class="text-sm text-gray-600 dark:text-[#29a8dc]">${professor.email || 'N/A'}</span>
+                            <span class="text-sm text-gray-600 dark:text-[#144b7b] font-semibold">${professor.email || 'N/A'}</span>
                         </div>
                         <div class="flex items-center">
                             <i class="fas fa-phone text-[#29a8dc] mr-2"></i>
-                            <span class="text-sm text-gray-600 dark:text-[#29a8dc]">${professor.contacto || 'N/A'}</span>
+                            <span class="text-sm text-gray-600 dark:text-[#144b7b] font-semibold">${professor.contacto || 'N/A'}</span>
                         </div>
                     </div>
                     <div class="mt-4 flex space-x-2">
