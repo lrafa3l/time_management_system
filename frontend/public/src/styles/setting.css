@@ -155,9 +155,11 @@
 /* Main Content Styles */
 .main-content {
     flex-grow: 1;
-    padding: 30px;
+    padding: 30px 1rem;
     background-color: var(--gray-medium);
     margin-left: var(--sidebar-width);
+    overflow-x: hidden;
+    height: 100vh;
 }
 
 /* Header Styles */
@@ -198,6 +200,29 @@
     transition: all 0.3s ease;
 }
 
+.toggle-section {
+    position: relative;
+}
+
+.toggle-arrow {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease, color 0.2s ease;
+    color: var(--primary-color);
+}
+
+.toggle-section.active .toggle-arrow {
+    transform: rotate(180deg);
+}
+
+.toggle-section:hover .toggle-arrow {
+    transform: scale(1.2);
+    color: var(--primary-light);
+}
+
+.toggle-section.active:hover .toggle-arrow {
+    transform: scale(1.2) rotate(180deg);
+}
+
 .section-content {
     display: none;
 }
@@ -211,6 +236,74 @@
     justify-content: center;
     gap: 1rem;
     margin-top: 1rem;
+}
+
+/* Input Field Styles */
+input[type="text"],
+input[type="password"],
+select {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    background-color: var(--white);
+    border: 1px solid var(--gray-dark);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(41, 168, 220, 0.2);
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: var(--gray-dark);
+    opacity: 0.7;
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2329a8dc'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+/* Checkbox Styles */
+input[type="checkbox"] {
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--gray-dark);
+    border-radius: 4px;
+    background-color: var(--white);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-size: 0.875rem;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(41, 168, 220, 0.2);
+}
+
+/* Error State */
+input.error,
+select.error {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 2px rgba(220, 77, 77, 0.2);
 }
 
 /* Scrollbar */
@@ -245,7 +338,7 @@
 
 @media (max-width: 1200px) {
     .main-content {
-        padding: 20px;
+        padding: 20px 1rem;
     }
 }
 
@@ -257,6 +350,7 @@
 
     .main-content {
         margin-left: 80px;
+        padding: 20px 0.5rem;
     }
 
     .logo {
@@ -287,7 +381,7 @@
 
 @media (max-width: 768px) {
     .main-content {
-        padding: 15px;
+        padding: 15px 0.5rem;
     }
 
     .header {
@@ -309,6 +403,7 @@
 @media (max-width: 576px) {
     .main-content {
         margin-left: 0;
+        padding: 15px 0.5rem;
     }
 
     .header {

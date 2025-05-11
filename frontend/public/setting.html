@@ -4,27 +4,14 @@
     <title>SGH | Definições</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-
-    <!-- Box Icon -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-    <!-- Favicon -->
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
-
-    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/src/styles/setting.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
-    <!-- <link rel="stylesheet" href="/src/styles/cursor-follower.css" /> -->
     <link rel="stylesheet" href="/src/styles/toggle.css" />
     <link rel="stylesheet" href="/src/styles/sweetalert.css" />
-
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
@@ -87,7 +74,7 @@
         <div class="header">
             <div class="welcome-section">
                 <h1 class="welcome-title">Definições</h1>
-                <p class="text-gray-600">Ajuste suas preferências para o sistema de gestão de horários</p>
+                <p class="text-[#144b7b]">Ajuste as suas preferências para o sistema de gestão de horários</p>
             </div>
             <div class="header-right">
                 <div class="notification-bell">
@@ -99,32 +86,38 @@
         <div class="dashboard-container max-w-2xl mx-auto mt-6">
             <form id="settings-form">
                 <div class="account-section bg-white rounded-lg shadow p-6 mb-4">
-                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center gap-2 cursor-pointer toggle-section" data-target="security-content">
-                        <i class="fas fa-key text-[#29a8dc]"></i> Segurança
+                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center justify-between cursor-pointer toggle-section" data-target="security-content">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-key text-[#29a8dc]"></i> Segurança
+                        </span>
+                        <i class="fas fa-chevron-down toggle-arrow text-[#29a8dc]"></i>
                     </h2>
                     <div id="security-content" class="section-content">
                         <div class="mb-4">
-                            <label for="current-password" class="block text-sm font-medium text-gray-700">Senha Atual</label>
-                            <input type="password" id="current-password" name="currentPassword" class="mt-1 block w-full p-2 border rounded" />
+                            <label for="current-password" class="block text-sm font-medium text-[#144b7b] mb-1">Senha Atual</label>
+                            <input type="password" id="current-password" name="currentPassword" placeholder="Digite sua senha atual" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#29a8dc] focus:border-[#29a8dc] transition duration-200" />
                         </div>
                         <div class="mb-4">
-                            <label for="new-password" class="block text-sm font-medium text-gray-700">Nova Senha</label>
-                            <input type="password" id="new-password" name="newPassword" class="mt-1 block w-full p-2 border rounded" />
+                            <label for="new-password" class="block text-sm font-medium text-[#144b7b] mb-1">Nova Senha</label>
+                            <input type="password" id="new-password" name="newPassword" placeholder="Digite a nova senha" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#29a8dc] focus:border-[#29a8dc] transition duration-200" />
                         </div>
                         <div class="mb-4">
-                            <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirmar Nova Senha</label>
-                            <input type="password" id="confirm-password" name="confirmPassword" class="mt-1 block w-full p-2 border rounded" />
+                            <label for="confirm-password" class="block text-sm font-medium text-[#144b7b] mb-1">Confirmar Nova Senha</label>
+                            <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirme a nova senha" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#29a8dc] focus:border-[#29a8dc] transition duration-200" />
                         </div>
                     </div>
                 </div>
                 <div class="account-section bg-white rounded-lg shadow p-6 mb-4">
-                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center gap-2 cursor-pointer toggle-section" data-target="calendar-content">
-                        <i class="fas fa-calendar-day text-[#29a8dc]"></i> Preferências de Calendário
+                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center justify-between cursor-pointer toggle-section" data-target="calendar-content">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-calendar-day text-[#29a8dc]"></i> Preferências de Calendário
+                        </span>
+                        <i class="fas fa-chevron-down toggle-arrow text-[#29a8dc]"></i>
                     </h2>
                     <div id="calendar-content" class="section-content">
                         <div class="mb-4">
-                            <label for="calendar-view" class="block text-sm font-medium text-gray-700">Vista Padrão do Calendário</label>
-                            <select id="calendar-view" name="calendarView" class="mt-1 block w-full p-2 border rounded">
+                            <label for="calendar-view" class="block text-sm font-medium text-[#144b7b] mb-1">Vista Padrão do Calendário</label>
+                            <select id="calendar-view" name="calendarView" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#29a8dc] focus:border-[#29a8dc] transition duration-200 appearance-none bg-white">
                                 <option value="weekly">Semanal</option>
                                 <option value="monthly">Mensal</option>
                             </select>
@@ -132,36 +125,41 @@
                     </div>
                 </div>
                 <div class="account-section bg-white rounded-lg shadow p-6 mb-4">
-                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center gap-2 cursor-pointer toggle-section" data-target="profile-content">
-                        <i class="fas fa-user-circle text-[#29a8dc]"></i> Visibilidade do Perfil
+                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center justify-between cursor-pointer toggle-section" data-target="profile-content">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-user-circle text-[#29a8dc]"></i> Visibilidade do Perfil
+                        </span>
+                        <i class="fas fa-chevron-down toggle-arrow text-[#29a8dc]"></i>
                     </h2>
                     <div id="profile-content" class="section-content">
                         <div class="mb-4 flex items-center justify-between">
-                            <label for="profile-visible" class="text-sm font-medium text-gray-700">Tornar Perfil Visível para Outros Usuários</label>
-                            <input type="checkbox" id="profile-visible" name="profileVisible" class="h-4 w-4 text-[#29a8dc] border-gray-300 rounded" />
+                            <label for="profile-visible" class="text-sm font-medium text-[#144b7b]">Tornar Perfil Visível para Outros Usuários</label>
+                            <input type="checkbox" id="profile-visible" name="profileVisible" class="h-5 w-5 text-[#29a8dc] border-gray-300 rounded focus:ring-[#29a8dc] transition duration-200" />
                         </div>
                     </div>
                 </div>
                 <div class="account-section bg-white rounded-lg shadow p-6 mb-4">
-                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center gap-2 cursor-pointer toggle-section" data-target="alerts-content">
-                        <i class="fas fa-bell text-[#29a8dc]"></i> Alertas de Horário
+                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center justify-between cursor-pointer toggle-section" data-target="alerts-content">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-bell text-[#29a8dc]"></i> Alertas de Horário
+                        </span>
+                        <i class="fas fa-chevron-down toggle-arrow text-[#29a8dc]"></i>
                     </h2>
                     <div id="alerts-content" class="section-content">
                         <div class="mb-4 flex items-center justify-between">
-                            <label for="schedule-alerts" class="text-sm font-medium text-gray-700">Receber Alertas de Aulas e Conflitos</label>
-                            <input type="checkbox" id="schedule-alerts" name="scheduleAlerts" class="h-4 w-4 text-[#29a8dc] border-gray-300 rounded" />
+                            <label for="schedule-alerts" class="text-sm font-medium text-[#144b7b]">Receber Alertas de Aulas e Conflitos</label>
+                            <input type="checkbox" id="schedule-alerts" name="scheduleAlerts" class="h-5 w-5 text-[#29a8dc] border-gray-300 rounded focus:ring-[#29a8dc] transition duration-200" />
                         </div>
                     </div>
                 </div>
                 <div class="settings-actions flex justify-center mt-4">
-                    <button type="submit" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Salvar Alterações</button>
+                    <button type="submit" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg transition duration-200">Salvar Alterações</button>
                 </div>
             </form>
         </div>
     </div>
     <script src="/src/js/auth.js"></script>
     <script src="/src/js/page-transitions.js"></script>
-    <!-- <script defer src="/src/js/cursor-follower.js"></script> -->
     <script src="/src/js/mobile-toggle.js"></script>
     <script src="/src/js/logOut.js"></script>
     <script src="/src/js/setting.js"></script>

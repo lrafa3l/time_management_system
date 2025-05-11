@@ -12,7 +12,7 @@ html, body {
   .circle {
     width: 20px;
     height: 20px;
-    background-color: #f2e828;
+    background-color: turquoise;
     border-radius: 50%;
     position: absolute;
     pointer-events: none;
@@ -24,7 +24,7 @@ html, body {
   .bomb {
     width: 20px;
     height: 20px;
-    background-color: #ffcc00;
+    background-color: rgb(48, 185, 171) !important;
     border-radius: 50%;
     position: absolute;
     pointer-events: none;
@@ -37,6 +37,10 @@ html, body {
     0% {
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 0.5;
     }
     100% {
       transform: translate(-50%, -50%) scale(3);

@@ -34,10 +34,20 @@ document.addEventListener("DOMContentLoaded", function () {
             const targetId = header.getAttribute('data-target');
             const content = document.getElementById(targetId);
             const isOpen = content.style.display === 'block';
+
+            // Close all sections and remove active class
             document.querySelectorAll('.section-content').forEach(c => {
                 c.style.display = 'none';
             });
-            content.style.display = isOpen ? 'none' : 'block';
+            document.querySelectorAll('.toggle-section').forEach(h => {
+                h.classList.remove('active');
+            });
+
+            // Toggle current section
+            if (!isOpen) {
+                content.style.display = 'block';
+                header.classList.add('active');
+            }
         });
     });
 
