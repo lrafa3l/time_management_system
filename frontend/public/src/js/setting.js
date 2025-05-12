@@ -65,6 +65,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         } catch (error) {
             console.error('Erro ao carregar configurações:', error);
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar as configurações.',
+                icon: 'error',
+                customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+            });
         }
     }
 
@@ -72,9 +78,9 @@ document.addEventListener("DOMContentLoaded", function () {
     settingsForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(settingsForm);
-        const currentPassword = formData.get('currentPassword');
-        const newPassword = formData.get('newPassword');
-        const confirmPassword = formData.get('confirmPassword');
+        const currentPassword = formData.get('currentPassword')?.trim();
+        const newPassword = formData.get('newPassword')?.trim();
+        const confirmPassword = formData.get('confirmPassword')?.trim();
         const calendarView = formData.get('calendarView');
         const profileVisible = formData.get('profileVisible') === 'on';
         const scheduleAlerts = formData.get('scheduleAlerts') === 'on';
@@ -83,8 +89,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
             const user = auth.currentUser;
-            // Update password if provided
-            if (currentPassword && newPassword && confirmPassword) {
+            // Update password only if all three fields are filled
+            if (currentPassword || newPassword || confirmPassword) {
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    Swal.fire({
+                        title: 'Erro!',
+                        text: 'Preencha todos os campos de senha (atual, nova e confirmação).',
+                        icon: 'error',
+                        customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+                    });
+                    return;
+                }
                 if (newPassword !== confirmPassword) {
                     Swal.fire({
                         title: 'Erro!',
@@ -94,10 +109,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                     return;
                 }
-                if (newPassword.length < 6) {
+                if (newPassword.length < 8) {
                     Swal.fire({
                         title: 'Erro!',
-                        text: 'A nova senha deve ter pelo menos 6 caracteres.',
+                        text: 'A nova senha deve ter pelo menos 8 caracteres.',
                         icon: 'error',
                         customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
                     });
@@ -106,9 +121,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
                 await user.reauthenticateWithCredential(credential);
                 await user.updatePassword(newPassword);
+                console.log('Senha atualizada com sucesso');
+                // Força logout após mudança de senha
+                await auth.signOut();
+                Swal.fire({
+                    title: 'Sucesso!',
+                    text: 'Senha alterada com sucesso. Faça login novamente.',
+                    icon: 'success',
+                    customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+                }).then(() => {
+                    window.location.href = '/login';
+                });
+                return; // Sai após mudança de senha
             }
 
-            // Save settings to Firestore
+            // Save settings to Firestore if no password change
             await db.collection('users').doc(user.uid).collection('settings').doc('preferences').set({
                 calendarView,
                 profileVisible,
@@ -128,6 +155,10 @@ document.addEventListener("DOMContentLoaded", function () {
             let message = 'Não foi possível salvar as configurações. Tente novamente.';
             if (error.code === 'auth/wrong-password') {
                 message = 'A senha atual está incorreta.';
+            } else if (error.code === 'auth/internal-error') {
+                message = 'Erro interno do servidor. Verifique sua conexão e tente novamente.';
+            } else if (error.code === 'auth/too-many-requests') {
+                message = 'Muitas tentativas. Tente novamente mais tarde.';
             }
             Swal.fire({
                 title: 'Erro!',
