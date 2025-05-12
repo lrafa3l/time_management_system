@@ -1,6 +1,6 @@
 /* schedule.css */
 
-/* Root Variables */
+/* ===== ROOT VARIABLES ===== */
 :root {
   --primary-color: #29a8dc;
   --primary-light: #144b7b;
@@ -10,7 +10,8 @@
   --gray-light: #f5f7ff;
   --gray-medium: #e6e9f4;
   --gray-dark: #828795;
-  --danger: #f36c6c;
+  --danger: #dc4d4d;
+  --danger-dark: #d32f2f;
   --success: #2dbf78;
   --white: #ffffff;
   --text-primary: #0f2a65;
@@ -21,9 +22,9 @@
   --border-radius: 9px;
   --dark-blue: #072946;
   --bluie: #262a39;
-  --primary-color: #29a8dc;
   --water: #d7faff;
 }
+
 /* PDF Preview Modal Styles */
 .pdf-preview-modal {
   display: none;
@@ -44,6 +45,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -67,6 +69,7 @@
     transform: translateY(-50px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -348,7 +351,8 @@
 .main-content {
   flex-grow: 1;
   padding: 30px;
-  background-color: var(--gray-medium); /* Alterado para var(--gray-medium) */
+  background-color: var(--gray-medium);
+  /* Alterado para var(--gray-medium) */
 }
 
 .layout-wrapper {
@@ -524,11 +528,13 @@ section.antialiased {
 }
 
 .delete-btn {
-  color: var(--danger);
+  background-color: var(--danger);
+  color: var(--white);
 }
 
 .delete-btn:hover {
-  background-color: rgba(243, 108, 108, 0.1);
+  background-color: var(--danger-dark);
+  color: var(--white);
 }
 
 .pagination {
@@ -698,7 +704,7 @@ section.antialiased {
     height: 100vh;
     z-index: 900;
   }
-  
+
   .sidebar.active {
     transform: translateX(0);
   }

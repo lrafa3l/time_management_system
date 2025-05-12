@@ -1,27 +1,52 @@
+/* ===== ROOT VARIABLES ===== */
+:root {
+    --primary-color: #29a8dc;
+    --primary-light: #144b7b;
+    --primary-cyan: #81ffd9;
+    --primary-dark: #0f2a65;
+    --secondary-color: #3b3f5c;
+    --gray-light: #f5f7ff;
+    --gray-medium: #e6e9f4;
+    --gray-dark: #828795;
+    --danger: #dc3030;
+    --danger-dark: #d32f2f;
+    --success: #2dbf78;
+    --white: #ffffff;
+    --text-primary: #0f2a65;
+    --text-secondary: #6c7380;
+    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    --sidebar-width: 280px;
+    --header-height: 80px;
+    --border-radius: 9px;
+    --dark-blue: #072946;
+    --bluie: #262a39;
+    --water: #d7faff;
+}
+
 /* SweetAlert2 Custom Styles */
 .my-swal-popup {
-    background-color: var(--gray-light); /* #f5f7ff */
-    border-radius: var(--border-radius); /* 9px */
-    box-shadow: var(--card-shadow); /* 0 10px 25px rgba(0, 0, 0, 0.05) */
+    background-color: var(--gray-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
     padding: 20px;
     font-family: "AfacadFlux", sans-serif;
 }
 
 .my-swal-title {
-    color: var(--text-primary); /* #0f2a65 */
+    color: var(--text-primary);
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 10px;
 }
 
 .my-swal-text {
-    color: var(--text-secondary); /* #6c7380 */
+    color: var(--text-secondary);
     font-size: 16px;
     line-height: 1.5;
 }
 
 .my-swal-button {
-    background-color: var(--primary-color); /* #29a8dc */
+    background-color: var(--danger);
     color: var(--white);
     border: none;
     border-radius: var(--border-radius);
@@ -34,23 +59,93 @@
 }
 
 .my-swal-button:hover {
-    background-color: var(--primary-light); /* #144b7b */
+    background-color: var(--danger-dark, #d32f2f);
+}
+
+.my-swal-button,
+.my-swal-confirm-button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: 110px;
+    height: 45px;
+}
+
+.my-swal-button:hover,
+.my-swal-confirm-button:hover {
+    background-color: var(--primary-light);
+}
+
+.my-swal-cancel-button {
+    background-color: var(--danger-dark, #d32f2f);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: 110px;
+    height: 45px;
+}
+
+.my-swal-cancel-button:hover {
+    background-color: var(--danger-dark, #d32f2f);
+}
+
+.swal-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--primary-color);
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .swal2-icon.swal2-error {
-    border-color: var(--danger); /* #f36c6c */
+    border-color: var(--danger);
     color: var(--danger);
 }
 
 .swal2-icon.swal2-success {
-    border-color: var(--success); /* #2dbf78 */
+    border-color: var(--success);
     color: var(--success);
 }
 
 .swal2-backdrop {
-    background: rgba(0, 0, 0, 0.5); /* Matches modal backdrop */
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .swal2-container {
-    z-index: 998; /* Below main.css modal (999) */
+    z-index: 1003;
+}
+
+/* Modal input styles */
+.detail-input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100%;
+    font-size: 14px;
+}
+
+.detail-input:focus {
+    border-color: var(--primary-color);
+    outline: none;
 }

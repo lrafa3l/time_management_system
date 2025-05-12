@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log('docentesCounter.js loaded');
+    console.log('turmaCounter.js loaded');
 
     // Firebase configuration
     const firebaseConfig = {
@@ -19,23 +19,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     const db = firebase.firestore();
 
-    // Function to count professores and update DOM
-    async function countProfessores() {
-        console.log('countProfessores started');
-        const docentesNumber = document.getElementById('docentesNumber');
-        if (!docentesNumber) {
-            console.error('Elemento #docentesNumber não encontrado');
+    // Function to count Turmas and update DOM
+    async function countTurmas() {
+        console.log('count turmas started');
+        const turmaNumber = document.getElementById('turmaNumber');
+        if (!turmaNumber) {
+            console.error('Elemento #turmaNumber não encontrado');
             return;
         }
 
-        const loadingSpinner = docentesNumber.querySelector('.loading-spinner');
-        const countSpan = docentesNumber.querySelector('.countD');
+        const loadingSpinner = turmaNumber.querySelector('.loading-spinner');
+        const countSpan = turmaNumber.querySelector('.countT');
 
         console.log('loadingSpinner:', loadingSpinner, 'countSpinner:', countSpan);
 
         if (!loadingSpinner || !countSpan) {
-            console.error('Elementos .loading-spinner ou .count não encontrados em #docentesNumber');
-            docentesNumber.textContent = '0';
+            console.error('Elementos .loading-spinner ou .count não encontrados em #turmaNumber');
+            turmaNumber.textContent = '0';
             return;
         }
 
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Temporary delay to test spinner visibility
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            const snapshot = await db.collection('professores')
+            const snapshot = await db.collection('turmas')
                 .where('userId', '==', user.uid)
                 .get();
 
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
             countSpan.classList.remove('hidden');
             console.log('Count updated:', count);
         } catch (error) {
-            console.error('Erro ao contar professores:', error);
+            console.error('Erro ao contar as turmas:', error);
             countSpan.textContent = '0';
             loadingSpinner.classList.add('hidden');
             countSpan.classList.remove('hidden');
@@ -81,20 +81,20 @@ document.addEventListener("DOMContentLoaded", function () {
     firebase.auth().onAuthStateChanged(user => {
         console.log('Auth state:', user ? `User ${user.uid}` : 'No user');
         if (user) {
-            countProfessores();
+            countTurmas();
         } else {
-            const docentesNumber = document.getElementById('docentesNumber');
-            if (docentesNumber) {
-                const countSpan = docentesNumber.querySelector('.count');
+            const turmaNumber = document.getElementById('turmaNumber');
+            if (turmaNumber) {
+                const countSpan = turmaNumber.querySelector('.count');
                 if (countSpan) {
                     countSpan.textContent = '0';
                     countSpan.classList.remove('hidden');
-                    const loadingSpinner = docentesNumber.querySelector('.loading-spinner');
+                    const loadingSpinner = turmaNumber.querySelector('.loading-spinner');
                     if (loadingSpinner) {
                         loadingSpinner.classList.add('hidden');
                     }
                 } else {
-                    docentesNumber.textContent = '0';
+                    turmaNumber.textContent = '0';
                 }
             }
         }

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt">
 <head>
     <title>SGH | Página Inicial</title>
     <meta charset="UTF-8" />
@@ -10,6 +9,7 @@
     <link rel="stylesheet" href="/src/styles/main.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/cursor-follower.css" />
     <link rel="stylesheet" href="/src/styles/sweetalert.css" />
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -19,7 +19,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-
 <body>
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
@@ -57,6 +56,10 @@
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
+            <a href="/admin" class="nav-item">
+                <i class="fas fa-user-shield"></i>
+                <span>Administração</span>
+            </a>
         </div>
         <div class="nav-menu-bottom">
             <a href="/ajuda" class="nav-item">
@@ -73,7 +76,7 @@
         <div class="header">
             <div class="welcome-section">
                 <h1 class="welcome-title">Sistema de Gestão de Horários</h1>
-                <p class="greeting"></p>
+                <p class="greeting text-[#144b7b] text-base">Bem-vindo, ...</p>
             </div>
             <div class="header-right">
                 <div class="notification-bell">
@@ -84,9 +87,9 @@
         </div>
         <div class="new-event">
             <div class="new-content">
-                
-                    <div class="event-item dropdown">
-                        <button class="dropdown-btn">
+                <div class="new">
+                    <div class="dropdown">
+                        <button class="dropdown-btn event-item">
                             <i class="fa-solid fa-plus"></i>
                             <span>Cadastrar</span>
                         </button>
@@ -98,7 +101,7 @@
                             <a href="#" class="modal-trigger" data-form="disciplina">Cadastrar Disciplina</a>
                         </div>
                     </div>
-                
+                </div>
                 <a href="#" class="event-item role-professor modal-trigger" data-form="horario">
                     <i class="fa-solid fa-calendar-plus"></i>
                     <span>Adicionar Horário</span>
@@ -119,6 +122,7 @@
                         <span class="close-modal">×</span>
                     </div>
                     <div class="modal-body">
+                        <!-- Modal para o Cadastro será injected aqui -->
                     </div>
                 </div>
             </div>
@@ -132,7 +136,10 @@
                                 <i class="fa-solid fa-clock-rotate-left"></i>
                             </div>
                             <p class="card-title">Horários Feitos</p>
-                            <h2 class="card-amount">1</h2>
+                            <h2 class="card-amount" id="horarioNumber">
+                                <span class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                                <span class="countH hidden">0</span>
+                            </h2>
                         </div>
                     </a>
                     <a href="/docentes" style="text-decoration: none; color: inherit;">
@@ -143,7 +150,7 @@
                             <p class="card-title">Docentes</p>
                             <h2 class="card-amount" id="docentesNumber">
                                 <span class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></span>
-                                <span class="count hidden">0</span>
+                                <span class="countD hidden">0</span>
                             </h2>
                         </div>
                     </a>
@@ -153,7 +160,10 @@
                                 <i class='fas fa-chalkboard-teacher'></i>
                             </div>
                             <p class="card-title">Turmas</p>
-                            <h2 class="card-amount">25</h2>
+                            <h2 class="card-amount" id="turmaNumber">
+                                <span class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                                <span class="countT hidden">0</span>
+                            </h2>
                         </div>
                     </a>
                 </div>
@@ -168,7 +178,7 @@
                                 <div class="activity-content">
                                     <div class="activity-title">Turma GSI13BT</div>
                                     <div class="activity-time">
-                                        <i class="far fa-clock"></i> Today, 14:45
+                                        <i class="far fa-clock"></i> Hoje, 14:45
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +189,7 @@
                                 <div class="activity-content">
                                     <div class="activity-title deleted">Turma GSI12AM</div>
                                     <div class="activity-time">
-                                        <i class="far fa-clock"></i> Yesterday, 16:08
+                                        <i class="far fa-clock"></i> Ontem, 16:08
                                     </div>
                                 </div>
                             </div>
@@ -190,7 +200,7 @@
                                 <div class="activity-content">
                                     <div class="activity-title added">Turma GSI12AM</div>
                                     <div class="activity-time">
-                                        <i class="far fa-clock"></i> Yesterday, 16:08
+                                        <i class="far fa-clock"></i> Ontem, 16:08
                                     </div>
                                 </div>
                             </div>
@@ -201,7 +211,7 @@
                                 <div class="activity-content">
                                     <div class="activity-title added">Turma GSI12AM</div>
                                     <div class="activity-time">
-                                        <i class="far fa-clock"></i> Yesterday, 16:08
+                                        <i class="far fa-clock"></i> Ontem, 16:08
                                     </div>
                                 </div>
                             </div>
@@ -212,7 +222,7 @@
                                 <div class="activity-content">
                                     <div class="activity-title added">Turma GSI12AM</div>
                                     <div class="activity-time">
-                                        <i class="far fa-clock"></i> Yesterday, 16:08
+                                        <i class="far fa-clock"></i> Ontem, 16:08
                                     </div>
                                 </div>
                             </div>
@@ -240,9 +250,11 @@
     <script src="/src/js/dropdown.js"></script>
     <script src="/src/js/trackTime.js"></script>
     <script src="/src/js/page-transitions.js"></script>
-    <script src="/src/js/logOut.js"></script>
+    <script defer src="/src/js/cursor-follower.js"></script>
+    <!-- <script src="/src/js/logOut.js"></script> -->
     <script src="/src/js/cadastro.js"></script>
+    <script defer src="/src/js/horarioCounter.js"></script>
     <script defer src="/src/js/docentesCounter.js"></script>
+    <script defer src="/src/js/turmaCounter.js"></script>
 </body>
-
 </html>

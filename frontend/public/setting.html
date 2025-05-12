@@ -1,31 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt">
 <head>
     <title>SGH | Definições</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-
-    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="/src/styles/setting.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
-    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
-
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!-- Adicione os SDKs do Firebase -->
+    <link rel="stylesheet" href="/src/styles/sweetalert.css" />
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-
 <body>
-
-    <!-- Loader de transição -->
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
             <div class="bounce-ball"></div>
@@ -33,18 +25,14 @@
             <div class="bounce-ball"></div>
         </div>
     </div>
-
     <button class="menu-toggle" id="menuToggle">
         <i class="fa-solid fa-bars menu-icon"></i>
         <i class="fa-solid fa-xmark close-icon"></i>
     </button>
-
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
             <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
         </div>
-
         <div class="nav-menu">
             <a href="/pagina-inicial" class="nav-item">
                 <i class="fas fa-home"></i>
@@ -66,7 +54,10 @@
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
-
+            <a href="/admin" class="nav-item">
+                <i class="fas fa-user-shield"></i>
+                <span>Administração</span>
+            </a>
         </div>
         <div class="nav-menu-bottom">
             <a href="/ajuda" class="nav-item">
@@ -79,15 +70,12 @@
             </button>
         </div>
     </div>
-
-    <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
         <div class="header">
             <div class="welcome-section">
                 <h1 class="welcome-title">Definições</h1>
+                <p class="text-[#144b7b]">Ajuste as suas preferências para o sistema de gestão de horários</p>
             </div>
-
             <div class="header-right">
                 <div class="notification-bell">
                     <i class="fas fa-bell"></i>
@@ -95,16 +83,85 @@
                 </div>
             </div>
         </div>
-
-        <!-- Dashboard Container -->
-        <div class="dashboard-container"></div>
+        <div class="dashboard-container max-w-2xl mx-auto mt-6">
+            <form id="settings-form">
+                <div class="account-section bg-white rounded-lg shadow p-6 mb-4">
+                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center justify-between cursor-pointer toggle-section" data-target="security-content">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-key text-[#29a8dc]"></i> Segurança
+                        </span>
+                        <i class="fas fa-chevron-down toggle-arrow text-[#29a8dc]"></i>
+                    </h2>
+                    <div id="security-content" class="section-content">
+                        <div class="mb-4">
+                            <label for="current-password" class="block text-sm font-medium text-[#144b7b] mb-1">Senha Atual</label>
+                            <input type="password" id="current-password" name="currentPassword" placeholder="Digite sua senha atual" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#29a8dc] focus:border-[#29a8dc] transition duration-200" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="new-password" class="block text-sm font-medium text-[#144b7b] mb-1">Nova Senha</label>
+                            <input type="password" id="new-password" name="newPassword" placeholder="Digite a nova senha" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#29a8dc] focus:border-[#29a8dc] transition duration-200" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="confirm-password" class="block text-sm font-medium text-[#144b7b] mb-1">Confirmar Nova Senha</label>
+                            <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirme a nova senha" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#29a8dc] focus:border-[#29a8dc] transition duration-200" />
+                        </div>
+                    </div>
+                </div>
+                <div class="account-section bg-white rounded-lg shadow p-6 mb-4">
+                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center justify-between cursor-pointer toggle-section" data-target="calendar-content">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-calendar-day text-[#29a8dc]"></i> Preferências de Calendário
+                        </span>
+                        <i class="fas fa-chevron-down toggle-arrow text-[#29a8dc]"></i>
+                    </h2>
+                    <div id="calendar-content" class="section-content">
+                        <div class="mb-4">
+                            <label for="calendar-view" class="block text-sm font-medium text-[#144b7b] mb-1">Vista Padrão do Calendário</label>
+                            <select id="calendar-view" name="calendarView" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#29a8dc] focus:border-[#29a8dc] transition duration-200 appearance-none bg-white">
+                                <option value="weekly">Semanal</option>
+                                <option value="monthly">Mensal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="account-section bg-white rounded-lg shadow p-6 mb-4">
+                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center justify-between cursor-pointer toggle-section" data-target="profile-content">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-user-circle text-[#29a8dc]"></i> Visibilidade do Perfil
+                        </span>
+                        <i class="fas fa-chevron-down toggle-arrow text-[#29a8dc]"></i>
+                    </h2>
+                    <div id="profile-content" class="section-content">
+                        <div class="mb-4 flex items-center justify-between">
+                            <label for="profile-visible" class="text-sm font-medium text-[#144b7b]">Tornar Perfil Visível para Outros Usuários</label>
+                            <input type="checkbox" id="profile-visible" name="profileVisible" class="h-5 w-5 text-[#29a8dc] border-gray-300 rounded focus:ring-[#29a8dc] transition duration-200" />
+                        </div>
+                    </div>
+                </div>
+                <div class="account-section bg-white rounded-lg shadow p-6 mb-4">
+                    <h2 class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2 flex items-center justify-between cursor-pointer toggle-section" data-target="alerts-content">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-bell text-[#29a8dc]"></i> Alertas de Horário
+                        </span>
+                        <i class="fas fa-chevron-down toggle-arrow text-[#29a8dc]"></i>
+                    </h2>
+                    <div id="alerts-content" class="section-content">
+                        <div class="mb-4 flex items-center justify-between">
+                            <label for="schedule-alerts" class="text-sm font-medium text-[#144b7b]">Receber Alertas de Aulas e Conflitos</label>
+                            <input type="checkbox" id="schedule-alerts" name="scheduleAlerts" class="h-5 w-5 text-[#29a8dc] border-gray-300 rounded focus:ring-[#29a8dc] transition duration-200" />
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-actions flex justify-center mt-4">
+                    <button type="submit" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg transition duration-200">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <!-- Scripts -->
     <script src="/src/js/auth.js"></script>
     <script src="/src/js/page-transitions.js"></script>
     <script src="/src/js/mobile-toggle.js"></script>
     <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/setting.js"></script>
 </body>
-
 </html>

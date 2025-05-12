@@ -1,0 +1,142 @@
+/* Estilos para a seção da conta */
+.welcome-title {
+    margin-bottom: 8px !important;
+}
+
+.dash-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 0 auto;
+    max-width: 900px;
+    width: 100%;
+}
+
+.account-section {
+    background: white;
+    border-radius: 9px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    width: 100%;
+}
+
+.account-details {
+    margin-top: 1rem;
+}
+
+.account-section h2 {
+    color: #29a8dc;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.account-section h2 i {
+    color: #29a8dc;
+    font-size: 1.2rem;
+}
+
+/* Estilos para os itens de detalhe */
+.detail-item {
+    display: flex;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #4b5563;
+    width: 250px;
+}
+
+.detail-value {
+    color: #072946;
+    flex: 1;
+    text-align: right;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin: 0 auto;
+    max-width: 900px;
+    width: 100%;
+}
+
+/* Estilos do Perfil */
+.profile-card {
+    background: white;
+    border-radius: 9px;
+    padding: 1.1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    width: 100%;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.profile-avatar i {
+    font-size: 4.5rem;
+    color: #29a8dc;
+    margin-bottom: 0.7rem;
+}
+
+.profile-header h2 {
+    margin: 0.5rem 0 0;
+    color: #1f2937;
+}
+
+.profile-header p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+#edit-profile-btn, #cancel-profile-btn {
+    width: 30%;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .detail-item {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .detail-label {
+        width: 100%;
+    }
+    
+    .profile-header {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #edit-profile-btn, #cancel-profile-btn {
+        width: 50%;
+    }
+}

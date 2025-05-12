@@ -1,3 +1,4 @@
+/* ===== ROOT VARIABLES ===== */
 :root {
     --primary-color: #29a8dc;
     --primary-light: #144b7b;
@@ -18,7 +19,8 @@
     --border-radius: 9px;
     --dark-blue: #072946;
     --bluie: #262a39;
-}
+    --water: #d7faff;
+  }
 
 .docente-card {
     background-color: var(--white);
@@ -208,5 +210,10 @@ option {
     .nav-item i {
         margin-right: 10px;
         font-size: 20px;
+    }
+
+    .detail-item {
+        flex-wrap: wrap;
+        text-align: left;
     }
 }

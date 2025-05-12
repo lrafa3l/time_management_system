@@ -104,6 +104,35 @@ button[type="submit"]:hover {
   z-index: 1;
 }
 
+/* Error Message */
+.error-text {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+  color: #dc3545;
+}
+
+/* Submit Button Spinner */
+.submit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.submit.spinner-active .button-text {
+  visibility: hidden;
+}
+.submit.spinner-active .spinner {
+  display: inline-block;
+}
+.submit .spinner {
+  display: none;
+  position: absolute;
+}
+.submit .spinner i {
+  font-size: 16px;
+}
+
 ::selection {
   background-color: #29a8dc;
   color: #ffffff;

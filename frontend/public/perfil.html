@@ -1,162 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt">
 <head>
     <title>SGH | Perfil de Usuário</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-
+    
+    <!-- Box icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    
+    <!-- Taiwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/perfil.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
-    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
-
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!-- Adicione os SDKs do Firebase -->
+    <link rel="stylesheet" href="/src/styles/cursor-follower.css" />
+    <link rel="stylesheet" href="/src/styles/sweetalert.css" />
+    
+    <!-- Firebase CSS -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <style>
-        /* Estilos para a seção da conta */
-
-        .dash-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin: 0 auto;
-            max-width: 900px;
-            width: 100%;
-        }
-
-        .account-section {
-            background: white;
-            border-radius: 9px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .account-details {
-            margin-top: 1rem;
-        }
-
-        .account-section h2 {
-            color: #29a8dc;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .account-section h2 i {
-            color: #29a8dc;
-            font-size: 1.2rem;
-        }
-
-        /* Estilos para os itens de detalhe */
-        .detail-item {
-            display: flex;
-            padding: 1rem 0;
-            border-bottom: 1px solid #e5e7eb;
-            flex-wrap: wrap;
-        }
-
-        .detail-label {
-            font-weight: 600;
-            color: #4b5563;
-            width: 250px;
-        }
-
-        .detail-value {
-            color: #1f2937;
-            flex: 1;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .detail-item {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .detail-label {
-                width: 100%;
-            }
-        }
-
-
-
-        /* Estilos do Perfil */
-        .profile-card {
-            background: white;
-            border-radius: 9px;
-            padding: 1.1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .profile-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .profile-avatar i {
-            font-size: 4.5rem;
-            color: #29a8dc;
-        }
-
-        .profile-header h2 {
-            margin: 0.5rem 0 0;
-            color: #1f2937;
-        }
-
-        .profile-header p {
-            margin: 0;
-            color: #6b7280;
-        }
-
-        .profile-details {
-            margin-bottom: 2rem;
-        }
-
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .detail-label {
-            font-weight: 600;
-            color: #4b5563;
-        }
-
-        .detail-value {
-            color: #1f2937;
-        }
-
-        #edit-profile-btn {
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-
 <body>
-
-    <!-- Loader de transição -->
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
             <div class="bounce-ball"></div>
@@ -164,19 +39,14 @@
             <div class="bounce-ball"></div>
         </div>
     </div>
-
-    <!-- Botão de toggle para mobile -->
     <button class="menu-toggle" id="menuToggle">
         <i class="fa-solid fa-bars menu-icon"></i>
         <i class="fa-solid fa-xmark close-icon"></i>
     </button>
-
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
             <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
         </div>
-
         <div class="nav-menu">
             <a href="/pagina-inicial" class="nav-item">
                 <i class="fas fa-home"></i>
@@ -198,7 +68,10 @@
                 <i class="fas fa-sliders-h"></i>
                 <span>Definições</span>
             </a>
-
+            <a href="/admin" class="nav-item">
+                <i class="fas fa-user-shield"></i>
+                <span>Administração</span>
+            </a>
         </div>
         <div class="nav-menu-bottom">
             <a href="/ajuda" class="nav-item">
@@ -211,15 +84,11 @@
             </button>
         </div>
     </div>
-
-    <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
         <div class="header">
             <div class="welcome-section">
                 <h1 class="welcome-title">Perfil de Usuário</h1>
             </div>
-
             <div class="header-right">
                 <div class="notification-bell">
                     <i class="fas fa-bell"></i>
@@ -227,149 +96,85 @@
                 </div>
             </div>
         </div>
-
-        <!-- Dashboard Container -->
         <div class="dash-container">
-            <!-- Seção do Perfil Principal -->
             <div class="profile-header">
                 <div class="profile-avatar">
                     <i class="fas fa-user-circle"></i>
                 </div>
             </div>
-
-            <!-- Seção de Dados Pessoais -->
-            <div class="account-section">
-                <h2><i class="fas fa-user-tie"></i> Dados Pessoais</h2>
-                <div class="account-details">
-                    <div class="detail-item">
-                        <span class="detail-label">Nome Completo:</span>
-                        <span id="account-name">Carregando...</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Email:</span>
-                        <span id="account-email">Carregando...</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Contacto Telefónico:</span>
-                        <span id="account-phone">Carregando...</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Formação do Ensino Médio:</span>
-                        <span id="account-formacao-medio">Carregando...</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Habilitações do Ensino Superior:</span>
-                        <span id="account-habilitacoes-superior">Carregando...</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Seção de Dados Profissionais -->
-            <div class="account-section">
-                <h2><i class="fas fa-briefcase"></i> Dados Profissionais</h2>
-                <div class="account-details">
-                    <div class="detail-item">
-                        <span class="detail-label">Unidade Orgânica:</span>
-                        <span id="account-unidade-organica">Carregando...</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Categoria:</span>
-                        <span id="account-categoria">Carregando...</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Classe que Leciona:</span>
-                        <span id="account-classe-leciona">Carregando...</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Disciplina(s):</span>
-                        <span id="account-disciplinas">Carregando...</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Cargo/Função:</span>
-                        <span id="account-cargo-funcao">Carregando...</span>
+            <form id="profile-form" class="profile">
+                <div class="account-section">
+                    <h2><i class="fas fa-user-tie"></i> Dados Pessoais</h2>
+                    <div class="account-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Nome Completo:</span>
+                            <span id="account-name" class="detail-value">Carregando...</span>
+                            <input type="text" name="nome" id="edit-name" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Email:</span>
+                            <span id="account-email" class="detail-value">Carregando...</span>
+                            <input type="email" name="email" id="edit-email" class="detail-input hidden w-full p-2 border rounded" disabled />
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Contacto Telefónico:</span>
+                            <span id="account-phone" class="detail-value">Carregando...</span>
+                            <input type="text" name="contacto" id="edit-phone" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Formação do Ensino Médio:</span>
+                            <span id="account-formacao-medio" class="detail-value">Carregando...</span>
+                            <input type="text" name="formacaoMedio" id="edit-formacao-medio" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Habilitações do Ensino Superior:</span>
+                            <span id="account-habilitacoes-superior" class="detail-value">Carregando...</span>
+                            <input type="text" name="habilitacoes" id="edit-habilitacoes-superior" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
                     </div>
                 </div>
+                <div class="account-section">
+                    <h2><i class="fas fa-briefcase"></i> Dados Profissionais</h2>
+                    <div class="account-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Unidade Orgânica:</span>
+                            <span id="account-unidade-organica" class="detail-value">Carregando...</span>
+                            <input type="text" name="unidade" id="edit-unidade-organica" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Categoria:</span>
+                            <span id="account-categoria" class="detail-value">Carregando...</span>
+                            <input type="text" name="categoria" id="edit-categoria" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Classe que Leciona:</span>
+                            <span id="account-classe-leciona" class="detail-value">Carregando...</span>
+                            <input type="text" name="classes" id="edit-classe-leciona" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Disciplina(s):</span>
+                            <span id="account-disciplinas" class="detail-value">Carregando...</span>
+                            <input type="text" name="disciplinas" id="edit-disciplinas" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Cargo/Função:</span>
+                            <span id="account-cargo-funcao" class="detail-value">Carregando...</span>
+                            <input type="text" name="cargo" id="edit-cargo-funcao" class="detail-input hidden w-full p-2 border rounded" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="profile-actions flex justify-center mt-4 gap-4">
+                <button id="edit-profile-btn" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Editar Perfil</button>
+                <button id="cancel-profile-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hidden">Cancelar</button>
             </div>
         </div>
     </div>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-    <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyA-3WwKHF1-f4fi5sHapRAsNr9INX0Etgo",
-            authDomain: "schedule-system-8c4b6.firebaseapp.com",
-            databaseURL: "https://schedule-system-8c4b6-default-rtdb.firebaseio.com",
-            projectId: "schedule-system-8c4b6",
-            storageBucket: "schedule-system-8c4b6.firebasestorage.app",
-            messagingSenderId: "1056197912318",
-            appId: "1:1056197912318:web:2868c9a27bcc03587e27af",
-            measurementId: "G-GHEY7QZEQ9"
-        };
-
-        // Inicialização do Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-
-        const db = firebase.firestore();
-
-        // Função para carregar e exibir os dados
-        async function loadUserData() {
-            const user = firebase.auth().currentUser;
-
-            if (!user) {
-                console.log("Usuário não autenticado");
-                window.location.href = '/login';
-                return;
-            }
-
-            try {
-                const doc = await db.collection('users').doc(user.uid).get();
-
-                if (doc.exists) {
-                    const userData = doc.data();
-
-                    // Preencher seção de Dados Pessoais
-                    document.getElementById('account-name').textContent = userData.name || 'Não informado';
-                    document.getElementById('account-email').textContent = user.email || 'Não informado';
-                    document.getElementById('account-phone').textContent = userData.contacto || 'Não informado';
-                    document.getElementById('account-formacao-medio').textContent = userData.formacaoMedio || 'Não informado';
-                    document.getElementById('account-habilitacoes-superior').textContent = userData.habilitacoesSuperior || 'Não informado';
-
-                    // Preencher seção de Dados Profissionais
-                    document.getElementById('account-unidade-organica').textContent = userData.unidadeOrganica || 'Não informado';
-                    document.getElementById('account-categoria').textContent = userData.categoria || 'Não informado';
-                    document.getElementById('account-classe-leciona').textContent = userData.classeLeciona || 'Não informado';
-                    document.getElementById('account-disciplinas').textContent = userData.disciplinas || 'Não informado';
-                    document.getElementById('account-cargo-funcao').textContent = userData.role || 'Não informado';
-
-                } else {
-                    console.log("Documento não encontrado");
-                }
-            } catch (error) {
-                console.error("Erro ao carregar dados:", error);
-            }
-        }
-
-        // Carregar dados quando a página estiver pronta
-        document.addEventListener('DOMContentLoaded', () => {
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    loadUserData();
-                } else {
-                    window.location.href = '/login';
-                }
-            });
-        });
-    </script>
+    <script src="/src/js/auth.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/page-transitions.js"></script>
+    <script defer src="/src/js/cursor-follower.js"></script>
+    <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/perfil.js"></script>
 </body>
-<script src="/src/js/auth.js"></script>
-<script src="/src/js/firestore.js"></script>
-<script src="/src/js/mobile-toggle.js"></script>
-<script src="/src/js/page-transitions.js"></script>
-<script src="/src/js/logOut.js"></script>
-
 </html>
