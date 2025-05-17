@@ -1,0 +1,83 @@
+{
+  "hosting": {
+    "site": "ipikkhorario",
+    "public": "frontend/public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/login",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/pagina-inicial",
+        "destination": "/main.html"
+      },
+      {
+        "source": "/calendario",
+        "destination": "/calendar.html"
+      },
+      {
+        "source": "/turmas",
+        "destination": "/classes.html"
+      },
+      {
+        "source": "/ajuda",
+        "destination": "/help.html"
+      },
+      {
+        "source": "/docentes",
+        "destination": "/prof.html"
+      },
+      {
+        "source": "/definicoes",
+        "destination": "/setting.html"
+      },
+      {
+        "source": "/horario",
+        "destination": "/view.html"
+      },
+      {
+        "source": "/horarios-feitos",
+        "destination": "/schedule.html"
+      },
+      {
+        "source": "/admin",
+        "destination": "/admin.html"
+      },
+      {
+        "source": "/conta",
+        "destination": "/perfil.html"
+      },
+      {
+        "source": "/estatisticas",
+        "destination": "/statistics.html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/manifest.json",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+      },
+      {
+        "source": "/sw.js",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      },
+      {
+        "source": "/**/*.@(jpg|png|css|js|ico)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+      },
+      {
+        "source": "/**/*.html",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      }
+    ]
+  }
+}

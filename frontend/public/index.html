@@ -4,23 +4,24 @@
     <title>SGH | Iniciar Sessão</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Gestão de Horários">
+    <meta name="theme-color" content="#1a73e8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SGH">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
-
     <link rel="stylesheet" href="/src/styles/general.css">
     <link rel="stylesheet" href="/src/styles/auth.css">
     <link rel="stylesheet" href="/src/styles/transitions.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <!-- SweetAlert2 for user feedback -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="d-flex">
-    <!-- Loader de transição -->
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
             <div class="bounce-ball"></div>
@@ -28,7 +29,6 @@
             <div class="bounce-ball"></div>
         </div>
     </div>
-
     <div class="container">
         <div class="d-flex">
             <img class="logo" src="/assets/images/ipikk-logo-bg.png" alt="Logo">
@@ -55,13 +55,19 @@
                 </button>
             </div>
             <div id="error-message" class="error-text"></div>
-            <div id="lockout-timer" class="lockout-text"></div>
         </form>
     </div>
-
-    <!-- Scripts -->
     <script defer src="/src/js/auth.js"></script>
     <script src="/src/js/page-transitions.js"></script>
     <script src="/src/js/logOut.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => console.log('Service Worker registered:', registration))
+            .catch(error => console.log('Service Worker registration failed:', error));
+        });
+      }
+    </script>
 </body>
 </html>
