@@ -43,7 +43,6 @@ body {
   color: var(--text-primary);
   display: flex;
   min-height: 100vh;
-  /* Removed overflow-x: hidden to allow resizing */
 }
 
 /* ===== SIDEBAR STYLES ===== */

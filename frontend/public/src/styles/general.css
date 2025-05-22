@@ -56,3 +56,19 @@ html {
 .logo {
   width: 140px;
 }
+
+/* ===== RESPONSIVE DESIGN STYLES ===== */
+
+@media (max-width: 768px) {
+  .container {
+    width: 280px;
+    margin: 0 auto;
+    height: 350px;
+    min-height: 320px;
+    padding: 15px;
+  }
+
+  .logo {
+    width: 110px;
+  }
+}
