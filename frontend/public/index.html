@@ -4,7 +4,7 @@
     <title>SGH | Iniciar Sessão</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema de Gestão de Horários">
+    <meta name="description" content="Systema de Gestão de Horários">
     <meta name="theme-color" content="#1a73e8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/src/styles/general.css">
     <link rel="stylesheet" href="/src/styles/auth.css">
     <link rel="stylesheet" href="/src/styles/transitions.css">
+     <link rel="stylesheet" href="/src/styles/sweetalert.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
@@ -54,7 +55,6 @@
                     </span>
                 </button>
             </div>
-            <div id="error-message" class="error-text"></div>
         </form>
     </div>
     <script defer src="/src/js/auth.js"></script>
@@ -64,8 +64,8 @@
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js')
-            .then(registration => console.log('Service Worker registered:', registration))
-            .catch(error => console.log('Service Worker registration failed:', error));
+            .then(registration => console.log('Service Worker registado:', registration))
+            .catch(error => console.log('Registo de Service Worker falhou:', error));
         });
       }
     </script>

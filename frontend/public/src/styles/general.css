@@ -9,7 +9,7 @@ body,
 html {
   font-family: "AfacadFlux", sans-serif;
   font-weight: 400;
-  background-color: #e6e9f4;
+  background-color: #f5f7ff;
   height: 100%;
   margin: 0;
 }
@@ -38,6 +38,7 @@ html {
   position: relative;
   border-radius: 12px;
   padding-bottom: 25px;
+  justify-content: space-around;
 }
 
 .container::before {
@@ -53,6 +54,5 @@ html {
 }
 
 .logo {
-  width: 180px;
-  margin-bottom: 18px;
+  width: 140px;
 }

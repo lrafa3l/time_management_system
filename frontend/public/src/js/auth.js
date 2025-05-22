@@ -84,7 +84,6 @@ async function ensureUserDocuments(user) {
 function startLockoutTimer(lockoutSeconds = 60) {
     const loginForm = document.getElementById('loginForm');
     const submitButton = document.querySelector('.submit');
-    const errorElement = document.getElementById('error-message');
 
     if (!loginForm) return;
 
@@ -117,7 +116,6 @@ function startLockoutTimer(lockoutSeconds = 60) {
             loginForm.querySelectorAll('input, button').forEach(el => el.disabled = false);
             sessionStorage.removeItem('lockoutEnd');
             sessionStorage.removeItem('loginAttempts');
-            if (errorElement) errorElement.textContent = '';
             Swal.close();
         } else {
             setTimeout(updateTimer, 1000);
@@ -160,17 +158,12 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
             button.classList.remove('spinner-active');
             button.disabled = false;
         }
-        const errorElement = document.getId('error-message');
-        if (errorElement) {
-            errorElement.textContent = 'Preencha todos os campos de login.';
-        } else {
-            Swal.fire({
-                title: 'Erro!',
-                text: 'Preencha todos os campos de login.',
-                icon: 'error',
-                customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
-            });
-        }
+        Swal.fire({
+            title: 'Erro!',
+            text: 'Preencha todos os campos de login.',
+            icon: 'error',
+            customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+        });
         return;
     }
 
@@ -203,26 +196,23 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
 
         // Verifica limite de tentativas
         if (attempts >= 3 || errorCode === 'auth/too-many-requests') {
-            const errorElement = document.getElementById('error-message');
-            if (errorElement) {
-                errorElement.textContent = 'Muitas tentativas de login. Aguarde antes de tentar novamente.';
-            }
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Muitas tentativas de login. Aguarde antes de tentar novamente.',
+                icon: 'error',
+                customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+            });
             startLockoutTimer();
             return;
         }
 
-        // Exibe mensagem de erro amigável
-        const errorElement = document.getElementById('error-message');
-        if (errorElement) {
-            errorElement.textContent = getFriendlyErrorMessage(errorCode);
-        } else {
-            Swal.fire({
-                title: 'Erro!',
-                text: getFriendlyErrorMessage(errorCode),
-                icon: 'error',
-                customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
-            });
-        }
+        // Exibe mensagem de erro via SweetAlert
+        Swal.fire({
+            title: 'Erro!',
+            text: getFriendlyErrorMessage(errorCode),
+            icon: 'error',
+            customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+        });
     }
 });
 
@@ -232,25 +222,25 @@ function getFriendlyErrorMessage(errorCode) {
         case 'auth/invalid-email':
             return 'O formato do email é inválido.';
         case 'auth/user-disabled':
-            return 'Esta conta foi desativada.';
+            return 'Esta conta foi desactivada.';
         case 'auth/user-not-found':
             return 'Nenhum usuário encontrado com este email.';
         case 'auth/wrong-password':
-            return 'Senha incorreta.';
+            return 'Palavra-passe incorrecta.';
         case 'auth/too-many-requests':
             return 'Muitas tentativas de login. Aguarde antes de tentar novamente.';
         case 'auth/network-request-failed':
-            return 'Falha na rede. Verifique sua conexão ou tente novamente.';
+            return 'Falha na rede. Verifique a sua ligação ou tente novamente.';
         case 'auth/invalid-login-credentials':
-            return 'E-mail ou senha inválidos. Tente novamente.';
+            return 'Email ou palavra-passe inválidos. Tente novamente.';
         case 'auth/internal-error':
-            return 'Erro interno do servidor. Verifique sua conexão e tente novamente.';
+            return 'Erro interno do servidor. Verifique a sua ligação e tente novamente.';
         default:
             return 'Ocorreu um erro. Tente novamente.';
     }
 }
 
-// Monitora estado de autenticação para atualizar saudação
+// Monitora estado de autenticação para actualizar saudação
 auth.onAuthStateChanged(async (user) => {
     try {
         if (user) {
@@ -267,17 +257,19 @@ auth.onAuthStateChanged(async (user) => {
                 }
             }
         } else {
-            console.log('Nenhum usuário autenticado, redirecionando para /login');
+            console.log('Nenhum usuário autenticado, redireccionando para /login');
             if (window.location.pathname !== '/login') {
                 window.location.href = '/login';
             }
         }
     } catch (error) {
         console.error('Erro no onAuthStateChanged:', error);
-        const greeting = document.querySelector('.greeting');
-        if (greeting) {
-            greeting.textContent = 'Bem-vindo, Usuário!';
-        }
+        Swal.fire({
+            title: 'Erro!',
+            text: getFriendlyErrorMessage(error.code || 'auth/internal-error'),
+            icon: 'error',
+            customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+        });
         if (error.code === 'auth/internal-error' || error.code === 'auth/network-request-failed') {
             try {
                 await auth.signOut();
@@ -287,6 +279,12 @@ auth.onAuthStateChanged(async (user) => {
                 }
             } catch (signOutError) {
                 console.error('Erro ao fazer logout:', signOutError);
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Erro ao encerrar a sessão. Tente novamente.',
+                    icon: 'error',
+                    customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+                });
             }
         }
     }
