@@ -232,7 +232,7 @@ function getFriendlyErrorMessage(errorCode) {
         case 'auth/network-request-failed':
             return 'Falha na rede. Verifique a sua ligação ou tente novamente.';
         case 'auth/invalid-login-credentials':
-            return 'Email ou palavra-passe inválidos. Tente novamente.';
+            return 'Email ou palavra-passe inválido. Tente novamente.';
         case 'auth/internal-error':
             return 'Erro interno do servidor. Verifique a sua ligação e tente novamente.';
         default:
