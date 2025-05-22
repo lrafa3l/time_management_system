@@ -1,5 +1,13 @@
-// Ensure DOM and page are fully loaded
-window.addEventListener('load', () => {
+// Função para verificar se o dispositivo é móvel
+function isMobileDevice() {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(userAgent);
+}
+
+// Executar apenas em computadores (não móveis)
+if (!isMobileDevice()) {
+  // Ensure DOM and page are fully loaded
+  window.addEventListener('load', () => {
     // Create circle element dynamically
     const circle = document.createElement('div');
     circle.className = 'circle';
@@ -64,3 +72,4 @@ window.addEventListener('load', () => {
   
     animate();
   });
+}
