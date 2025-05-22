@@ -1,2 +1,3 @@
 .vscode/
 serviceAccountKey.json
+node_modules/
