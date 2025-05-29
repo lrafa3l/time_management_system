@@ -23,8 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const possibleKeys = [
                 `userProfile_${currentUserId}`,
                 `horariosCount_${currentUserId}`,
-                `professoresCount_${currentUserId}`
-                // Adicione outras chaves relevantes, e.g., `formData_${formType}`
+                `professoresCount_${currentUserId}`,
+                `professorProfile_${currentUserId}`,
+                `userSettings_${currentUserId}` // Adicionado para configurações
             ];
 
             return possibleKeys.some(key => sessionStorage.getItem(key) !== null);

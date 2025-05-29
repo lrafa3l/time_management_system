@@ -31,12 +31,79 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function cacheProfileData(user, userData) {
+        try {
+            const profileData = {
+                nome: userData.nome || '',
+                email: user.email || '',
+                contacto: userData.contacto || '',
+                formacaoMedio: userData.formacaoMedio || '',
+                habilitacoes: userData.habilitacoes || '',
+                unidade: userData.unidade || '',
+                categoria: userData.categoria || '',
+                classes: Array.isArray(userData.classes) ? userData.classes : [],
+                disciplinas: Array.isArray(userData.disciplinas) ? userData.disciplinas : [],
+                cargo: userData.cargo || ''
+            };
+            sessionStorage.setItem(`professorProfile_${user.uid}`, JSON.stringify(profileData));
+            console.log(`Perfil do professor ${user.uid} cacheado com sucesso`);
+        } catch (error) {
+            console.warn('Erro ao salvar perfil do professor no sessionStorage:', error);
+            if (error.name === 'QuotaExceededError') {
+                console.warn('Limite de sessionStorage excedido. Limpando dados antigos.');
+                sessionStorage.removeItem(`professorProfile_${user.uid}`);
+                try {
+                    sessionStorage.setItem(`professorProfile_${user.uid}`, JSON.stringify(profileData));
+                } catch (innerErr) {
+                    console.warn('Falha ao salvar após limpeza:', innerErr);
+                }
+            }
+        }
+    }
+
     async function loadUserData() {
         const user = auth.currentUser;
         if (!user) {
             window.location.href = '/login';
             return;
         }
+
+        // Verifica cache primeiro
+        try {
+            const cachedProfile = sessionStorage.getItem(`professorProfile_${user.uid}`);
+            if (cachedProfile) {
+                const userData = JSON.parse(cachedProfile);
+                console.log(`Carregando dados do perfil do cache para ${user.uid}`);
+                document.getElementById('account-name').textContent = userData.nome || 'Não informado';
+                document.getElementById('account-email').textContent = userData.email || 'Não informado';
+                document.getElementById('account-phone').textContent = userData.contacto || 'Não informado';
+                document.getElementById('account-formacao-medio').textContent = userData.formacaoMedio || 'Não informado';
+                document.getElementById('account-habilitacoes-superior').textContent = userData.habilitacoes || 'Não informado';
+                document.getElementById('account-unidade-organica').textContent = userData.unidade || 'Não informado';
+                document.getElementById('account-categoria').textContent = userData.categoria || 'Não informado';
+                document.getElementById('account-classe-leciona').textContent = Array.isArray(userData.classes) && userData.classes.length ? userData.classes.join(', ') : 'Não informado';
+                document.getElementById('account-disciplinas').textContent = Array.isArray(userData.disciplinas) && userData.disciplinas.length ? userData.disciplinas.join(', ') : 'Não informado';
+                document.getElementById('account-cargo-funcao').textContent = userData.cargo || 'Não informado';
+
+                if (isEditMode) {
+                    document.getElementById('edit-name').value = userData.nome || '';
+                    document.getElementById('edit-email').value = userData.email || '';
+                    document.getElementById('edit-phone').value = userData.contacto || '';
+                    document.getElementById('edit-formacao-medio').value = userData.formacaoMedio || '';
+                    document.getElementById('edit-habilitacoes-superior').value = userData.habilitacoes || '';
+                    document.getElementById('edit-unidade-organica').value = userData.unidade || '';
+                    document.getElementById('edit-categoria').value = userData.categoria || '';
+                    document.getElementById('edit-classe-leciona').value = Array.isArray(userData.classes) ? userData.classes.join(', ') : '';
+                    document.getElementById('edit-disciplinas').value = Array.isArray(userData.disciplinas) ? userData.disciplinas.join(', ') : '';
+                    document.getElementById('edit-cargo-funcao').value = userData.cargo || '';
+                }
+                return;
+            }
+        } catch (error) {
+            console.warn('Erro ao recuperar perfil do professor do sessionStorage:', error);
+        }
+
+        // Carrega do Firestore se não houver cache
         try {
             const doc = await db.collection('professores').doc(user.uid).get();
             if (doc.exists) {
@@ -48,9 +115,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('account-habilitacoes-superior').textContent = userData.habilitacoes || 'Não informado';
                 document.getElementById('account-unidade-organica').textContent = userData.unidade || 'Não informado';
                 document.getElementById('account-categoria').textContent = userData.categoria || 'Não informado';
-                document.getElementById('account-classe-leciona').textContent = Array.isArray(userData.classes) ? userData.classes.join(', ') : 'Não informado';
-                document.getElementById('account-disciplinas').textContent = Array.isArray(userData.disciplinas) ? userData.disciplinas.join(', ') : 'Não informado';
+                document.getElementById('account-classe-leciona').textContent = Array.isArray(userData.classes) && userData.classes.length ? userData.classes.join(', ') : 'Não informado';
+                document.getElementById('account-disciplinas').textContent = Array.isArray(userData.disciplinas) && userData.disciplinas.length ? userData.disciplinas.join(', ') : 'Não informado';
                 document.getElementById('account-cargo-funcao').textContent = userData.cargo || 'Não informado';
+
                 if (isEditMode) {
                     document.getElementById('edit-name').value = userData.nome || '';
                     document.getElementById('edit-email').value = user.email || '';
@@ -63,6 +131,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById('edit-disciplinas').value = Array.isArray(userData.disciplinas) ? userData.disciplinas.join(', ') : '';
                     document.getElementById('edit-cargo-funcao').value = userData.cargo || '';
                 }
+
+                // Cacheia os dados carregados
+                cacheProfileData(user, userData);
             } else {
                 console.log("Documento não encontrado em professores");
                 Swal.fire({
@@ -107,24 +178,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function saveProfileChanges() {
         showLoadingSpinner();
+        const user = auth.currentUser;
+        if (!user) {
+            Swal.close();
+            window.location.href = '/login';
+            return;
+        }
+
         const formData = new FormData(profileForm);
         const updatedData = {
             nome: formData.get('nome') || '',
             nomeNormalized: (formData.get('nome') || '').toLowerCase(),
-            email: auth.currentUser.email,
-            emailNormalized: (auth.currentUser.email || '').toLowerCase(),
+            email: user.email,
+            emailNormalized: (user.email || '').toLowerCase(),
             contacto: formData.get('contacto') || '',
             formacaoMedio: formData.get('formacaoMedio') || '',
             habilitacoes: formData.get('habilitacoes') || '',
             unidade: formData.get('unidade') || '',
             categoria: formData.get('categoria') || '',
-            classes: formData.get('classes') ? formData.get('classes').split(',').map(s => s.trim()) : [],
-            disciplinas: formData.get('disciplinas') ? formData.get('disciplinas').split(',').map(s => s.trim()) : [],
+            classes: formData.get('classes') ? formData.get('classes').split(',').map(s => s.trim()).filter(s => s) : [],
+            disciplinas: formData.get('disciplinas') ? formData.get('disciplinas').split(',').map(s => s.trim()).filter(s => s) : [],
             cargo: formData.get('cargo') || '',
-            userId: auth.currentUser.uid
+            userId: user.uid
         };
+
         try {
-            await db.collection('professores').doc(auth.currentUser.uid).set(updatedData, { merge: true });
+            await db.collection('professores').doc(user.uid).set(updatedData, { merge: true });
+            // Atualiza o cache com os novos dados
+            cacheProfileData(user, updatedData);
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Perfil atualizado com sucesso.',
