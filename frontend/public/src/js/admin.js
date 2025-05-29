@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const userModal = document.getElementById('user-modal');
     const userForm = document.getElementById('user-form');
     const addUserBtn = document.getElementById('add-user-btn');
-    const saveUserBtn = document.getElementById('save-user-btn');
     const modalTitle = document.getElementById('modal-title');
+    const searchInput = document.getElementById('search-docentes');
 
     let currentPage = 1;
     const usersPerPage = 6;
@@ -41,25 +41,63 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Cache users in sessionStorage
+    function cacheUsers(users, adminId) {
+        try {
+            if (!adminId) throw new Error('No admin ID provided');
+            sessionStorage.setItem(`adminUsers_${adminId}`, JSON.stringify(users));
+            console.log(`Usuários cacheados para admin ${adminId}, ${users.length} usuários`);
+        } catch (error) {
+            console.warn('Erro ao salvar usuários no sessionStorage:', error);
+            if (error.name === 'QuotaExceededError') {
+                console.warn('Limite de sessionStorage excedido. Limpando dados antigos.');
+                sessionStorage.removeItem(`adminUsers_${adminId}`);
+                try {
+                    sessionStorage.setItem(`adminUsers_${adminId}`, JSON.stringify(users));
+                    console.log(`Cache salvo após limpeza para admin ${adminId}`);
+                } catch (innerErr) {
+                    console.warn('Falha ao salvar após limpeza:', innerErr);
+                    Swal.fire({
+                        title: 'Aviso',
+                        text: 'Falha ao salvar cache local. Dados serão carregados do servidor.',
+                        icon: 'warning',
+                        customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+                    });
+                }
+            }
+        }
+    }
+
     async function checkAdmin() {
         const user = auth.currentUser;
         if (!user) {
             window.location.href = '/login';
             return false;
         }
-        const doc = await db.collection('users').doc(user.uid).get();
-        if (!doc.exists || doc.data().role !== 'admin') {
+        try {
+            const doc = await db.collection('users').doc(user.uid).get();
+            if (!doc.exists || doc.data().role !== 'admin') {
+                Swal.fire({
+                    title: 'Acesso Negado',
+                    text: 'Apenas administradores podem acessar esta página.',
+                    icon: 'error',
+                    customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+                }).then(() => {
+                    window.location.href = '/pagina-inicial';
+                });
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error('Erro ao verificar admin:', error);
             Swal.fire({
-                title: 'Acesso Negado',
-                text: 'Apenas administradores podem acessar esta página.',
+                title: 'Erro',
+                text: 'Falha ao verificar permissões. Tente novamente.',
                 icon: 'error',
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
-            }).then(() => {
-                window.location.href = '/pagina-inicial';
             });
             return false;
         }
-        return true;
     }
 
     function generatePassword() {
@@ -78,7 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
-            if (!response.ok) throw new Error('Falha ao enviar email');
+            if (!response.ok) throw new Error(`HTTP ${response.status}: Falha ao enviar email`);
+            console.log(`Email de senha enviado para ${email}`);
         } catch (error) {
             console.error('Erro ao enviar email:', error);
             throw error;
@@ -121,7 +160,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
             });
             hideModal();
-            loadUsers();
+            await loadUsers(); // Recarrega para atualizar allUsers
+            cacheUsers(allUsers, auth.currentUser.uid); // Cache após atualização
         } catch (error) {
             console.error('Erro ao adicionar usuário:', error);
             Swal.fire({
@@ -130,6 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon: 'error',
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
             });
+        } finally {
+            Swal.close();
         }
     }
 
@@ -164,7 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
             });
             hideModal();
-            loadUsers();
+            await loadUsers(); // Recarrega para atualizar allUsers
+            cacheUsers(allUsers, auth.currentUser.uid); // Cache após atualização
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
             Swal.fire({
@@ -173,6 +216,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon: 'error',
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
             });
+        } finally {
+            Swal.close();
         }
     }
 
@@ -181,14 +226,14 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             await db.collection('users').doc(userId).delete();
             await db.collection('professores').doc(userId).delete();
-            // Note: Deleting Firebase Auth user requires admin SDK, handled server-side if needed
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Usuário deletado com sucesso.',
                 icon: 'success',
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
             });
-            loadUsers();
+            await loadUsers(); // Recarrega para atualizar allUsers
+            cacheUsers(allUsers, auth.currentUser.uid); // Cache após atualização
         } catch (error) {
             console.error('Erro ao deletar usuário:', error);
             Swal.fire({
@@ -197,6 +242,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon: 'error',
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
             });
+        } finally {
+            Swal.close();
         }
     }
 
@@ -227,7 +274,51 @@ document.addEventListener("DOMContentLoaded", function () {
         currentUserId = null;
     }
 
+    function searchUsers(query) {
+        query = query.toLowerCase().trim();
+        if (!query) {
+            filteredUsers = [...allUsers];
+        } else {
+            filteredUsers = allUsers.filter(user =>
+                (user.nome || '').toLowerCase().includes(query) ||
+                (user.email || '').toLowerCase().includes(query)
+            );
+        }
+        currentPage = 1;
+        renderPage(currentPage);
+        console.log(`Pesquisa realizada: "${query}", encontrados ${filteredUsers.length} usuários`);
+    }
+
     async function loadUsers() {
+        const adminId = auth.currentUser ? auth.currentUser.uid : null;
+        if (!adminId) {
+            console.warn('Nenhum adminId disponível. Abortando loadUsers.');
+            return;
+        }
+
+        // Verificar cache primeiro
+        try {
+            const cachedUsers = sessionStorage.getItem(`adminUsers_${adminId}`);
+            if (cachedUsers) {
+                const parsedUsers = JSON.parse(cachedUsers);
+                if (Array.isArray(parsedUsers)) {
+                    allUsers = parsedUsers;
+                    filteredUsers = [...allUsers];
+                    console.log(`Usuários carregados do cache para admin ${adminId}, ${allUsers.length} usuários`);
+                    renderPage(currentPage);
+                    return;
+                } else {
+                    console.warn('Dados do cache inválidos. Removendo cache.');
+                    sessionStorage.removeItem(`adminUsers_${adminId}`);
+                }
+            }
+        } catch (error) {
+            console.warn('Erro ao recuperar usuários do sessionStorage:', error);
+            sessionStorage.removeItem(`adminUsers_${adminId}`); // Limpa cache corrompido
+        }
+
+        // Carregar do Firestore
+        showLoadingSpinner();
         try {
             const professorSnapshot = await db.collection('professores').orderBy('nome').get();
             const userSnapshot = await db.collection('users').get();
@@ -251,16 +342,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 };
             });
             filteredUsers = [...allUsers];
-            renderPage(1);
+            cacheUsers(allUsers, adminId); // Cachear após carregar
+            renderPage(currentPage);
+            console.log(`Usuários carregados do Firestore para admin ${adminId}, ${allUsers.length} usuários`);
         } catch (error) {
             console.error('Erro ao carregar usuários:', error);
             usersList.innerHTML = '<p class="text-center text-red-500">Erro ao carregar usuários.</p>';
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar os usuários. Tente novamente.',
+                icon: 'error',
+                customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+            });
+        } finally {
+            Swal.close();
         }
     }
 
     function renderUsers(users, startIndex) {
         usersList.innerHTML = '';
-        users.forEach((user, index) => {
+        users.forEach(user => {
             const card = `
                 <div class="user-card bg-white dark:bg-[#ffffff] rounded-lg shadow p-6">
                     <div class="flex items-center space-x-4 mb-4">
@@ -337,7 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         const nextButton = document.createElement('a');
         nextButton.href = '#';
-        nextButton.className = `px-3 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-[#d7faff] dark:hover:bg-[#d7faff] ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
+        nextButton.className = `px-3 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-[#ffffff] text-gray-500 dark:text-[#29a8dc] hover:bg-[#d7faff] ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}`;
         nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
         if (currentPage < totalPages) {
             nextButton.addEventListener('click', (e) => {
@@ -391,9 +492,22 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.addEventListener('click', hideModal);
     });
 
+    searchInput.addEventListener('input', debounce((e) => {
+        const query = e.target.value;
+        searchUsers(query);
+    }, 300));
+
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
     auth.onAuthStateChanged(async (user) => {
         if (user && await checkAdmin()) {
-            loadUsers();
+            await loadUsers();
         }
     });
 });

@@ -4,34 +4,26 @@
     <title>SGH | Administração de Usuários</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-   
     <!-- Box Icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
     <!-- Favicon -->
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
-
     <!-- Flowbite -->
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
-
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/src/styles/schedule.css" />
     <link rel="stylesheet" href="/src/styles/cursor-follower.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
     <link rel="stylesheet" href="/src/styles/sweetalert.css" />
-
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -57,14 +49,6 @@
                     <i class="fas fa-home"></i>
                     <span>Página Inicial</span>
                 </a>
-                <!-- <a href="/estatisticas" class="nav-item">
-                    <i class="fa-solid fa-chart-simple"></i>
-                    <span>Estatísticas</span>
-                </a>
-                <a href="/calendario" class="nav-item">
-                    <i class="fa-solid fa-calendar-day"></i>
-                    <span>Calendário</span>
-                </a> -->
                 <a href="/conta" class="nav-item">
                     <i class="fa-solid fa-circle-user"></i>
                     <span>Conta</span>
@@ -89,7 +73,7 @@
                 </button>
             </div>
         </div>
-        <div class="main-content">
+        <div class="main-content" id="contentWrapper">
             <div class="header">
                 <div class="welcome-section">
                     <h1 class="welcome-title">Administração de Usuários</h1>
@@ -101,14 +85,22 @@
                     </div>
                 </div>
             </div>
-            <section class="p-4 sm:p-6 flex justify-center align-items-center">
+            <section class="p-4 sm:p-6 flex justify-center items-center">
                 <div class="w-full max-w-7xl mx-auto">
-                    <div class="mb-6" style="display: flex; justify-content: center; align-items: center;">
-                        <button id="add-user-btn" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">
-                            Adicionar Novo Usuário
-                        </button>
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div id="search" class="w-full md:w-1/2">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <i class="fas fa-search text-[#29a8dc]"></i>
+                                </div>
+                                <input type="text" id="search-docentes"
+                                    class="bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#29a8dc] focus:border-[#29a8dc] block w-full pl-10 p-2.5 dark:placeholder-gray-400 dark:text-[#144b7b] dark:focus:ring-[#29a8dc] dark:focus:border-[#29a8dc]"
+                                    placeholder="Pesquisar usuários...">
+                            </div>
+                        </div>
+                        <button id="add-user-btn" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Adicionar Novo Usuário</button>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="users-list">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6" id="users-list">
                         <!-- User cards will be inserted here -->
                     </div>
                     <div class="mt-8 flex justify-center">
@@ -120,13 +112,9 @@
             </section>
         </div>
     </div>
-    <div id="user-modal" class="hidden fixed inset-0 z-1002 overflow-auto bg-gray-900/50 flex items-center justify-center">
-        <div class="relative bg-white dark:bg-[#ffffff] rounded-lg shadow p-6 max-w-2xl w-full m-4">
-            <button type="button" class="modal-close-btn text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 absolute top-4 right-4" aria-label="Close">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
+    <div id="user-modal" class="hidden fixed inset-0 z-[1002] overflow-auto bg-gray-900/50 flex items-center justify-center">
+        <div class="bg-white dark:bg-[#ffffff] rounded-lg shadow p-6 w-[95%] sm:w-[640px] max-h-[90vh] overflow-y-auto relative">
+            <button type="button" class="modal-close-btn bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1 px-3 rounded-lg absolute top-4 right-4">Cancelar</button>
             <h2 id="modal-title" class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2">Adicionar Usuário</h2>
             <form id="user-form">
                 <div class="account-section mb-6">
@@ -186,9 +174,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end mt-6 space-x-2">
+                <div class="flex justify-end mt-6">
                     <button type="submit" id="save-user-btn" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Salvar</button>
-                    <button type="button" class="modal-close-btn bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg">Cancelar</button>
                 </div>
             </form>
         </div>
