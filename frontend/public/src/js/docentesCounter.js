@@ -1,25 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log('docentesCounter.js loaded');
 
-    // Firebase configuration
     const firebaseConfig = {
-        apiKey: "AIzaSyA-3WwKHF1-f4fi5sHapRAsNr9INX0Etgo",
+        apiKey: "AIzaSyA-3-WwKHF1-f4fi5sHapRAsNr9INX0Etgo",
         authDomain: "schedule-system-8c4b6.firebaseapp.com",
-        databaseURL: "https://schedule-system-8c4b6-default-rtdb.firebaseio.com",
+        databaseURL: "https://schedule-system-8c4b6-default-rtdb.europe-west1.firebasedatabase.app",
         projectId: "schedule-system-8c4b6",
-        storageBucket: "schedule-system-8c4b6.firebasestorage.app",
+        storageBucket: "schedule-system-8c4b6.fireapp.com",
         messagingSenderId: "1056197912318",
-        appId: "1:1056197912318:web:2868c9a27bcc03587e27af",
+        appId: "1:1056197912318:web:2861286c9a27bcc03587e27af",
         measurementId: "G-GHEY7QZEQ9"
     };
 
-    // Initialize Firebase
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.firestore();
 
-    // Function to count professores and update DOM
     async function countProfessores() {
         console.log('countProfessores started');
         const docentesNumber = document.getElementById('docentesNumber');
@@ -31,31 +28,35 @@ document.addEventListener("DOMContentLoaded", function () {
         const loadingSpinner = docentesNumber.querySelector('.loading-spinner');
         const countSpan = docentesNumber.querySelector('.countD');
 
-        console.log('loadingSpinner:', loadingSpinner, 'countSpinner:', countSpan);
-
         if (!loadingSpinner || !countSpan) {
-            console.error('Elementos .loading-spinner ou .count não encontrados em #docentesNumber');
+            console.error('Elementos .loading-spinner ou .countD não encontrados em #docentesNumber');
             docentesNumber.textContent = '0';
             return;
         }
 
-        // Ensure spinner is visible
         loadingSpinner.classList.remove('hidden');
         countSpan.classList.add('hidden');
-        console.log('Spinner should be visible:', !loadingSpinner.classList.contains('hidden'));
 
         try {
             const user = firebase.auth().currentUser;
             if (!user) {
                 console.error('Usuário não autenticado');
+                throw new Error('Usuário não autenticado');
                 countSpan.textContent = '0';
                 loadingSpinner.classList.add('hidden');
                 countSpan.classList.remove('hidden');
                 return;
             }
 
-            // Temporary delay to test spinner visibility
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Check sessionStorage for cached count
+            const cachedCount = sessionStorage.getItem(`professoresCount_${user.uid}`);
+            if (cachedCount !== null) {
+                console.log('Using cached count:', cachedCount);
+                countSpan.textContent = cachedCount;
+                loadingSpinner.classList.add('hidden');
+                countSpan.classList.remove('hidden');
+                return;
+            }
 
             const snapshot = await db.collection('professores')
                 .where('userId', '==', user.uid)
@@ -63,6 +64,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const count = snapshot.size;
             countSpan.textContent = count.toString();
+            // Save to sessionStorage
+            try {
+                sessionStorage.setItem(`professoresCount_${user.uid}`, count);
+            } catch (err) {
+                console.warn('Erro ao salvar contador de professores no sessionStorage:', err);
+            }
             loadingSpinner.classList.add('hidden');
             countSpan.classList.remove('hidden');
             console.log('Count updated:', count);
@@ -77,11 +84,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Initialize on auth state change
     firebase.auth().onAuthStateChanged(user => {
         console.log('Auth state:', user ? `User ${user.uid}` : 'No user');
         if (user) {
-            countProfessores();
+            countProfessores(user.uid);
         } else {
             const docentesNumber = document.getElementById('docentesNumber');
             if (docentesNumber) {
@@ -96,6 +102,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     docentesNumber.textContent = '0';
                 }
+            }
+            // Clear sessionStorage on logout
+            try {
+                sessionStorage.clear();
+            } catch (error) {
+                console.warn('Erro ao limpar sessionStorage:', error);
             }
         }
     });

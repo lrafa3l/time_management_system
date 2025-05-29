@@ -9,6 +9,18 @@ const firebaseConfig = {
     measurementId: "G-GHEY7QZEQ9"
 };
 
+// Check if Firebase SDK is available
+if (typeof firebase === 'undefined') {
+    console.error('Firebase SDK não carregado. Verifique os scripts incluídos no HTML.');
+    Swal.fire({
+        title: 'Erro!',
+        text: 'Falha ao carregar dependências. Verifique a conexão e tente novamente.',
+        icon: 'error',
+        customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
+    });
+    throw new Error('Firebase SDK não disponível');
+}
+
 // Inicializa Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -74,10 +86,48 @@ async function ensureUserDocuments(user) {
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         }
+
+        return professorDoc;
     } catch (error) {
         console.error('Erro ao garantir documentos do usuário:', error);
         throw new Error('Falha ao configurar dados do usuário.');
     }
+}
+
+// Função para cachear perfil do usuário
+function cacheUserProfile(user, professorDoc) {
+    try {
+        const profileData = {
+            uid: user.uid,
+            nome: professorDoc.exists && professorDoc.data().nome ? professorDoc.data().nome : user.displayName || user.email.split('@')[0] || 'Usuário',
+            email: user.email || ''
+        };
+        sessionStorage.setItem(`userProfile_${user.uid}`, JSON.stringify(profileData));
+        console.log(`Perfil do usuário ${user.uid} cacheado com sucesso`);
+    } catch (error) {
+        console.warn('Erro ao salvar perfil do usuário no sessionStorage:', error);
+        if (error.name === 'QuotaExceededError') {
+            console.warn('Limite de sessionStorage excedido. Limpando dados antigos.');
+            sessionStorage.removeItem(`userProfile_${user.uid}`);
+            try {
+                sessionStorage.setItem(`userProfile_${user.uid}`, JSON.stringify(profileData));
+            } catch (innerErr) {
+                console.warn('Falha ao salvar após limpeza:', innerErr);
+            }
+        }
+    }
+}
+
+// Função para atualizar a saudação
+function updateGreeting(profileData) {
+    const greeting = document.querySelector('.greeting');
+    if (greeting && profileData.nome) {
+        greeting.textContent = `Bem-vindo, ${profileData.nome}!`;
+        console.log(`Saudação atualizada com cache: ${profileData.nome}`);
+        return true;
+    }
+    console.warn('Elemento .greeting não encontrado ou nome inválido');
+    return false;
 }
 
 // Manipula contagem regressiva com SweetAlert
@@ -91,9 +141,12 @@ function startLockoutTimer(lockoutSeconds = 60) {
     loginForm.querySelectorAll('input, button').forEach(el => el.disabled = true);
     submitButton?.classList.remove('spinner-active');
 
-    // Define tempo de expiração
-    const lockoutEnd = Date.now() + lockoutSeconds * 1000;
-    sessionStorage.setItem('lockoutEnd', lockoutEnd);
+    try {
+        const lockoutEnd = Date.now() + lockoutSeconds * 1000;
+        sessionStorage.setItem('lockoutEnd', lockoutEnd);
+    } catch (error) {
+        console.warn('Erro ao salvar lockoutEnd no sessionStorage:', error);
+    }
 
     // Abre SweetAlert com timer
     Swal.fire({
@@ -114,8 +167,12 @@ function startLockoutTimer(lockoutSeconds = 60) {
 
         if (secondsLeft <= 0) {
             loginForm.querySelectorAll('input, button').forEach(el => el.disabled = false);
-            sessionStorage.removeItem('lockoutEnd');
-            sessionStorage.removeItem('loginAttempts');
+            try {
+                sessionStorage.removeItem('lockoutEnd');
+                sessionStorage.removeItem('loginAttempts');
+            } catch (error) {
+                console.warn('Erro ao limpar sessionStorage:', error);
+            }
             Swal.close();
         } else {
             setTimeout(updateTimer, 1000);
@@ -127,9 +184,13 @@ function startLockoutTimer(lockoutSeconds = 60) {
 
 // Verifica lockout ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
-    const lockoutEnd = sessionStorage.getItem('lockoutEnd');
-    if (lockoutEnd && Date.now() < parseInt(lockoutEnd)) {
-        startLockoutTimer((parseInt(lockoutEnd) - Date.now()) / 1000);
+    try {
+        const lockoutEnd = sessionStorage.getItem('lockoutEnd');
+        if (lockoutEnd && Date.now() < parseInt(lockoutEnd)) {
+            startLockoutTimer((parseInt(lockoutEnd) - Date.now()) / 1000);
+        }
+    } catch (error) {
+        console.warn('Erro ao verificar lockoutEnd no sessionStorage:', error);
     }
 });
 
@@ -138,9 +199,13 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Verifica se está em lockout
-    const lockoutEnd = sessionStorage.getItem('lockoutEnd');
-    if (lockoutEnd && Date.now() < parseInt(lockoutEnd)) {
-        return;
+    try {
+        const lockoutEnd = sessionStorage.getItem('lockoutEnd');
+        if (lockoutEnd && Date.now() < parseInt(lockoutEnd)) {
+            return;
+        }
+    } catch (error) {
+        console.warn('Erro ao verificar lockoutEnd:', error);
     }
 
     // Adiciona a classe spinner-active ao botão
@@ -160,7 +225,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
         }
         Swal.fire({
             title: 'Erro!',
-            text: 'Preencha todos os campos de login.',
+            textContent: 'Preencha todos os campos de login.',
             icon: 'error',
             customClass: { popup: 'my-swal-popup', title: 'my-swal-title', content: 'my-swal-text', confirmButton: 'my-swal-button' }
         });
@@ -168,19 +233,38 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     }
 
     // Conta tentativas de login
-    let attempts = parseInt(sessionStorage.getItem('loginAttempts') || '0');
-    attempts += 1;
-    sessionStorage.setItem('loginAttempts', attempts);
+    let attempts = 0;
+    try {
+        attempts = parseInt(sessionStorage.getItem('loginAttempts') || '0');
+        attempts += 1;
+        sessionStorage.setItem('loginAttempts', attempts);
+    } catch (error) {
+        console.warn('Erro ao gerenciar loginAttempts no sessionStorage:', error);
+    }
 
     try {
         const userCredential = await attemptLogin(auth, email, password);
         const user = userCredential.user;
 
-        // Garante que documentos existem
-        await ensureUserDocuments(user);
+        // Garante que documentos existem e obtém professorDoc
+        const professorDoc = await ensureUserDocuments(user);
+
+        // Cacheia o perfil do usuário
+        cacheUserProfile(user, professorDoc);
+
+        // Salva currentUserId
+        try {
+            sessionStorage.setItem('currentUserId', user.uid);
+        } catch (error) {
+            console.warn('Erro ao salvar currentUserId no sessionStorage:', error);
+        }
 
         // Limpa contagem de tentativas após login bem-sucedido
-        sessionStorage.removeItem('loginAttempts');
+        try {
+            sessionStorage.removeItem('loginAttempts');
+        } catch (error) {
+            console.warn('Erro ao limpar loginAttempts:', error);
+        }
         console.log('Usuário logado:', user.email);
         window.location.href = '/pagina-inicial';
     } catch (error) {
@@ -245,16 +329,52 @@ auth.onAuthStateChanged(async (user) => {
     try {
         if (user) {
             console.log('Usuário autenticado:', user.uid);
-            const professorDoc = await withRetry(() => db.collection('professores').doc(user.uid).get());
-            const greeting = document.querySelector('.greeting');
-            if (greeting) {
-                if (professorDoc.exists && professorDoc.data().nome) {
-                    greeting.textContent = `Bem-vindo, ${professorDoc.data().nome}!`;
-                } else if (user.displayName) {
-                    greeting.textContent = `Bem-vindo, ${user.displayName}!`;
-                } else {
-                    greeting.textContent = `Bem-vindo, ${user.email.split('@')[0]}!`;
+
+            // Verifica se é o mesmo usuário da sessão
+            const cachedUserId = sessionStorage.getItem('currentUserId');
+            if (cachedUserId === user.uid) {
+                // Usa dados em cache para a saudação
+                try {
+                    const cachedProfile = sessionStorage.getItem(`userProfile_${user.uid}`);
+                    if (cachedProfile) {
+                        const profileData = JSON.parse(cachedProfile);
+                        // Tenta atualizar a saudação imediatamente
+                        if (updateGreeting(profileData)) {
+                            return; // Sai se a saudação foi atualizada com sucesso
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Erro ao recuperar perfil do usuário do sessionStorage:', error);
                 }
+            }
+
+            // Espera pelo DOM estar pronto
+            const updateGreetingWhenReady = async () => {
+                if (document.readyState === 'complete') {
+                    // Consulta Firestore se não houver cache válido
+                    const professorDoc = await withRetry(() => db.collection('professores').doc(user.uid).get());
+                    const profileData = {
+                        nome: professorDoc.exists && professorDoc.data().nome ? professorDoc.data().nome : user.displayName || user.email.split('@')[0] || 'Usuário',
+                        email: user.email || ''
+                    };
+                    if (updateGreeting(profileData)) {
+                        // Atualiza o cache com os dados mais recentes
+                        cacheUserProfile(user, professorDoc);
+                    }
+                } else {
+                    document.addEventListener('DOMContentLoaded', () => {
+                        updateGreetingWhenReady();
+                    }, { once: true });
+                }
+            };
+
+            await updateGreetingWhenReady();
+
+            // Atualiza currentUserId
+            try {
+                sessionStorage.setItem('currentUserId', user.uid);
+            } catch (error) {
+                console.warn('Erro ao salvar currentUserId no sessionStorage:', error);
             }
         } else {
             console.log('Nenhum usuário autenticado, redireccionando para /login');
@@ -274,6 +394,11 @@ auth.onAuthStateChanged(async (user) => {
             try {
                 await auth.signOut();
                 console.log('Sessão limpa devido a erro de autenticação');
+                try {
+                    sessionStorage.clear();
+                } catch (clearError) {
+                    console.warn('Erro ao limpar sessionStorage:', clearError);
+                }
                 if (window.location.pathname !== '/login') {
                     window.location.href = '/login';
                 }
@@ -295,6 +420,11 @@ document.getElementById('logout-btn')?.addEventListener('click', async () => {
     try {
         await auth.signOut();
         console.log('Usuário deslogado');
+        try {
+            sessionStorage.clear(); // Limpa todos os dados do sessionStorage
+        } catch (error) {
+            console.warn('Erro ao limpar sessionStorage:', error);
+        }
         window.location.href = '/login';
     } catch (error) {
         console.error('Erro ao fazer logout:', error);

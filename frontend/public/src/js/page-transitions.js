@@ -13,6 +13,28 @@ document.addEventListener('DOMContentLoaded', function () {
         maxDataWait: 5000 // Timeout for data loading
     };
 
+    // Função para verificar se há conteúdo em sessionStorage
+    function hasCachedContent() {
+        try {
+            const currentUserId = sessionStorage.getItem('currentUserId');
+            if (!currentUserId) return false; // No authenticated user
+
+            // Verifica chaves relevantes
+            const possibleKeys = [
+                `userProfile_${currentUserId}`,
+                `horariosCount_${currentUserId}`,
+                `professoresCount_${currentUserId}`
+                // Adicione outras chaves relevantes, e.g., `formData_${formType}`
+            ];
+
+            return possibleKeys.some(key => sessionStorage.getItem(key) !== null);
+        } catch (error) {
+            console.warn('Erro ao verificar sessionStorage:', error);
+            return false;
+        }
+    }
+
+    // Função para mostrar conteúdo imediatamente
     function showContent() {
         body.classList.add('page-loaded');
 
@@ -29,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100);
     }
 
+    // Função para iniciar transição de página
     function startPageTransition(url) {
         if (body.classList.contains('transitioning')) return;
         body.classList.add('transitioning');
@@ -45,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 10);
     }
 
+    // Função para verificar se o link deve ser interceptado
     function shouldInterceptLink(link) {
         return link && link.href &&
             !link.hash &&
@@ -58,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
             (link.href.split('?')[0].endsWith('.html') || link.href.split('?')[0].endsWith('/'));
     }
 
+    // Intercepta cliques em links
     document.addEventListener('click', function (e) {
         const target = e.target.closest('a');
         if (target && shouldInterceptLink(target)) {
@@ -66,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, true);
 
+    // Manipula evento pageshow (navegação por cache do navegador)
     window.addEventListener('pageshow', function (event) {
         if (event.persisted && transitionElement) {
             transitionElement.style.display = 'none';
@@ -74,9 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Check if on /docentes or /admin page
-    if (window.location.pathname === '/docentes' ||
-        window.location.pathname === '/admin') {
+    // Verifica se há conteúdo em cache e decide transição
+    if (hasCachedContent()) {
+        console.log('Conteúdo em cache detectado, ignorando transição');
+        showContent();
+    } else if (window.location.pathname === '/docentes' || window.location.pathname === '/admin') {
         const startTime = Date.now();
         const dataLoadTimeout = setTimeout(() => {
             console.warn('Data load timeout, showing content');

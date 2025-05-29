@@ -41,6 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const formType = this.getAttribute("data-form");
                 if (formType) {
                     tempItems = [];
+                    // Save form type to sessionStorage
+                    try {
+                        sessionStorage.setItem('activeFormType', formType);
+                    } catch (error) {
+                        console.warn("Erro ao salvar formType no sessionStorage:", error);
+                    }
                     loadForm(formType).catch(error => {
                         console.error("Erro ao carregar formulário:", error);
                         Swal.fire({
@@ -67,6 +73,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 closeModal();
             }
         });
+
+        // Restore modal state from sessionStorage
+        const savedFormType = sessionStorage.getItem('activeFormType');
+        if (savedFormType) {
+            loadForm(savedFormType).then(() => {
+                openModal();
+                restoreFormData(savedFormType);
+            }).catch(error => {
+                console.error("Erro ao restaurar formulário:", error);
+            });
+        }
+
+        // Handle logout to clear sessionStorage
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                try {
+                    sessionStorage.clear();
+                    firebase.auth().signOut();
+                } catch (error) {
+                    console.warn("Erro ao limpar sessionStorage ou fazer logout:", error);
+                }
+            });
+        }
     }
 
     function openModal() {
@@ -80,6 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
         UI.modal.style.display = "none";
         UI.modalBody.innerHTML = '';
         tempItems = [];
+        // Clear form data from sessionStorage on close (optional, can keep for restore)
+        // sessionStorage.removeItem('formData');
     }
 
     async function loadForm(formType) {
@@ -88,9 +120,65 @@ document.addEventListener("DOMContentLoaded", function () {
             const formHTML = await generateFormHTML(formType);
             UI.modalBody.innerHTML = formHTML;
             setupFormSubmitHandler(formType);
+            setupFormInputListeners(formType); // Add input listeners for sessionStorage
         } catch (error) {
             console.error(`Erro ao carregar formulário ${formType}:`, error);
             throw error;
+        }
+    }
+
+    function setupFormInputListeners(formType) {
+        const form = document.getElementById(`cadastro-${formType}`);
+        if (form) {
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    saveFormData(formType, form);
+                });
+            });
+        }
+    }
+
+    function saveFormData(formType, form) {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            if (key === 'disciplinas' || key === 'classes') {
+                data[key] = data[key] ? [...data[key], value] : [value];
+            } else {
+                data[key] = value;
+            }
+        });
+        try {
+            sessionStorage.setItem(`formData_${formType}`, JSON.stringify(data));
+        } catch (error) {
+            console.warn(`Erro ao salvar dados do formulário ${formType} no sessionStorage:`, error);
+        }
+    }
+
+    function restoreFormData(formType) {
+        try {
+            const savedData = sessionStorage.getItem(`formData_${formType}`);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                const form = document.getElementById(`cadastro-${formType}`);
+                if (form) {
+                    Object.entries(data).forEach(([key, value]) => {
+                        if (Array.isArray(value)) {
+                            // Handle checkboxes (e.g., disciplinas, classes)
+                            value.forEach(val => {
+                                const input = form.querySelector(`input[name="${key}"][value="${val}"]`);
+                                if (input) input.checked = true;
+                            });
+                        } else {
+                            const input = form.querySelector(`[name="${key}"]`);
+                            if (input) input.value = value;
+                        }
+                    });
+                }
+            }
+        } catch (error) {
+            console.warn(`Erro ao restaurar dados do formulário ${formType}:`, error);
         }
     }
 
@@ -362,6 +450,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     await handleMultipleItemsSubmit(formType, form);
                 } else {
                     await handleFormSubmit(formType, form);
+                }
+                // Clear form data from sessionStorage after successful submission
+                try {
+                    sessionStorage.removeItem(`formData_${formType}`);
+                } catch (error) {
+                    console.warn(`Erro ao limpar formData_${formType} do sessionStorage:`, error);
                 }
             });
 
@@ -723,13 +817,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 text: 'Horário gerado com sucesso!',
                 confirmButtonText: 'Continuar',
                 confirmButtonColor: '#2dbf78',
-                customClass: {
-                    popup: 'my-swal-popup',
-                    title: 'my-swal-title',
-                    content: 'my-swal-text',
-                    confirmButton: 'my-swal-button'
-                },
-                backdrop: 'rgba(0, 0, 0, 0.5)',
+                customClass: 'modal',
+                backdrop: 'rgba(0, 4, 4, 0.5)',
                 timer: 2000,
                 showConfirmButton: false
             });
@@ -746,13 +835,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 text: `Erro ao gerar horário: ${error.message}`,
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#29a8dc',
-                customClass: {
-                    popup: 'my-swal-popup',
-                    title: 'my-swal-title',
-                    content: 'my-swal-text',
-                    confirmButton: 'my-swal-button'
-                },
-                backdrop: 'rgba(0, 0, 0, 0.5)'
+                customClass: 'modal',
+                backdrop: 'rgba(0, 4, 4, 0.5)'
             });
         } finally {
             submitBtn.disabled = false;
@@ -778,7 +862,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const professorDoc = await db.collection('professores').doc(professorId).get();
         if (!professorDoc.exists) throw new Error('Professor não encontrado');
         const professor = professorDoc.data();
-        const professorDisciplinas = professor.disciplinas || [];
+        const professorDisciplinas = professor.dis || [];
         const professorClasses = professor.classes || [];
         const turmasSnapshot = await db.collection('turmas').get();
         const cursosSnapshot = await db.collection('cursos').get();
@@ -787,7 +871,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const turmas = turmasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const cursos = cursosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const salas = salasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const disciplinas = disciplinasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const disciplines = disciplinasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const eligibleTurmas = turmas.filter(turma => {
             const turmaClasse = turma.classe || '';
             return professorClasses.includes(turmaClasse);
@@ -815,7 +899,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const turmaDisciplinas = curso && curso.disciplinas ? curso.disciplinas : [];
                 const commonDisciplinaId = turmaDisciplinas.find(id => professorDisciplinas.includes(id));
                 if (!commonDisciplinaId) continue;
-                const disciplinaDoc = disciplinas.find(d => d.id === commonDisciplinaId);
+                const disciplinaDoc = disciplines.find(d => d.id === commonDisciplinaId);
                 if (!disciplinaDoc) continue;
                 const availableSalas = salas.filter(sala => !occupied.salas[key] || !occupied.salas[key].includes(sala.id));
                 if (availableSalas.length === 0) continue;
@@ -898,7 +982,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const snapshot = await db.collection("disciplinas").get();
             return snapshot.docs.map(doc => ({
                 id: doc.id,
-                nome: doc.data().nome || 'Sem nome',
+                nome: doc.data().nome || '',
                 nomeNormalized: doc.data().nomeNormalized || normalizeString(doc.data().nome || '')
             }));
         } catch (error) {

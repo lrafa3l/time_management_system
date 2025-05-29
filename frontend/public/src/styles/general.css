@@ -7,12 +7,13 @@
 
 body,
 html {
+  background: linear-gradient(to bottom right, #e7edf7, #c5e4f9);
   font-family: "AfacadFlux", sans-serif;
   font-weight: 400;
-  background-color: #f5f7ff;
   height: 100%;
   margin: 0;
 }
+
 
 .d-flex {
   display: flex;

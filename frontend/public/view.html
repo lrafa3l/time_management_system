@@ -1,4 +1,5 @@
 <html lang="pt">
+
 <head>
     <title>SGH | Horário</title>
     <meta charset="UTF-8">
@@ -23,76 +24,94 @@
             size: A4;
             margin: 1.5cm;
         }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             width: 100%;
         }
+
         .container {
             width: 80%;
             margin: 0 auto;
             padding: 0;
             box-sizing: border-box;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
         }
+
         .right-header {
             width: 30%;
             text-align: center;
             font-size: 10px;
         }
+
         .logo {
             width: 60px;
             height: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 10px;
             margin-bottom: 5px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid black;
             padding: 6px;
             text-align: center;
         }
-        .schedule-table th, .schedule-table td {
+
+        .schedule-table th,
+        .schedule-table td {
             border: 1px solid black !important;
         }
+
         .header-table {
             width: 100%;
             border: none;
         }
+
         .header-table td {
             border: none;
             vertical-align: middle;
         }
+
         .info-row td {
             text-align: left;
             padding: 3px;
         }
+
         .observation {
             margin-top: 5px;
             font-size: 10px;
         }
+
         .signature {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
             font-size: 10px;
         }
+
         .signature-box {
             text-align: center;
             width: 45%;
         }
+
         .signature-line {
             border-top: 1px solid black;
             margin: 5px 0;
         }
+
         .btn {
             padding: 8px 16px;
             margin: 0 5px;
@@ -102,19 +121,43 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
+        .msg {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: #4ca0af;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-del {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: #a93c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
         .btn:hover {
             background-color: #45a049;
         }
+
         [contenteditable="true"] {
             padding: 2px 5px;
             border: 1px dashed transparent;
             min-height: 1em;
         }
+
         [contenteditable="true"]:focus {
             border: 1px dashed #908e8e;
             background-color: #f9f9f9;
             outline: none;
         }
+
         @media print {
             body {
                 width: 210mm;
@@ -122,20 +165,24 @@
                 padding: 0;
                 margin: 0;
             }
+
             .action-buttons {
                 display: none;
             }
+
             .container {
                 padding: 0;
-                width: 100%;
+                width: 90%;
                 height: 100%;
             }
+
             table {
                 page-break-inside: avoid;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
@@ -147,8 +194,8 @@
     <div class="action-buttons" style="margin: 20px 0; text-align: center;">
         <button id="editBtn" class="btn">Editar</button>
         <button id="saveBtn" class="btn" style="display: none;">Salvar</button>
-        <button id="cancelBtn" class="btn" style="display: none;">Cancelar</button>
-        <button id="downloadPdfBtn" class="btn">Baixar PDF</button>
+        <button id="cancelBtn" class="btn-del" style="display: none;">Cancelar</button>
+        <button class="msg">CTRL + P para imprimir</button>
     </div>
     <div class="container">
         <table class="header-table" style="margin-bottom: 1.2cm;">
@@ -184,12 +231,16 @@
                     <div><span>NOME:</span> <span id="nome" contenteditable="true"></span></div>
                     <div><span>UNIDADE ORGÂNICA:</span> <span id="unidade_organica" contenteditable="true"></span></div>
                     <div><span>CATEGORIA:</span> <span id="categoria" contenteditable="true"></span></div>
-                    <div><span>CLASSE QUE LECCIONA:</span> <span id="classe_leciona" contenteditable="true"></span></div>
+                    <div><span>CLASSE QUE LECCIONA:</span> <span id="classe_leciona" contenteditable="true"></span>
+                    </div>
                     <div><span>DISCIPLINA(S):</span> <span id="disciplinas" contenteditable="true"></span></div>
-                    <div><span>FORMAÇÃO DO ENSINO MÉDIO:</span> <span id="formacao_medio" contenteditable="true"></span></div>
-                    <div><span>HABILITAÇÕES LITERÁR. ENSINO SUPERIOR:</span> <span id="habilitacoes_superior" contenteditable="true"></span></div>
+                    <div><span>FORMAÇÃO DO ENSINO MÉDIO:</span> <span id="formacao_medio" contenteditable="true"></span>
+                    </div>
+                    <div><span>HABILITAÇÕES LITERÁR. ENSINO SUPERIOR:</span> <span id="habilitacoes_superior"
+                            contenteditable="true"></span></div>
                     <div><span>CARGO/FUNÇÃO:</span> <span id="cargo_funcao" contenteditable="true"></span></div>
-                    <div><span>CONTACTO TELEFÓNICO:</span> <span id="contacto_telefonico" contenteditable="true"></span></div>
+                    <div><span>CONTACTO TELEFÓNICO:</span> <span id="contacto_telefonico" contenteditable="true"></span>
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -369,18 +420,22 @@
         </table>
         <div class="observation" style="margin: 1.5cm 0cm; display: flex; flex-direction: column; align-items: center;">
             <p id="observacao" style="margin: 5px 0;"></p>
-            <p id="total_tempos" style="margin: 5px 0; border-top: 1px solid #bab8b8; border-bottom: 1px solid #bab8b8; padding: 8px; width: 100%; text-align: center;"></p>
+            <p id="total_tempos"
+                style="margin: 5px 0; border-top: 1px solid #bab8b8; border-bottom: 1px solid #bab8b8; padding: 8px; width: 100%; text-align: center;">
+            </p>
         </div>
         <div class="signature">
             <div class="signature-box">
                 <p style="margin-bottom: 20px;">O (A) Professor(a)</p>
                 <div class="signature-line"></div>
-                <p style="margin: 0;"><span id="professor_assinatura" contenteditable="true">Eng.º Diasliua Paulo Simão</span></p>
+                <p style="margin: 0;"><span id="professor_assinatura" contenteditable="true">Eng.º Diasliua Paulo
+                        Simão</span></p>
             </div>
             <div class="signature-box">
                 <p style="margin-bottom: 20px;">A Subdirecção Pedagógica</p>
                 <div class="signature-line" style="width: 80%; margin-left: 10%;"></div>
-                <p style="margin: 0;"><span id="subdirecao_assinatura" contenteditable="true">Eng.º Carlos Alberto Brito Teixeira da Silva</span></p>
+                <p style="margin: 0;"><span id="subdirecao_assinatura" contenteditable="true">Eng.º Carlos Alberto Brito
+                        Teixeira da Silva</span></p>
             </div>
         </div>
     </div>
@@ -399,15 +454,23 @@
                 measurementId: "G-GHEY7QZEQ9"
             };
             if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
+                try {
+                    firebase.initializeApp(firebaseConfig);
+                } catch (error) {
+                    console.error("Erro ao inicializar Firebase:", error);
+                    alert("Erro ao inicializar Firebase. Verifique a configuração.");
+                    return;
+                }
             }
             const db = firebase.firestore();
 
-            // Get horarioId from URL
+            // Get professorId from URL
             const urlParams = new URLSearchParams(window.location.search);
-            const horarioId = urlParams.get('horarioId');
-            if (!horarioId) {
-                alert('Horário não especificado!');
+            const professorId = urlParams.get('professorId');
+            console.log("Professor ID from URL:", professorId);
+            if (!professorId) {
+                console.error("Nenhum professorId fornecido na URL");
+                alert('Professor não especificado!');
                 window.location.href = '/';
                 return;
             }
@@ -420,146 +483,335 @@
             const editableElements = document.querySelectorAll('[contenteditable="true"]');
             let originalData = {};
 
-            // Load schedule
+            // Check for missing buttons
+            if (!editBtn) console.error("Elemento 'editBtn' não encontrado no DOM");
+            if (!saveBtn) console.error("Elemento 'saveBtn' não encontrado no DOM");
+            if (!cancelBtn) console.error("Elemento 'cancelBtn' não encontrado no DOM");
+            if (!downloadPdfBtn) console.error("Elemento 'downloadPdfBtn' não encontrado no DOM");
+
+            // Helper to get disciplina names
+            async function getDisciplinaNames(disciplinaIds) {
+                if (!disciplinaIds || disciplinaIds.length === 0) {
+                    console.warn("Nenhum disciplinaId fornecido");
+                    return '';
+                }
+                try {
+                    const disciplinas = await Promise.all(
+                        disciplinaIds.map(async id => {
+                            const doc = await db.collection('disciplinas').doc(id).get();
+                            if (doc.exists) {
+                                return doc.data().nome || '';
+                            } else {
+                                console.warn(`Disciplina com ID ${id} não encontrada`);
+                                return '';
+                            }
+                        })
+                    );
+                    return disciplinas.filter(name => name).join(', ');
+                } catch (error) {
+                    console.error('Erro ao carregar nomes das disciplinas:', error);
+                    return '';
+                }
+            }
+
+            // Load schedule and professor data
             async function loadSchedule() {
                 try {
-                    const doc = await db.collection('horarios').doc(horarioId).get();
-                    if (!doc.exists) {
-                        alert('Horário não encontrado!');
+                    console.log("Iniciando carregamento de dados para professorId:", professorId);
+
+                    // Fetch professor data
+                    console.log("Buscando dados do professor...");
+                    const professorDoc = await db.collection('professores').doc(professorId).get();
+                    if (!professorDoc.exists) {
+                        console.error("Professor não encontrado no Firestore para ID:", professorId);
+                        alert('Professor não encontrado!');
                         window.location.href = '/';
                         return;
                     }
-                    const data = doc.data();
+                    const professorData = professorDoc.data();
+                    console.log("Dados do professor:", professorData);
+
+                    // Check if DOM elements exist
+                    const nomeElement = document.getElementById('nome');
+                    if (!nomeElement) console.error("Elemento 'nome' não encontrado no DOM");
+                    const unidadeElement = document.getElementById('unidade_organica');
+                    if (!unidadeElement) console.error("Elemento 'unidade_organica' não encontrado no DOM");
 
                     // Populate professor data
-                    document.getElementById('nome').textContent = data.professorData.nome;
-                    document.getElementById('unidade_organica').textContent = data.professorData.unidade;
-                    document.getElementById('categoria').textContent = data.professorData.categoria;
-                    document.getElementById('classe_leciona').textContent = data.professorData.classe;
-                    document.getElementById('disciplinas').textContent = data.professorData.disciplinas;
-                    document.getElementById('formacao_medio').textContent = data.professorData.formacao_medio;
-                    document.getElementById('habilitacoes_superior').textContent = data.professorData.habilitacoes;
-                    document.getElementById('cargo_funcao').textContent = data.professorData.cargo;
-                    document.getElementById('contacto_telefonico').textContent = data.professorData.contacto;
+                    if (nomeElement) nomeElement.textContent = professorData.nome || 'N/A';
+                    if (unidadeElement) unidadeElement.textContent = professorData.unidade || 'N/A';
+                    document.getElementById('categoria').textContent = professorData.categoria || 'N/A';
+                    document.getElementById('classe_leciona').textContent = professorData.classes?.join(', ') || 'N/A';
+                    document.getElementById('disciplinas').textContent = await getDisciplinaNames(professorData.disciplinas || []);
+                    document.getElementById('formacao_medio').textContent = professorData.formacaoMedio || 'N/A';
+                    document.getElementById('habilitacoes_superior').textContent = professorData.habilitacoes || 'N/A';
+                    document.getElementById('cargo_funcao').textContent = professorData.cargo || 'N/A';
+                    document.getElementById('contacto_telefonico').textContent = professorData.contacto || 'N/A';
+                    document.getElementById('professor_assinatura').textContent = professorData.nome || 'N/A';
+                    console.log("Dados do professor preenchidos no DOM");
+
+                    // Fetch schedule entries
+                    console.log("Buscando horários para professorId:", professorId);
+                    const scheduleSnapshot = await db.collection('horarios')
+                        .where('professorId', '==', professorId)
+                        .get();
+                    if (scheduleSnapshot.empty) {
+                        console.warn("Nenhum horário encontrado para professorId:", professorId);
+                        alert('Nenhum horário encontrado para este professor!');
+                        return;
+                    }
+                    console.log("Número de horários encontrados:", scheduleSnapshot.size);
+
+                    // Cache turma, sala, and disciplina names
+                    const turmasMap = new Map();
+                    const salasMap = new Map();
+                    const disciplinasMap = new Map();
+                    console.log("Carregando turmas, salas e disciplinas...");
+                    await Promise.all([
+                        db.collection('turmas').get().then(snapshot => {
+                            snapshot.forEach(doc => turmasMap.set(doc.id, doc.data().nome || 'N/A'));
+                            console.log("Turmas carregadas:", Array.from(turmasMap.entries()));
+                        }),
+                        db.collection('salas').get().then(snapshot => {
+                            snapshot.forEach(doc => salasMap.set(doc.id, doc.data().nome || 'N/A'));
+                            console.log("Salas carregadas:", Array.from(salasMap.entries()));
+                        }),
+                        db.collection('disciplinas').get().then(snapshot => {
+                            snapshot.forEach(doc => disciplinasMap.set(doc.id, doc.data().nome || 'N/A'));
+                            console.log("Disciplinas carregadas:", Array.from(disciplinasMap.entries()));
+                        })
+                    ]);
+
+                    // Initialize schedule object
+                    const schedule = {
+                        seg: {}, ter: {}, qua: {}, qui: {}, sex: {}
+                    };
+                    let totalTemposLectivos = 0;
 
                     // Populate schedule
-                    const days = ['seg', 'ter', 'qua', 'qui', 'sex'];
                     const times = [
                         '7H00-7H50', '7H55-8H45', '8H50-9H40', '10H00-10H50', '10H55-11H45', '11H50-12H40',
                         '13H00-13H50', '13H55-14H45', '14H50-15H40', '16H00-16H50', '16H55-17H45'
                     ];
+
+                    scheduleSnapshot.forEach(doc => {
+                        const data = doc.data();
+                        const day = data.day.toLowerCase().substring(0, 3); // e.g., 'Segunda' -> 'seg'
+                        const time = data.timeSlot;
+                        schedule[day][time] = {
+                            period: data.period,
+                            session: data.session,
+                            turma: turmasMap.get(data.turmaId) || 'N/A',
+                            sala: salasMap.get(data.salaId) || 'N/A',
+                            disciplina: disciplinasMap.get(data.disciplinaId) || 'N/A',
+                            docId: doc.id
+                        };
+                        totalTemposLectivos++;
+                        console.log(`Horário processado: ${day} ${time} -> ${schedule[day][time].turma} (${schedule[day][time].disciplina}) em ${schedule[day][time].sala}`);
+                    });
+
+                    // Fill table
+                    console.log("Preenchendo tabela de horários...");
                     times.forEach((time, index) => {
                         const period = index < 6 ? `${index + 1}º` : `${index - 5}º`;
                         const session = index < 6 ? 'manha' : 'tarde';
-                        days.forEach(day => {
-                            const entry = data.schedule[day]?.[time] || { turma: '', sala: '', disciplina: '' };
+                        ['seg', 'ter', 'qua', 'qui', 'sex'].forEach(day => {
                             const aulaId = `${day}-${session}-${period}-aula`;
                             const salaId = `${day}-${session}-${period}-sala`;
-                            document.getElementById(aulaId).textContent = `${entry.turma} (${entry.disciplina})`;
-                            document.getElementById(salaId).textContent = entry.sala;
+                            const elementAula = document.getElementById(aulaId);
+                            const elementSala = document.getElementById(salaId);
+                            if (!elementAula || !elementSala) {
+                                console.error(`Elementos DOM não encontrados: ${aulaId}, ${salaId}`);
+                                return;
+                            }
+                            const entry = schedule[day][time] || { turma: '', sala: '', disciplina: '' };
+                            elementAula.textContent = entry.turma && entry.disciplina && entry.turma !== 'N/A' && entry.disciplina !== 'N/A' ? `${entry.turma} (${entry.disciplina})` : '';
+                            elementSala.textContent = entry.sala !== 'N/A' ? entry.sala : '';
+                            console.log(`Preenchido: ${aulaId} = ${elementAula.textContent}, ${salaId} = ${elementSala.textContent}`);
                         });
                     });
 
-                    // Populate observation
-                    document.getElementById('observacao').textContent = data.observacao;
-                    document.getElementById('total_tempos').textContent = `TOTAL DE TEMPOS LECTIVOS: ${data.totalTemposLectivos}`;
+                    // Populate observation and total tempos
+                    document.getElementById('observacao').textContent = '';
+                    document.getElementById('total_tempos').textContent = `TOTAL DE TEMPOS LECTIVOS: ${totalTemposLectivos}`;
+                    console.log("Total de tempos lectivos:", totalTemposLectivos);
                 } catch (error) {
                     console.error('Erro ao carregar horário:', error);
-                    alert('Erro ao carregar horário!');
+                    alert(`Erro ao carregar horário: ${error.message}`);
                 }
             }
 
             // Enable editing
-            editBtn.addEventListener('click', () => {
-                editableElements.forEach(el => {
-                    originalData[el.id] = el.textContent;
+            if (editBtn) {
+                editBtn.addEventListener('click', () => {
+                    console.log("Modo de edição ativado");
+                    editableElements.forEach(el => {
+                        originalData[el.id] = el.textContent;
+                    });
+                    editBtn.style.display = 'none';
+                    if (saveBtn) saveBtn.style.display = 'inline-block';
+                    if (cancelBtn) cancelBtn.style.display = 'inline-block';
                 });
-                editBtn.style.display = 'none';
-                saveBtn.style.display = 'inline-block';
-                cancelBtn.style.display = 'inline-block';
-            });
+            }
 
             // Save changes
-            saveBtn.addEventListener('click', async () => {
-                try {
-                    const updatedData = {
-                        professorData: {
-                            nome: document.getElementById('nome').textContent,
-                            unidade: document.getElementById('unidade_organica').textContent,
-                            categoria: document.getElementById('categoria').textContent,
-                            classe: document.getElementById('classe_leciona').textContent,
-                            disciplinas: document.getElementById('disciplinas').textContent,
-                            formacao_medio: document.getElementById('formacao_medio').textContent,
-                            habilitacoes: document.getElementById('habilitacoes_superior').textContent,
-                            cargo: document.getElementById('cargo_funcao').textContent,
-                            contacto: document.getElementById('contacto_telefonico').textContent
-                        },
-                        schedule: {}
-                    };
+            if (saveBtn) {
+                saveBtn.addEventListener('click', async () => {
+                    try {
+                        console.log("Salvando alterações...");
+                        const user = firebase.auth().currentUser;
+                        if (!user) {
+                            console.error("Usuário não autenticado");
+                            throw new Error('Usuário não autenticado');
+                        }
 
-                    const days = ['seg', 'ter', 'qua', 'qui', 'sex'];
-                    const times = [
-                        '7H00-7H50', '7H55-8H45', '8H50-9H40', '10H00-10H50', '10H55-11H45', '11H50-12H40',
-                        '13H00-13H50', '13H55-14H45', '14H50-15H40', '16H00-16H50', '16H55-17H45'
-                    ];
-                    times.forEach((time, index) => {
-                        const period = index < 6 ? `${index + 1}º` : `${index - 5}º`;
-                        const session = index < 6 ? 'manha' : 'tarde';
-                        days.forEach(day => {
-                            if (!updatedData.schedule[day]) updatedData.schedule[day] = {};
-                            const aulaId = `${day}-${session}-${period}-aula`;
-                            const salaId = `${day}-${session}-${period}-sala`;
-                            const aulaText = document.getElementById(aulaId).textContent;
-                            const [turma, disciplina] = aulaText.split(' (').map(s => s.replace(')', '').trim());
-                            updatedData.schedule[day][time] = {
-                                period,
-                                session,
-                                turma: turma || '',
-                                sala: document.getElementById(salaId).textContent || '',
-                                disciplina: disciplina || ''
-                            };
+                        // Update professor data
+                        console.log("Atualizando dados do professor...");
+                        await db.collection('professores').doc(professorId).update({
+                            nome: document.getElementById('nome').textContent || 'N/A',
+                            unidade: document.getElementById('unidade_organica').textContent || 'N/A',
+                            categoria: document.getElementById('categoria').textContent || 'N/A',
+                            classes: document.getElementById('classe_leciona').textContent.split(',').map(c => c.trim()).filter(c => c) || [],
+                            formacaoMedio: document.getElementById('formacao_medio').textContent || 'N/A',
+                            habilitacoes: document.getElementById('habilitacoes_superior').textContent || 'N/A',
+                            cargo: document.getElementById('cargo_funcao').textContent || 'N/A',
+                            contacto: document.getElementById('contacto_telefonico').textContent || 'N/A'
                         });
-                    });
+                        console.log("Dados do professor atualizados");
 
-                    await db.collection('horarios').doc(horarioId).update(updatedData);
-                    alert('Alterações salvas com sucesso!');
-                    editBtn.style.display = 'inline-block';
-                    saveBtn.style.display = 'none';
-                    cancelBtn.style.display = 'none';
-                } catch (error) {
-                    console.error('Erro ao salvar alterações:', error);
-                    alert('Erro ao salvar alterações!');
-                }
-            });
+                        // Fetch existing schedule entries
+                        console.log("Buscando horários existentes para atualização...");
+                        const scheduleSnapshot = await db.collection('horarios')
+                            .where('professorId', '==', professorId)
+                            .get();
+                        const schedule = {
+                            seg: {}, ter: {}, qua: {}, qui: {}, sex: {}
+                        };
+                        scheduleSnapshot.forEach(doc => {
+                            const data = doc.data();
+                            const day = data.day.toLowerCase().substring(0, 3);
+                            const time = data.timeSlot;
+                            schedule[day][time] = { docId: doc.id };
+                        });
 
-            // Cancel editing
-            cancelBtn.addEventListener('click', () => {
-                editableElements.forEach(el => {
-                    if (originalData[el.id]) {
-                        el.textContent = originalData[el.id];
+                        // Cache IDs for turmas, salas, and disciplinas
+                        const turmasMap = new Map();
+                        const salasMap = new Map();
+                        const disciplinasMap = new Map();
+                        console.log("Carregando mapas de turmas, salas e disciplinas para salvar...");
+                        await Promise.all([
+                            db.collection('turmas').get().then(snapshot => {
+                                snapshot.forEach(doc => turmasMap.set(doc.data().nome, doc.id));
+                            }),
+                            db.collection('salas').get().then(snapshot => {
+                                snapshot.forEach(doc => salasMap.set(doc.data().nome, doc.id));
+                            }),
+                            db.collection('disciplinas').get().then(snapshot => {
+                                snapshot.forEach(doc => disciplinasMap.set(doc.data().nome, doc.id));
+                            })
+                        ]);
+
+                        // Update schedule entries
+                        const batch = db.batch();
+                        const times = [
+                            '7H00-7H50', '7H55-8H45', '8H50-9H40', '10H00-10H50', '10H55-11H45', '11H50-12H40',
+                            '13H00-13H50', '13H55-14H45', '14H50-15H40', '16H00-16H50', '16H55-17H45'
+                        ];
+                        const days = ['seg', 'ter', 'qua', 'qui', 'sex'];
+
+                        // Delete existing entries
+                        console.log("Deletando horários existentes...");
+                        scheduleSnapshot.forEach(doc => batch.delete(doc.ref));
+
+                        // Add new schedule entries
+                        console.log("Adicionando novos horários...");
+                        times.forEach((time, index) => {
+                            const period = index < 6 ? `${index + 1}º` : `${index - 5}º`;
+                            const session = index < 6 ? 'manha' : 'tarde';
+                            days.forEach(day => {
+                                const aulaId = `${day}-${session}-${period}-aula`;
+                                const salaId = `${day}-${session}-${period}-sala`;
+                                const aulaText = document.getElementById(aulaId)?.textContent || '';
+                                const salaText = document.getElementById(salaId)?.textContent || '';
+                                if (aulaText && salaText) {
+                                    const [turma, disciplina] = aulaText.split(' (').map(s => s.replace(')', '').trim());
+                                    if (turma && disciplina) {
+                                        const turmaId = turmasMap.get(turma);
+                                        const salaId = salasMap.get(salaText);
+                                        const disciplinaId = disciplinasMap.get(disciplina);
+                                        if (turmaId && salaId && disciplinaId) {
+                                            const docRef = db.collection('horarios').doc();
+                                            batch.set(docRef, {
+                                                professorId,
+                                                turmaId,
+                                                salaId,
+                                                disciplinaId,
+                                                day: day === 'seg' ? 'Segunda' : day === 'ter' ? 'Terça' : day === 'qua' ? 'Quarta' : day === 'qui' ? 'Quinta' : 'Sexta',
+                                                timeSlot: time,
+                                                session,
+                                                period,
+                                                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                                userId: user.uid
+                                            });
+                                            console.log(`Adicionado horário: ${day} ${time} -> ${turma} (${disciplina}) em ${salaText}`);
+                                        } else {
+                                            console.warn(`Dados inválidos para ${day} ${time}: turmaId=${turmaId}, salaId=${salaId}, disciplinaId=${disciplinaId}`);
+                                        }
+                                    }
+                                }
+                            });
+                        });
+
+                        await batch.commit();
+                        console.log("Alterações salvas com sucesso");
+                        alert('Alterações salvas com sucesso!');
+                        if (editBtn) editBtn.style.display = 'inline-block';
+                        if (saveBtn) saveBtn.style.display = 'none';
+                        if (cancelBtn) cancelBtn.style.display = 'none';
+                    } catch (error) {
+                        console.error('Erro ao salvar alterações:', error);
+                        alert(`Erro ao salvar alterações: ${error.message}`);
                     }
                 });
-                editBtn.style.display = 'inline-block';
-                saveBtn.style.display = 'none';
-                cancelBtn.style.display = 'none';
-            });
+            }
+
+            // Cancel editing
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => {
+                    console.log("Cancelando edição...");
+                    editableElements.forEach(el => {
+                        if (originalData[el.id]) {
+                            el.textContent = originalData[el.id];
+                        }
+                    });
+                    if (editBtn) editBtn.style.display = 'inline-block';
+                    if (saveBtn) saveBtn.style.display = 'none';
+                    if (cancelBtn) cancelBtn.style.display = 'none';
+                });
+            }
 
             // Download PDF
-            downloadPdfBtn.addEventListener('click', () => {
-                const element = document.querySelector('.container');
-                const opt = {
-                    margin: [1.5, 1.5],
-                    filename: `Horário_${document.getElementById('nome').textContent}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
-                };
-                html2pdf().set(opt).from(element).save();
-            });
+            if (downloadPdfBtn) {
+                downloadPdfBtn.addEventListener('click', () => {
+                    console.log("Gerando PDF...");
+                    const element = document.querySelector('.container');
+                    const opt = {
+                        margin: [1.5, 1.5],
+                        filename: `Horário_${document.getElementById('nome').textContent || 'Professor'}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+                    };
+                    html2pdf().set(opt).from(element).save();
+                    console.log("PDF gerado");
+                });
+            }
 
             // Load schedule on page load
+            console.log("Carregando horário...");
             loadSchedule();
         });
     </script>
 </body>
+
 </html>
