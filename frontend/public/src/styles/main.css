@@ -348,6 +348,7 @@ body {
 }
 
 /* DROPDOWN STYLES */
+/* DROPDOWN STYLES */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -355,14 +356,18 @@ body {
 
 .dropdown-content {
   display: none;
-  position: absolute;
+  position: fixed;
+  /* Keep fixed for viewport positioning */
   background-color: #f9f9f9;
   min-width: 200px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 100;
   border-radius: var(--border-radius);
   overflow: hidden;
-  position: fixed;
+  top: 0;
+  /* Will be set dynamically by JS */
+  left: 0;
+  /* Will be set dynamically by JS */
 }
 
 .dropdown-content a {
@@ -378,12 +383,32 @@ body {
   color: var(--white);
 }
 
-.dropdown.active .dropdown-content {
+.dropdown.active .dropdown-content,
+.dropdown-content.show {
   display: block;
 }
 
-.dropdown-content.show {
-  display: block;
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .dropdown-content {
+    width: 90%;
+    /* Responsive width */
+    max-width: 300px;
+    /* Limit for larger mobile screens */
+    min-width: 180px;
+    /* Ensure readability */
+    overflow-x: hidden;
+    /* Prevent horizontal overflow */
+  }
+}
+
+@media (max-width: 378px) {
+  .dropdown-content {
+    width: 95%;
+    /* Slightly narrower for very small screens */
+    max-width: 280px;
+    min-width: 160px;
+  }
 }
 
 /* ===== MODAL STYLES ===== */
@@ -1066,6 +1091,7 @@ label.checkbox-label {
 
 /* ===== RESPONSIVE DESIGN STYLES ===== */
 @media (max-width: 1400px) {
+
   .header,
   .new-event {
     display: flex;
@@ -1331,7 +1357,7 @@ label.checkbox-label {
   .activity-time {
     font-size: 12px;
   }
-  
+
   .sidebar {
     width: 250px;
     transform: translateX(-100%);
@@ -1388,7 +1414,7 @@ label.checkbox-label {
     height: 100vh;
     z-index: 2;
   }
-  
+
   .sidebar.active {
     transform: translateX(0);
   }
@@ -1428,28 +1454,28 @@ label.checkbox-label {
     gap: 10px;
     width: 100%;
     -webkit-overflow-scrolling: touch;
-    padding: 0;
-    height: 50px;
+    padding: 15px 0;
   }
-
+  
   .new-content::-webkit-scrollbar {
     display: none;
   }
-
+  
   .new-content span {
     display: none;
   }
-
+  
   .new-content i {
     margin: 0;
   }
-
+  
   .event-item,
   .new {
     width: 100%;
     max-width: 250px;
     justify-content: center;
     margin: 0;
+    height: 50px;
   }
 
 
@@ -1601,7 +1627,7 @@ label.checkbox-label {
   .section-title {
     text-align: center;
   }
-  
+
   .section-title::after {
     left: 50%;
     transform: translateX(-50%);
@@ -1633,7 +1659,7 @@ label.checkbox-label {
     height: 100vh;
     z-index: 2;
   }
-  
+
   .sidebar.active {
     transform: translateX(0);
   }
@@ -1663,7 +1689,6 @@ label.checkbox-label {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin: 10px 0;
     width: 100%;
   }
 
@@ -1831,7 +1856,7 @@ label.checkbox-label {
   .section-title {
     text-align: center;
   }
-  
+
   .section-title::after {
     left: 50%;
     transform: translateX(-50%);
