@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 
 <head>
     <title>SGH | Turmas</title>
@@ -10,46 +10,55 @@
     <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="stylesheet" href="/src/styles/cursor-follower.css" />
     <link rel="stylesheet" href="/src/styles/schedule.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
 
-    <!-- Adicione os SDKs do Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <style>
-        /* Estilos para o CRUD de Turmas */
         .turmas-table th {
             font-weight: 600;
             text-transform: uppercase;
             font-size: 0.75rem;
             letter-spacing: 0.05em;
+            color: #072946;
         }
-
         .btn-primary {
-            @apply bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors;
+            @apply bg-[#29a8dc] hover:bg-[#144b7b] text-white px-4 py-2 rounded-lg transition-colors;
         }
-
         .btn-secondary {
-            @apply bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition-colors;
+            @apply bg-[#e6e9f4] hover:bg-[#d1d5e0] text-[#072946] px-4 py-2 rounded-lg transition-colors;
         }
-
         .btn-danger {
             @apply bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition-colors;
         }
-
         .btn-edit {
-            @apply bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm transition-colors mr-2;
+            @apply bg-[#29a8dc] hover:bg-[#144b7b] text-white px-3 py-1 rounded-md text-sm transition-colors mr-2;
+        }
+        .modal-open {
+            overflow: hidden;
+        }
+        #turmaModal input, #turmaModal select {
+            @apply bg-[#e6e9f4] border-[#e6e9f4] text-[#072946] focus:ring-[#29a8dc] focus:border-[#29a8dc];
+        }
+        #turmaModal label {
+            @apply text-[#072946];
+        }
+        .turmas-table td {
+            @apply text-[#072946];
+        }
+        .divide-y > :not([hidden]) ~ :not([hidden]) {
+            border-color: #e6e9f4;
         }
     </style>
 </head>
 
 <body>
-
-    <!-- Loader de transição -->
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
             <div class="bounce-ball"></div>
@@ -63,26 +72,16 @@
         <i class="fa-solid fa-xmark close-icon"></i>
     </button>
 
-    <!-- Sidebar -->
     <div class="layout-wrapper">
         <div class="sidebar">
             <div class="logo">
                 <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
             </div>
-
             <div class="nav-menu">
                 <a href="/pagina-inicial" class="nav-item">
                     <i class="fas fa-home"></i>
                     <span>Página Inicial</span>
                 </a>
-                <!-- <a href="/estatisticas" class="nav-item">
-                    <i class="fa-solid fa-chart-simple"></i>
-                    <span>Estatísticas</span>
-                </a>
-                <a href="/calendario" class="nav-item">
-                    <i class="fa-solid fa-calendar-day"></i>
-                    <span>Calendário</span>
-                </a> -->
                 <a href="/conta" class="nav-item">
                     <i class="fa-solid fa-circle-user"></i>
                     <span>Conta</span>
@@ -108,9 +107,7 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Header -->
             <div class="header">
                 <div class="welcome-section">
                     <h1 class="welcome-title">Turmas</h1>
@@ -123,30 +120,27 @@
                 </div>
             </div>
 
-            <!-- Adicione isso dentro do <div class="main-content"> -->
             <section class="antialiased">
                 <div>
-                    <!-- CRUD Header -->
                     <div class="flex justify-between items-center mb-6">
                         <button id="createTurmaButton" class="btn-primary">
                             <i class="fas fa-plus mr-2"></i> Nova Turma
                         </button>
                     </div>
 
-                    <!-- Turmas Table -->
-                    <div class="bg-white dark:bg-[#072946] shadow-md sm:rounded-lg overflow-hidden">
+                    <div class="bg-white shadow-md sm:rounded-lg overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full turmas-table">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                <thead class="bg-[#e6e9f4]">
                                     <tr>
                                         <th class="px-6 py-3 text-left">Turma</th>
                                         <th class="px-6 py-3 text-left">Sala</th>
-                                        <th class="px-6 py-3 text-left">Ano Letivo</th>
+                                        <th class="px-6 py-3 text-left">Curso</th>
+                                        <th class="px-6 py-3 text-left">Turno</th>
                                         <th class="px-6 py-3 text-right">Ações</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                                    <!-- Dados serão carregados via JavaScript -->
+                                <tbody class="divide-y divide-[#e6e9f4]">
                                 </tbody>
                             </table>
                         </div>
@@ -154,48 +148,51 @@
                 </div>
             </section>
 
-            <!-- Modal de Criação/Edição -->
             <div id="turmaModal" class="hidden fixed inset-0 z-[9999]">
-                <div class="absolute inset-0 bg-black/70"></div>
+                <div class="absolute inset-0 bg-[#072946] opacity-70"></div>
                 <div class="relative flex items-center justify-center h-full">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4">
+                    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
                         <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalTitle">Adicionar
-                                Turma</h3>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-medium text-[#072946]" id="modalTitle">Adicionar Turma</h3>
+                                <button type="button" onclick="closeTurmaModal()" class="text-[#072946] hover:text-[#29a8dc]">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
 
                             <form id="turmaForm" class="mt-4 space-y-4">
                                 <input type="hidden" id="turmaId">
-
                                 <div>
-                                    <label for="turmaNome"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Turma*</label>
-                                    <input type="text" id="turmaNome" required
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                                    <label for="turmaNome" class="block mb-2 text-sm font-medium">Turma*</label>
+                                    <input type="text" id="turmaNome" name="nome" required
+                                        class="text-sm rounded-lg block w-full p-2.5">
                                 </div>
-
                                 <div>
-                                    <label for="turmaSala"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sala*</label>
-                                    <input type="text" id="turmaSala" required
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                </div>
-
-                                <div>
-                                    <label for="turmaAno"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ano
-                                        Letivo*</label>
-                                    <select id="turmaAno" required
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                                        <option value="">Selecione...</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2025">2025</option>
+                                    <label for="turmaSala" class="block mb-2 text-sm font-medium">Sala*</label>
+                                    <select id="turmaSala" name="sala" required
+                                        class="text-sm rounded-lg block w-full p-2.5">
+                                        <option value="">Selecione uma sala</option>
                                     </select>
                                 </div>
-
+                                <div>
+                                    <label for="turmaCurso" class="block mb-2 text-sm font-medium">Curso*</label>
+                                    <select id="turmaCurso" name="curso" required
+                                        class="text-sm rounded-lg block w-full p-2.5">
+                                        <option value="">Selecione um curso</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="turmaTurno" class="block mb-2 text-sm font-medium">Turno*</label>
+                                    <select id="turmaTurno" name="turno" required
+                                        class="text-sm rounded-lg block w-full p-2.5">
+                                        <option value="">Selecione o turno</option>
+                                        <option value="Manhã">Manhã</option>
+                                        <option value="Tarde">Tarde</option>
+                                        <option value="Noite">Noite</option>
+                                    </select>
+                                </div>
                                 <div class="flex justify-end space-x-3 pt-4">
-                                    <button type="button" onclick="closeTurmaModal()"
-                                        class="btn-secondary">Cancelar</button>
+                                    <button type="button" onclick="closeTurmaModal()" class="btn-secondary">Cancelar</button>
                                     <button type="submit" class="btn-primary">Salvar</button>
                                 </div>
                             </form>
@@ -206,8 +203,6 @@
         </div>
     </div>
 
-
-    <!-- Scripts -->
     <script defer src="/src/js/auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script src="/src/js/page-transitions.js"></script>
