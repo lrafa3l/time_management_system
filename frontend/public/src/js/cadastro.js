@@ -74,15 +74,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        // Restore modal state from sessionStorage
-        const savedFormType = sessionStorage.getItem('activeFormType');
-        if (savedFormType) {
-            loadForm(savedFormType).then(() => {
-                openModal();
-                restoreFormData(savedFormType);
-            }).catch(error => {
-                console.error("Erro ao restaurar formulário:", error);
-            });
+        // Clear activeFormType on page load to prevent auto-opening
+        try {
+            sessionStorage.removeItem('activeFormType');
+        } catch (error) {
+            console.warn("Erro ao limpar activeFormType do sessionStorage:", error);
         }
 
         // Handle logout to clear sessionStorage
