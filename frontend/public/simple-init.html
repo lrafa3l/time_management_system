@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicialização Simples - Sistema de Gestão de Horários</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #856404;
+        }
+
+        .warning h3 {
+            margin-bottom: 10px;
+            color: #d63031;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .progress.show {
+            display: block;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .log {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            display: none;
+        }
+
+        .log.show {
+            display: block;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .log-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .log-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .log-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .steps {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .steps h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .steps ol {
+            padding-left: 20px;
+        }
+
+        .steps li {
+            margin-bottom: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">IP</div>
+        <h1>Inicialização do Sistema</h1>
+        <p class="subtitle">Instituto Politécnico Industrial do Kilamba Kiaxi</p>
+
+        <div class="warning">
+            <h3>⚠️ Atenção!</h3>
+            <p>Este processo irá criar os dados básicos do sistema. Certifique-se de que:</p>
+            <ul style="text-align: left; margin-top: 10px;">
+                <li>As regras do Firestore estão configuradas para permitir escrita</li>
+                <li>Você tem acesso ao console do Firebase</li>
+                <li>A base de dados está vazia ou pode ser sobrescrita</li>
+            </ul>
+        </div>
+
+        <div class="steps">
+            <h3>📋 Passos da Inicialização:</h3>
+            <ol>
+                <li>Criar disciplinas básicas</li>
+                <li>Criar coordenações</li>
+                <li>Criar salas e laboratórios</li>
+                <li>Criar turmas</li>
+                <li>Configurar sistema</li>
+            </ol>
+        </div>
+
+        <button id="initBtn" class="btn" onclick="startInitialization()">
+            🚀 Iniciar Configuração
+        </button>
+
+        <div id="progress" class="progress">
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <div id="progressText">Preparando...</div>
+        </div>
+
+        <div id="log" class="log"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <!-- Inicializador -->
+    <script src="src/js/simple-initializer.js"></script>
+
+    <script>
+        let progressElement = document.getElementById('progress')
+        let progressFill = document.getElementById('progressFill')
+        let progressText = document.getElementById('progressText')
+        let logElement = document.getElementById('log')
+        let initBtn = document.getElementById('initBtn')
+
+        function addLog(message, type = 'info') {
+            const logEntry = document.createElement('div')
+            logEntry.className = `log-entry log-${type}`
+            logEntry.textContent = `${new Date().toLocaleTimeString()}: ${message}`
+            logElement.appendChild(logEntry)
+            logElement.scrollTop = logElement.scrollHeight
+            console.log(message)
+        }
+
+        function updateProgress(percent, text) {
+            progressFill.style.width = percent + '%'
+            progressText.textContent = text
+        }
+
+        async function startInitialization() {
+            try {
+                initBtn.disabled = true
+                progressElement.classList.add('show')
+                logElement.classList.add('show')
+
+                addLog('🚀 Iniciando configuração do sistema...', 'info')
+                updateProgress(10, 'Inicializando Firebase...')
+
+                await simpleInitializer.initFirebase()
+                addLog('✅ Firebase inicializado', 'success')
+                updateProgress(20, 'Firebase conectado')
+
+                addLog('📚 Criando dados básicos...', 'info')
+                updateProgress(30, 'Criando dados...')
+
+                await simpleInitializer.createBasicData()
+                addLog('✅ Dados básicos criados', 'success')
+                updateProgress(100, 'Concluído!')
+
+                addLog('🎉 Sistema inicializado com sucesso!', 'success')
+                addLog('📝 Próximos passos:', 'info')
+                addLog('1. Criar usuários no Firebase Authentication', 'info')
+                addLog('2. Atualizar regras do Firestore', 'info')
+                addLog('3. Configurar perfis de professores', 'info')
+
+                initBtn.textContent = '✅ Inicialização Concluída'
+                initBtn.style.background = '#00b894'
+
+            } catch (error) {
+                addLog(`❌ Erro: ${error.message}`, 'error')
+                initBtn.disabled = false
+                initBtn.textContent = '🔄 Tentar Novamente'
+            }
+        }
+    </script>
+</body>
+</html>

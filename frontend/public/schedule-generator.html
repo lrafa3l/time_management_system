@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH | Gerador de Horários</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-messaging-compat.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/styles/transitions.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    
+    <style>
+        :root {
+            --charcoal: #29465c;
+            --berkeley-blue: #1c3a5c;
+            --picton-blue: #23aae2;
+            --cerulean: #20708a;
+            --alice-blue: #e4eff4;
+            --seasalt: #f6f6f6;
+        }
+        
+        body {
+            font-family: 'AfacadFlux', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--alice-blue), var(--seasalt));
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, var(--charcoal), var(--berkeley-blue));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .form-section h3 {
+            margin-top: 0;
+            color: var(--charcoal);
+            border-bottom: 2px solid var(--picton-blue);
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--charcoal);
+        }
+        
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--picton-blue);
+        }
+        
+        .btn-primary {
+            background: var(--picton-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: var(--cerulean);
+        }
+        
+        .btn-secondary {
+            background: var(--berkeley-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--charcoal);
+        }
+        
+        .schedule-preview {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .schedule-table th {
+            background-color: var(--alice-blue);
+            font-weight: bold;
+        }
+        
+        .conflict-warning {
+            background-color: #ffe6e6;
+            border-left: 4px solid #ff4444;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        
+        .success-message {
+            background-color: #e6ffe6;
+            border-left: 4px solid #44ff44;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 8px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Gerador de Horários</h1>
+            <p>Instituto Politécnico Industrial do Kilamba Kiaxi Nº 8056 "Nova Vida"</p>
+            <p><em>"Um diferencial para a sua formação"</em></p>
+            <button id="backBtn" class="btn-secondary" style="float: right;">Voltar</button>
+        </div>
+
+        <div class="form-section">
+            <h3>Seleção do Professor</h3>
+            <div class="form-group">
+                <label for="professorSelect">Selecione o Professor:</label>
+                <select id="professorSelect">
+                    <option value="">Carregando professores...</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-section" id="professorInfo" style="display: none;">
+            <h3>Informações do Professor</h3>
+            <div id="professorDetails"></div>
+        </div>
+
+        <div class="form-section" id="scheduleForm" style="display: none;">
+            <h3>Configuração do Horário</h3>
+            
+            <div class="form-group">
+                <label for="cargaHoraria">Carga Horária Semanal (tempos):</label>
+                <input type="number" id="cargaHoraria" min="1" max="20" value="12">
+            </div>
+
+            <div class="form-group">
+                <label>Turnos Disponíveis:</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="turnoManha" checked>
+                        <label for="turnoManha">Manhã (7h00 - 12h40)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="turnoTarde" checked>
+                        <label for="turnoTarde">Tarde (13h00 - 17h45)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Dias da Semana:</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="segunda" checked>
+                        <label for="segunda">Segunda-feira</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="terca" checked>
+                        <label for="terca">Terça-feira</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="quarta" checked>
+                        <label for="quarta">Quarta-feira</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="quinta" checked>
+                        <label for="quinta">Quinta-feira</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="sexta" checked>
+                        <label for="sexta">Sexta-feira</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Turmas Preferenciais:</label>
+                <div id="turmasPreferenciais" class="checkbox-group">
+                    <!-- Será preenchido dinamicamente -->
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="generateSchedule()">Gerar Horário Automaticamente</button>
+            <button class="btn-secondary" onclick="createManualSchedule()">Criar Horário Manual</button>
+        </div>
+
+        <div class="loading" id="loadingIndicator">
+            <p>Gerando horário... Por favor aguarde.</p>
+        </div>
+
+        <div class="schedule-preview" id="schedulePreview" style="display: none;">
+            <h3>Pré-visualização do Horário</h3>
+            <div id="scheduleContent"></div>
+            <div style="margin-top: 20px;">
+                <button class="btn-primary" onclick="saveSchedule()">Salvar Horário</button>
+                <button class="btn-secondary" onclick="editSchedule()">Editar Manualmente</button>
+                <button class="btn-secondary" onclick="regenerateSchedule()">Gerar Novamente</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script>
+        let selectedProfessor = null;
+        let currentSchedule = null;
+        let availableRooms = [];
+        let availableTurmas = [];
+        let db = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar permissões
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    window.location.href = '/login';
+                    return;
+                }
+                
+                const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                const userRole = userDoc.exists ? userDoc.data().role : 'professor';
+                
+                if (!['admin', 'director', 'subdirector', 'coordenador'].includes(userRole)) {
+                    Swal.fire({
+                        title: 'Acesso Negado!',
+                        text: 'Você não tem permissão para gerar horários.',
+                        icon: 'error'
+                    }).then(() => {
+                        window.location.href = '/main.html';
+                    });
+                    return;
+                }
+                
+                db = firebase.firestore();
+                await loadProfessors();
+                await loadRoomsAndTurmas();
+            });
+
+            document.getElementById('backBtn').addEventListener('click', () => {
+                window.history.back();
+            });
+
+            document.getElementById('professorSelect').addEventListener('change', function() {
+                const professorId = this.value;
+                if (professorId) {
+                    loadProfessorInfo(professorId);
+                } else {
+                    document.getElementById('professorInfo').style.display = 'none';
+                    document.getElementById('scheduleForm').style.display = 'none';
+                }
+            });
+        });
+
+        async function loadProfessors() {
+            try {
+                const professoresSnapshot = await db.collection('professores')
+                    .where('ativo', '==', true)
+                    .orderBy('nome')
+                    .get();
+                
+                const select = document.getElementById('professorSelect');
+                select.innerHTML = '<option value="">Selecione um professor...</option>';
+                
+                professoresSnapshot.forEach(doc => {
+                    const professor = doc.data();
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = `${professor.nome} - ${professor.coordenacao || 'Sem coordenação'}`;
+                    select.appendChild(option);
+                });
+                
+            } catch (error) {
+                console.error('Erro ao carregar professores:', error);
+                Swal.fire('Erro!', 'Não foi possível carregar a lista de professores.', 'error');
+            }
+        }
+
+        async function loadRoomsAndTurmas() {
+            try {
+                const [salasSnapshot, turmasSnapshot] = await Promise.all([
+                    db.collection('salas').where('ativo', '==', true).get(),
+                    db.collection('turmas').where('ativo', '==', true).get()
+                ]);
+                
+                availableRooms = salasSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                availableTurmas = turmasSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+            } catch (error) {
+                console.error('Erro ao carregar salas e turmas:', error);
+            }
+        }
+
+        async function loadProfessorInfo(professorId) {
+            try {
+                selectedProfessor = professorId;
+                const professorDoc = await db.collection('professores').doc(professorId).get();
+                
+                if (!professorDoc.exists) {
+                    throw new Error('Professor não encontrado');
+                }
+                
+                const professor = professorDoc.data();
+                
+                // Buscar nomes das disciplinas
+                let disciplinasNomes = [];
+                if (professor.disciplinas && professor.disciplinas.length > 0) {
+                    const disciplinasPromises = professor.disciplinas.map(id => 
+                        db.collection('disciplinas').doc(id).get()
+                    );
+                    const disciplinasDocs = await Promise.all(disciplinasPromises);
+                    disciplinasNomes = disciplinasDocs
+                        .filter(doc => doc.exists)
+                        .map(doc => doc.data().nome);
+                }
+                
+                document.getElementById('professorDetails').innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                        <div><strong>Nome:</strong> ${professor.nome}</div>
+                        <div><strong>Coordenação:</strong> ${professor.coordenacao || 'N/A'}</div>
+                        <div><strong>Categoria:</strong> ${professor.categoria || 'N/A'}</div>
+                        <div><strong>Classes:</strong> ${professor.classes ? professor.classes.join(', ') : 'N/A'}</div>
+                        <div><strong>Disciplinas:</strong> ${disciplinasNomes.join(', ') || 'N/A'}</div>
+                        <div><strong>Cargo:</strong> ${professor.cargo || 'N/A'}</div>
+                    </div>
+                `;
+                
+                document.getElementById('professorInfo').style.display = 'block';
+                document.getElementById('scheduleForm').style.display = 'block';
+                
+                // Carregar turmas da coordenação do professor
+                await loadTurmasPreferenciais(professor.coordenacao);
+                
+            } catch (error) {
+                console.error('Erro ao carregar informações do professor:', error);
+                Swal.fire('Erro!', 'Não foi possível carregar as informações do professor.', 'error');
+            }
+        }
+
+        async function loadTurmasPreferenciais(coordenacao) {
+            const container = document.getElementById('turmasPreferenciais');
+            container.innerHTML = '';
+            
+            if (!coordenacao) {
+                container.innerHTML = '<p>Nenhuma coordenação definida para este professor.</p>';
+                return;
+            }
+            
+            const turmasCoordenacao = availableTurmas.filter(turma => 
+                turma.coordenacao === coordenacao
+            );
+            
+            if (turmasCoordenacao.length === 0) {
+                container.innerHTML = '<p>Nenhuma turma encontrada para esta coordenação.</p>';
+                return;
+            }
+            
+            turmasCoordenacao.forEach(turma => {
+                const div = document.createElement('div');
+                div.className = 'checkbox-item';
+                div.innerHTML = `
+                    <input type="checkbox" id="turma_${turma.id}" checked>
+                    <label for="turma_${turma.id}">${turma.nome} (${turma.turno})</label>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        async function generateSchedule() {
+            if (!selectedProfessor) {
+                Swal.fire('Erro!', 'Selecione um professor primeiro.', 'error');
+                return;
+            }
+            
+            const cargaHoraria = parseInt(document.getElementById('cargaHoraria').value);
+            if (!cargaHoraria || cargaHoraria < 1) {
+                Swal.fire('Erro!', 'Defina uma carga horária válida.', 'error');
+                return;
+            }
+            
+            // Verificar turnos selecionados
+            const turnoManha = document.getElementById('turnoManha').checked;
+            const turnoTarde = document.getElementById('turnoTarde').checked;
+            
+            if (!turnoManha && !turnoTarde) {
+                Swal.fire('Erro!', 'Selecione pelo menos um turno.', 'error');
+                return;
+            }
+            
+            // Verificar dias selecionados
+            const diasSelecionados = [];
+            ['segunda', 'terca', 'quarta', 'quinta', 'sexta'].forEach(dia => {
+                if (document.getElementById(dia).checked) {
+                    diasSelecionados.push(dia);
+                }
+            });
+            
+            if (diasSelecionados.length === 0) {
+                Swal.fire('Erro!', 'Selecione pelo menos um dia da semana.', 'error');
+                return;
+            }
+            
+            // Verificar turmas selecionadas
+            const turmasSelecionadas = [];
+            document.querySelectorAll('#turmasPreferenciais input[type="checkbox"]:checked').forEach(checkbox => {
+                const turmaId = checkbox.id.replace('turma_', '');
+                turmasSelecionadas.push(turmaId);
+            });
+            
+            if (turmasSelecionadas.length === 0) {
+                Swal.fire('Erro!', 'Selecione pelo menos uma turma.', 'error');
+                return;
+            }
+            
+            document.getElementById('loadingIndicator').classList.add('show');
+            
+            try {
+                // Gerar horário automaticamente
+                const schedule = await generateAutoSchedule({
+                    professorId: selectedProfessor,
+                    cargaHoraria,
+                    turnoManha,
+                    turnoTarde,
+                    diasSelecionados,
+                    turmasSelecionadas
+                });
+                
+                if (schedule) {
+                    currentSchedule = schedule;
+                    displaySchedulePreview(schedule);
+                } else {
+                    throw new Error('Não foi possível gerar um horário válido');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao gerar horário:', error);
+                Swal.fire('Erro!', 'Não foi possível gerar o horário. Tente ajustar os parâmetros.', 'error');
+            } finally {
+                document.getElementById('loadingIndicator').classList.remove('show');
+            }
+        }
+
+        async function generateAutoSchedule(params) {
+            // Algoritmo de geração automática de horário
+            const { professorId, cargaHoraria, turnoManha, turnoTarde, diasSelecionados, turmasSelecionadas } = params;
+            
+            // Buscar professor e suas disciplinas
+            const professorDoc = await db.collection('professores').doc(professorId).get();
+            const professor = professorDoc.data();
+            
+            // Definir horários disponíveis
+            const horariosDisponiveis = [];
+            const diasMap = {
+                'segunda': 'Segunda',
+                'terca': 'Terça',
+                'quarta': 'Quarta',
+                'quinta': 'Quinta',
+                'sexta': 'Sexta'
+            };
+            
+            const horariosManha = [
+                '7H00-7H50', '7H55-8H45', '8H50-9H40', 
+                '10H00-10H50', '10H55-11H45', '11H50-12H40'
+            ];
+            
+            const horariosTarde = [
+                '13H00-13H50', '13H55-14H45', '14H50-15H40', 
+                '16H00-16H50', '16H55-17H45'
+            ];
+            
+            diasSelecionados.forEach(dia => {
+                if (turnoManha) {
+                    horariosManha.forEach(horario => {
+                        horariosDisponiveis.push({
+                            dia: diasMap[dia],
+                            horario,
+                            turno: 'manha'
+                        });
+                    });
+                }
+                if (turnoTarde) {
+                    horariosTarde.forEach(horario => {
+                        horariosDisponiveis.push({
+                            dia: diasMap[dia],
+                            horario,
+                            turno: 'tarde'
+                        });
+                    });
+                }
+            });
+            
+            // Verificar conflitos existentes
+            const horariosExistentes = await db.collection('horarios')
+                .where('professorId', '==', professorId)
+                .get();
+            
+            const conflitos = new Set();
+            horariosExistentes.forEach(doc => {
+                const data = doc.data();
+                conflitos.add(`${data.day}_${data.timeSlot}`);
+            });
+            
+            // Filtrar horários disponíveis (sem conflitos)
+            const horariosLivres = horariosDisponiveis.filter(slot => 
+                !conflitos.has(`${slot.dia}_${slot.horario}`)
+            );
+            
+            if (horariosLivres.length < cargaHoraria) {
+                throw new Error('Não há horários suficientes disponíveis');
+            }
+            
+            // Distribuir disciplinas nas turmas
+            const schedule = [];
+            const turmasDisponiveis = availableTurmas.filter(turma => 
+                turmasSelecionadas.includes(turma.id)
+            );
+            
+            for (let i = 0; i < cargaHoraria && i < horariosLivres.length; i++) {
+                const slot = horariosLivres[i];
+                const turma = turmasDisponiveis[i % turmasDisponiveis.length];
+                
+                // Buscar sala apropriada
+                const salaAdequada = await findAvailableRoom(slot, turma);
+                
+                if (salaAdequada && professor.disciplinas && professor.disciplinas.length > 0) {
+                    const disciplinaId = professor.disciplinas[i % professor.disciplinas.length];
+                    
+                    schedule.push({
+                        professorId,
+                        turmaId: turma.id,
+                        salaId: salaAdequada.id,
+                        disciplinaId,
+                        day: slot.dia,
+                        timeSlot: slot.horario,
+                        session: slot.turno,
+                        period: getPeriodFromTime(slot.horario, slot.turno)
+                    });
+                }
+            }
+            
+            return schedule;
+        }
+
+        async function findAvailableRoom(slot, turma) {
+            // Verificar salas ocupadas no horário
+            const salasOcupadas = await db.collection('horarios')
+                .where('day', '==', slot.dia)
+                .where('timeSlot', '==', slot.horario)
+                .get();
+            
+            const salasOcupadasIds = new Set();
+            salasOcupadas.forEach(doc => {
+                salasOcupadasIds.add(doc.data().salaId);
+            });
+            
+            // Encontrar sala livre
+            const salasLivres = availableRooms.filter(sala => 
+                !salasOcupadasIds.has(sala.id) && 
+                sala.capacidade >= (turma.capacidade || 30)
+            );
+            
+            return salasLivres.length > 0 ? salasLivres[0] : null;
+        }
+
+        function getPeriodFromTime(timeSlot, session) {
+            const horariosManha = [
+                '7H00-7H50', '7H55-8H45', '8H50-9H40', 
+                '10H00-10H50', '10H55-11H45', '11H50-12H40'
+            ];
+            
+            const horariosTarde = [
+                '13H00-13H50', '13H55-14H45', '14H50-15H40', 
+                '16H00-16H50', '16H55-17H45'
+            ];
+            
+            if (session === 'manha') {
+                const index = horariosManha.indexOf(timeSlot);
+                return index >= 0 ? `${index + 1}º` : '1º';
+            } else {
+                const index = horariosTarde.indexOf(timeSlot);
+                return index >= 0 ? `${index + 1}º` : '1º';
+            }
+        }
+
+        async function displaySchedulePreview(schedule) {
+            const scheduleContent = document.getElementById('scheduleContent');
+            
+            // Buscar nomes para exibição
+            const turmasMap = new Map();
+            const salasMap = new Map();
+            const disciplinasMap = new Map();
+            
+            await Promise.all([
+                Promise.all(schedule.map(async item => {
+                    if (!turmasMap.has(item.turmaId)) {
+                        const turmaDoc = await db.collection('turmas').doc(item.turmaId).get();
+                        if (turmaDoc.exists) {
+                            turmasMap.set(item.turmaId, turmaDoc.data().nome);
+                        }
+                    }
+                })),
+                Promise.all(schedule.map(async item => {
+                    if (!salasMap.has(item.salaId)) {
+                        const salaDoc = await db.collection('salas').doc(item.salaId).get();
+                        if (salaDoc.exists) {
+                            salasMap.set(item.salaId, salaDoc.data().nome);
+                        }
+                    }
+                })),
+                Promise.all(schedule.map(async item => {
+                    if (!disciplinasMap.has(item.disciplinaId)) {
+                        const disciplinaDoc = await db.collection('disciplinas').doc(item.disciplinaId).get();
+                        if (disciplinaDoc.exists) {
+                            disciplinasMap.set(item.disciplinaId, disciplinaDoc.data().nome);
+                        }
+                    }
+                }))
+            ]);
+            
+            // Criar tabela de horário
+            const tableHTML = createScheduleTable(schedule, turmasMap, salasMap, disciplinasMap);
+            scheduleContent.innerHTML = tableHTML;
+            
+            document.getElementById('schedulePreview').style.display = 'block';
+        }
+
+        function createScheduleTable(schedule, turmasMap, salasMap, disciplinasMap) {
+            const days = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
+            const timeSlots = [
+                '7H00-7H50', '7H55-8H45', '8H50-9H40', 
+                '10H00-10H50', '10H55-11H45', '11H50-12H40',
+                '13H00-13H50', '13H55-14H45', '14H50-15H40', 
+                '16H00-16H50', '16H55-17H45'
+            ];
+            
+            // Organizar dados por dia e horário
+            const scheduleMap = new Map();
+            schedule.forEach(item => {
+                const key = `${item.day}_${item.timeSlot}`;
+                scheduleMap.set(key, item);
+            });
+            
+            let html = `
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Segunda</th>
+                            <th>Terça</th>
+                            <th>Quarta</th>
+                            <th>Quinta</th>
+                            <th>Sexta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            timeSlots.forEach(timeSlot => {
+                html += `<tr><td><strong>${timeSlot}</strong></td>`;
+                
+                days.forEach(day => {
+                    const key = `${day}_${timeSlot}`;
+                    const item = scheduleMap.get(key);
+                    
+                    if (item) {
+                        const turma = turmasMap.get(item.turmaId) || 'N/A';
+                        const sala = salasMap.get(item.salaId) || 'N/A';
+                        const disciplina = disciplinasMap.get(item.disciplinaId) || 'N/A';
+                        
+                        html += `
+                            <td style="background-color: #e6f3ff;">
+                                <div><strong>${turma}</strong></div>
+                                <div><small>${disciplina}</small></div>
+                                <div><small>Sala: ${sala}</small></div>
+                            </td>
+                        `;
+                    } else {
+                        html += '<td>-</td>';
+                    }
+                });
+                
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table>';
+            
+            // Adicionar resumo
+            html += `
+                <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 6px;">
+                    <h4>Resumo do Horário</h4>
+                    <p><strong>Total de tempos lectivos:</strong> ${schedule.length}</p>
+                    <p><strong>Turmas atendidas:</strong> ${new Set(schedule.map(s => turmasMap.get(s.turmaId))).size}</p>
+                    <p><strong>Disciplinas:</strong> ${new Set(schedule.map(s => disciplinasMap.get(s.disciplinaId))).size}</p>
+                </div>
+            `;
+            
+            return html;
+        }
+
+        async function saveSchedule() {
+            if (!currentSchedule || currentSchedule.length === 0) {
+                Swal.fire('Erro!', 'Nenhum horário para salvar.', 'error');
+                return;
+            }
+            
+            const result = await Swal.fire({
+                title: 'Confirmar Salvamento',
+                text: 'Deseja salvar este horário? Esta ação irá sobrescrever qualquer horário existente para este professor.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, salvar',
+                cancelButtonText: 'Cancelar'
+            });
+            
+            if (!result.isConfirmed) return;
+            
+            try {
+                const user = firebase.auth().currentUser;
+                const batch = db.batch();
+                
+                // Deletar horários existentes do professor
+                const existingSchedules = await db.collection('horarios')
+                    .where('professorId', '==', selectedProfessor)
+                    .get();
+                
+                existingSchedules.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                // Adicionar novos horários
+                currentSchedule.forEach(item => {
+                    const docRef = db.collection('horarios').doc();
+                    batch.set(docRef, {
+                        ...item,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        userId: user.uid
+                    });
+                });
+                
+                await batch.commit();
+                
+                // Notificar professor (implementar notificação push)
+                await notifyProfessor(selectedProfessor, 'schedule_created');
+                
+                Swal.fire('Sucesso!', 'Horário salvo com sucesso! O professor foi notificado.', 'success');
+                
+                // Redirecionar para visualização
+                window.location.href = `/view.html?professorId=${selectedProfessor}`;
+                
+            } catch (error) {
+                console.error('Erro ao salvar horário:', error);
+                Swal.fire('Erro!', 'Não foi possível salvar o horário.', 'error');
+            }
+        }
+
+        async function notifyProfessor(professorId, type) {
+            try {
+                // Implementar notificação push usando Firebase Messaging
+                // Por enquanto, apenas log
+                console.log(`Notificação enviada para professor ${professorId}: ${type}`);
+                
+                // Salvar notificação no banco
+                await db.collection('notificacoes').add({
+                    destinatarioId: professorId,
+                    tipo: type,
+                    titulo: type === 'schedule_created' ? 'Novo Horário Gerado' : 'Horário Alterado',
+                    mensagem: type === 'schedule_created' ? 
+                        'Um novo horário foi gerado para você. Clique para visualizar.' :
+                        'Seu horário foi alterado. Clique para ver as mudanças.',
+                    lida: false,
+                    criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+            } catch (error) {
+                console.error('Erro ao enviar notificação:', error);
+            }
+        }
+
+        function createManualSchedule() {
+            // Redirecionar para editor manual
+            window.location.href = `/manual-schedule-editor.html?professorId=${selectedProfessor}`;
+        }
+
+        function editSchedule() {
+            if (!currentSchedule) {
+                Swal.fire('Erro!', 'Nenhum horário para editar.', 'error');
+                return;
+            }
+            
+            // Implementar editor inline ou redirecionar para editor manual
+            createManualSchedule();
+        }
+
+        function regenerateSchedule() {
+            currentSchedule = null;
+            document.getElementById('schedulePreview').style.display = 'none';
+            generateSchedule();
+        }
+    </script>
+</body>
+</html>

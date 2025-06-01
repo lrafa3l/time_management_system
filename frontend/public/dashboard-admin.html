@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH | Dashboard Admin</title>
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/styles/unified-design.css" />
+     <link rel="stylesheet" href="/src/styles/toggle.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/sweetalert.css" />
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fa-solid fa-bars menu-icon"></i>
+        <i class="fa-solid fa-xmark close-icon"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="/assets/images/ipikk-logo.jpg" alt="IPIKK Logo">
+        </div>
+
+        <div class="sidebar-nav">
+            <a href="/pagina-inicial" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Página Inicial</span>
+            </a>
+            <a href="/conta" class="nav-item">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Conta</span>
+            </a>
+            <a href="/definicoes" class="nav-item">
+                <i class="fas fa-sliders-h"></i>
+                <span>Definições</span>
+            </a>
+            <a href="/admin" class="nav-item">
+                <i class="fas fa-user-shield"></i>
+                <span>Administração</span>
+            </a>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="/ajuda" class="nav-item">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Ajuda</span>
+            </a>
+            <button id="logout-btn" class="nav-item"
+                style="width: 100%; background: none; border: none; text-align: left;">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Terminar Sessão</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Administração de Usuários</h1>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="createUser()">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Novo Usuário
+                </button>
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-indicator"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-box">
+            <input type="text" class="form-control" placeholder="Pesquisar usuários..." id="search-users">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <!-- Users Grid -->
+        <div class="cards-grid" id="users-grid">
+            <!-- User cards will be dynamically inserted here -->
+        </div>
+
+        <!-- Pagination -->
+        <div style="display: flex; justify-content: center; margin-top: 30px;">
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-outline" style="padding: 8px 12px;">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn btn-primary" style="padding: 8px 12px;">1</button>
+                <button class="btn btn-outline" style="padding: 8px 12px;">2</button>
+                <button class="btn btn-outline" style="padding: 8px 12px;">3</button>
+                <button class="btn btn-outline" style="padding: 8px 12px;">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Verificar se o usuário é admin
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                if (!userDoc.exists || userDoc.data().role !== 'admin') {
+                    Swal.fire({
+                        title: 'Acesso Negado!',
+                        text: 'Você não tem permissão para acessar esta página.',
+                        icon: 'error'
+                    }).then(() => {
+                        window.location.href = '/main.html';
+                    });
+                    return;
+                }
+
+                loadUsers();
+            });
+        });
+
+        async function loadUsers() {
+            try {
+                const db = firebase.firestore();
+                const usersSnapshot = await db.collection('users').get();
+                const professoresSnapshot = await db.collection('professores').get();
+
+                const professoresMap = new Map();
+                professoresSnapshot.forEach(doc => {
+                    professoresMap.set(doc.id, doc.data());
+                });
+
+                const usersGrid = document.getElementById('users-grid');
+                usersGrid.innerHTML = '';
+
+                // Sample users for demonstration
+                const sampleUsers = [
+                    { id: '1', name: 'N/A', email: 'trainumber27@gmail.com', role: 'Usuário' },
+                    { id: '2', name: 'N/A', email: 'coordenador@gmail.com', role: 'Usuário' },
+                    { id: '3', name: 'N/A', email: 'teste2025@gmail.com', role: 'Usuário' },
+                    { id: '4', name: 'Balduino Peliganga', email: 'balduinopeliganga@gmail.com', role: 'Usuário' },
+                    { id: '5', name: 'Benvindo Manuel', email: 'porto.manuel@gmail.com', role: 'Usuário' },
+                    { id: '6', name: 'Elnata Mateus', email: 'elnatamateus12@gmail.com', role: 'Usuário' }
+                ];
+
+                sampleUsers.forEach(user => {
+                    const userCard = document.createElement('div');
+                    userCard.className = 'user-card';
+
+                    const initials = user.name === 'N/A' ? 'N/A' :
+                        user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+                    userCard.innerHTML = `
+                        <div class="user-avatar">${initials}</div>
+                        <div class="user-info">
+                            <div class="user-name">${user.name}</div>
+                            <div class="user-email">${user.email}</div>
+                            <div class="user-role">${user.role}</div>
+                        </div>
+                        <div class="user-actions">
+                            <button class="btn btn-primary" onclick="editUser('${user.id}')">Editar</button>
+                            <button class="btn btn-danger" onclick="deleteUser('${user.id}')">Deletar</button>
+                        </div>
+                    `;
+
+                    usersGrid.appendChild(userCard);
+                });
+
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+                Swal.fire('Erro!', 'Não foi possível carregar os usuários.', 'error');
+            }
+        }
+
+        async function createUser() {
+            const { value: formValues } = await Swal.fire({
+                title: 'Criar Novo Usuário',
+                html: `
+                    <input id="swal-input1" class="swal2-input" placeholder="Nome completo">
+                    <input id="swal-input2" class="swal2-input" placeholder="Email" type="email">
+                    <select id="swal-input3" class="swal2-input">
+                        <option value="">Selecione o perfil</option>
+                        <option value="professor">Professor</option>
+                        <option value="coordenador">Coordenador</option>
+                        <option value="subdirector">Subdirector</option>
+                        <option value="director">Director</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                `,
+                focusConfirm: false,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        document.getElementById('swal-input2').value,
+                        document.getElementById('swal-input3').value
+                    ];
+                }
+            });
+
+            if (formValues && formValues[0] && formValues[1] && formValues[2]) {
+                try {
+                    Swal.fire('Sucesso!', 'Usuário criado com sucesso.', 'success');
+                    loadUsers();
+                } catch (error) {
+                    Swal.fire('Erro!', 'Não foi possível criar o usuário.', 'error');
+                }
+            }
+        }
+
+        function editUser(userId) {
+            Swal.fire('Info', 'Funcionalidade de edição em desenvolvimento.', 'info');
+        }
+
+        async function deleteUser(userId) {
+            const result = await Swal.fire({
+                title: 'Confirmar exclusão',
+                text: 'Deseja realmente excluir este usuário?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    Swal.fire('Excluído!', 'Usuário excluído com sucesso.', 'success');
+                    loadUsers();
+                } catch (error) {
+                    Swal.fire('Erro!', 'Não foi possível excluir o usuário.', 'error');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

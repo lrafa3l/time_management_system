@@ -1,0 +1,27 @@
+/* Correção do z-index do SweetAlert */
+.swal-container-high-z {
+  z-index: 99999 !important;
+}
+
+.swal2-container {
+  z-index: 99999 !important;
+}
+
+.swal2-backdrop-show {
+  z-index: 99998 !important;
+}
+
+.swal2-popup {
+  z-index: 99999 !important;
+}
+
+/* Garantir que o modal apareça acima de tudo */
+.swal2-container.swal2-backdrop-show {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  z-index: 99999 !important;
+}
+
+/* Estilo adicional para melhor visibilidade */
+.swal2-popup {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}

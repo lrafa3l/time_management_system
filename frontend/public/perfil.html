@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="/src/styles/cursor-follower.css" />
     <link rel="stylesheet" href="/src/styles/sweetalert.css" />
     
-    <!-- Firebase CSS -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
@@ -47,31 +47,8 @@
         <div class="logo">
             <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
         </div>
-        <div class="nav-menu">
-            <a href="/pagina-inicial" class="nav-item">
-                <i class="fas fa-home"></i>
-                <span>Página Inicial</span>
-            </a>
-            <!-- <a href="/estatisticas" class="nav-item">
-                <i class="fa-solid fa-chart-simple"></i>
-                <span>Estatísticas</span>
-            </a>
-            <a href="/calendario" class="nav-item">
-                <i class="fa-solid fa-calendar-day"></i>
-                <span>Calendário</span>
-            </a> -->
-            <a href="#" class="nav-item active">
-                <i class="fa-solid fa-circle-user"></i>
-                <span>Conta</span>
-            </a>
-            <a href="/definicoes" class="nav-item">
-                <i class="fas fa-sliders-h"></i>
-                <span>Definições</span>
-            </a>
-            <a href="/admin" class="nav-item">
-                <i class="fas fa-user-shield"></i>
-                <span>Administração</span>
-            </a>
+        <div class="nav-menu" id="nav-menu">
+            <!-- Sidebar links will be dynamically inserted here -->
         </div>
         <div class="nav-menu-bottom">
             <a href="/ajuda" class="nav-item">
@@ -178,3 +155,43 @@
     <script src="/src/js/perfil.js"></script>
 </body>
 </html>
+
+<!-- 
+const sidebarLinks = {
+            director: [
+                { href: "/director", icon: "fas fa-home", text: "Dashboard" },
+                { href: "/director/relatorios", icon: "fas fa-chart-bar", text: "Relatórios" },
+                { href: "/director/aprovacoes", icon: "fas fa-check-circle", text: "Aprovações" },
+                { href: "/conta", icon: "fa-solid fa-circle-user", text: "Conta", active: true },
+                { href: "/definicoes", icon: "fas fa-sliders-h", text: "Definições" },
+            ],
+            coordenador: [
+                { href: "/coordenador", icon: "fas fa-home", text: "Dashboard" },
+                { href: "/coordenador/solicitacoes", icon: "fas fa-file-alt", text: "Solicitações" },
+                { href: "/coordenador/horarios", icon: "fas fa-calendar", text: "Horários" },
+                { href: "/conta", icon: "fa-solid fa-circle-user", text: "Conta", active: true },
+                { href: "/definicoes", icon: "fas fa-sliders-h", text: "Definições" },
+            ],
+            professor: [
+                { href: "/professor", icon: "fas fa-home", text: "Página Inicial" },
+                { href: "/professor/turmas", icon: "fas fa-users", text: "Minhas Turmas" },
+                { href: "/professor/horarios", icon: "fas fa-calendar", text: "Horários" },
+                { href: "/conta", icon: "fa-solid fa-circle-user", text: "Conta", active: true },
+                { href: "/definicoes", icon: "fas fa-sliders-h", text: "Definições" },
+            ],
+            admin: [
+                { href: "/admin", icon: "fas fa-user-shield", text: "Administração" },
+                { href: "/admin/users", icon: "fas fa-users", text: "Usuários" },
+                { href: "/admin/sistema", icon: "fas fa-cogs", text: "Sistema" },
+                { href: "/conta", icon: "fa-solid fa-circle-user", text: "Conta", active: true },
+                { href: "/definicoes", icon: "fas fa-sliders-h", text: "Definições" },
+            ],
+            subdirector: [
+                { href: "/subdirector", icon: "fas fa-home", text: "Página Inicial" },
+                { href: "/subdirector/disciplinas", icon: "fas fa-book", text: "Minhas Disciplinas" },
+                { href: "/subdirector/horarios", icon: "fas fa-calendar", text: "Horários" },
+                { href: "/conta", icon: "fa-solid fa-circle-user", text: "Conta", active: true },
+                { href: "/definicoes", icon: "fas fa-sliders-h", text: "Definições" },
+            ],
+        };
+-->

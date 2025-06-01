@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH | Inicialização do Sistema</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Data Initializer -->
+    <script src="/src/js/data-initializer.js"></script>
+    
+    <style>
+        :root {
+            --charcoal: #29465c;
+            --berkeley-blue: #1c3a5c;
+            --picton-blue: #23aae2;
+            --cerulean: #20708a;
+            --alice-blue: #e4eff4;
+            --seasalt: #f6f6f6;
+        }
+        
+        body {
+            font-family: 'AfacadFlux', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--alice-blue), var(--seasalt));
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--picton-blue);
+        }
+        
+        .header h1 {
+            color: var(--charcoal);
+            margin: 0;
+        }
+        
+        .header p {
+            color: var(--berkeley-blue);
+            margin: 10px 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .info-box {
+            background: var(--alice-blue);
+            border: 1px solid var(--picton-blue);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .btn-primary {
+            background: var(--picton-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: var(--cerulean);
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .progress-container {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--picton-blue), var(--cerulean));
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .log-container {
+            display: none;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        
+        .log-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .log-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .log-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .credentials-box {
+            display: none;
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .credentials-box h3 {
+            color: #155724;
+            margin-top: 0;
+        }
+        
+        .credential-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Inicialização do Sistema SGH</h1>
+            <p>Instituto Politécnico Industrial do Kilamba Kiaxi Nº 8056 "Nova Vida"</p>
+            <p><em>"Um diferencial para a sua formação"</em></p>
+        </div>
+
+        <div class="warning-box">
+            <h3>⚠️ Atenção!</h3>
+            <p>Esta operação irá inicializar o sistema com dados básicos. Execute apenas uma vez ou se desejar reiniciar completamente o sistema.</p>
+            <p><strong>Esta ação irá:</strong></p>
+            <ul>
+                <li>Criar todas as coordenações e disciplinas</li>
+                <li>Gerar todas as turmas do sistema</li>
+                <li>Cadastrar todas as salas e laboratórios</li>
+                <li>Criar usuários e professores iniciais</li>
+                <li>Configurar definições do sistema</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h3>ℹ️ Dados que serão criados:</h3>
+            <ul>
+                <li><strong>7 Coordenações:</strong> EIE, TM, FC, GSI, OCC, DP, INF</li>
+                <li><strong>84 Turmas:</strong> 10ª, 11ª e 12ª classes para cada coordenação</li>
+                <li><strong>30 Salas:</strong> 23 salas normais + 7 laboratórios/oficinas</li>
+                <li><strong>10 Usuários:</strong> 7 coordenadores + 1 diretor + 1 subdiretor + 1 admin</li>
+                <li><strong>Múltiplas Disciplinas:</strong> Todas as disciplinas por coordenação</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <button class="btn-primary" onclick="startInitialization()">
+                🚀 Inicializar Sistema
+            </button>
+            <button class="btn-danger" onclick="resetSystem()">
+                🔄 Resetar Sistema Completo
+            </button>
+        </div>
+
+        <div class="progress-container" id="progressContainer">
+            <h3>Progresso da Inicialização</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Preparando...</p>
+        </div>
+
+        <div class="log-container" id="logContainer">
+            <h3>Log de Execução</h3>
+            <div id="logContent"></div>
+        </div>
+
+        <div class="credentials-box" id="credentialsBox">
+            <h3>🔑 Credenciais de Acesso</h3>
+            <p>Guarde estas informações com segurança:</p>
+            <div id="credentialsList"></div>
+            <p><strong>Senha padrão para todos os usuários:</strong> <code>senha123</code></p>
+            <p><em>IMPORTANTE: Altere as senhas no primeiro login!</em></p>
+        </div>
+    </div>
+
+    <script>
+        let isInitializing = false;
+
+        async function startInitialization() {
+            if (isInitializing) return;
+            
+            const result = await Swal.fire({
+                title: 'Confirmar Inicialização',
+                text: 'Tem certeza que deseja inicializar o sistema? Esta operação pode demorar alguns minutos.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, inicializar',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (!result.isConfirmed) return;
+
+            isInitializing = true;
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('logContainer').style.display = 'block';
+            
+            try {
+                await runInitialization();
+                showSuccessMessage();
+            } catch (error) {
+                console.error('Erro na inicialização:', error);
+                addLog('Erro na inicialização: ' + error.message, 'error');
+                Swal.fire('Erro!', 'Falha na inicialização do sistema: ' + error.message, 'error');
+            } finally {
+                isInitializing = false;
+            }
+        }
+
+        async function runInitialization() {
+            const steps = [
+                { name: 'Inicializando Firebase', func: () => dataInitializer.initFirebase() },
+                { name: 'Criando disciplinas', func: () => dataInitializer.createDisciplinas() },
+                { name: 'Criando coordenações', func: () => dataInitializer.createCoordenacoes() },
+                { name: 'Criando salas', func: () => dataInitializer.createSalas() },
+                { name: 'Criando turmas', func: () => dataInitializer.createTurmas() },
+                { name: 'Criando professores e usuários', func: () => dataInitializer.createProfessoresAndUsers() },
+                { name: 'Configurando sistema', func: () => dataInitializer.createSystemSettings() }
+            ];
+
+            for (let i = 0; i < steps.length; i++) {
+                const step = steps[i];
+                updateProgress((i / steps.length) * 100, step.name);
+                addLog(`Executando: ${step.name}`, 'info');
+                
+                try {
+                    await step.func();
+                    addLog(`✅ Concluído: ${step.name}`, 'success');
+                } catch (error) {
+                    addLog(`❌ Erro em ${step.name}: ${error.message}`, 'error');
+                    throw error;
+                }
+            }
+
+            updateProgress(100, 'Inicialização concluída!');
+        }
+
+        async function resetSystem() {
+            const result = await Swal.fire({
+                title: '⚠️ ATENÇÃO: Reset Completo',
+                html: `
+                    <p>Esta operação irá <strong>DELETAR TODOS OS DADOS</strong> do sistema:</p>
+                    <ul style="text-align: left; margin: 20px;">
+                        <li>Todos os usuários (exceto admin atual)</li>
+                        <li>Todos os professores</li>
+                        <li>Todos os horários</li>
+                        <li>Todas as turmas, salas e disciplinas</li>
+                        <li>Todas as configurações</li>
+                    </ul>
+                    <p><strong>Esta ação é IRREVERSÍVEL!</strong></p>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, resetar tudo',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#dc3545'
+            });
+
+            if (!result.isConfirmed) return;
+
+            // Confirmação dupla
+            const secondConfirmation = await Swal.fire({
+                title: 'Confirmação Final',
+                text: 'Digite "RESETAR" para confirmar o reset completo:',
+                input: 'text',
+                inputPlaceholder: 'Digite RESETAR',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar Reset',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#dc3545',
+                preConfirm: (value) => {
+                    if (value !== 'RESETAR') {
+                        Swal.showValidationMessage('Digite exatamente "RESETAR" para confirmar');
+                        return false;
+                    }
+                    return true;
+                }
+            });
+
+            if (!secondConfirmation.isConfirmed) return;
+
+            try {
+                await performSystemReset();
+                Swal.fire('Reset Concluído!', 'Sistema resetado com sucesso. Execute a inicialização para recriar os dados.', 'success');
+            } catch (error) {
+                console.error('Erro no reset:', error);
+                Swal.fire('Erro!', 'Falha no reset do sistema: ' + error.message, 'error');
+            }
+        }
+
+        async function performSystemReset() {
+            addLog('Iniciando reset do sistema...', 'info');
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('logContainer').style.display = 'block';
+
+            await dataInitializer.initFirebase();
+            const db = dataInitializer.db;
+
+            const collections = ['horarios', 'professores', 'users', 'turmas', 'salas', 'disciplinas', 'coordenacoes', 'configuracoes', 'notificacoes'];
+            
+            for (let i = 0; i < collections.length; i++) {
+                const collection = collections[i];
+                updateProgress((i / collections.length) * 100, `Deletando ${collection}...`);
+                addLog(`Deletando coleção: ${collection}`, 'info');
+                
+                const snapshot = await db.collection(collection).get();
+                const batch = db.batch();
+                
+                snapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                if (!snapshot.empty) {
+                    await batch.commit();
+                }
+                
+                addLog(`✅ Coleção ${collection} deletada (${snapshot.size} documentos)`, 'success');
+            }
+
+            updateProgress(100, 'Reset concluído!');
+            addLog('Reset do sistema concluído com sucesso!', 'success');
+        }
+
+        function updateProgress(percentage, text) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function addLog(message, type = 'info') {
+            const logContent = document.getElementById('logContent');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            logContent.appendChild(logEntry);
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        function showSuccessMessage() {
+            document.getElementById('credentialsBox').style.display = 'block';
+            
+            const credentialsList = document.getElementById('credentialsList');
+            const credentials = [
+                { role: 'Administrador', email: 'admin@ipikk.edu.ao', name: 'Administrador do Sistema' },
+                { role: 'Director', email: 'director@ipikk.edu.ao', name: 'Ferreira Manuel Fragoso' },
+                { role: 'Subdirector', email: 'subdirector@ipikk.edu.ao', name: 'Carlos Alberto Brito Teixeira da Silva' },
+                { role: 'Coord. EIE', email: 'ezequiel.mazezela@ipikk.edu.ao', name: 'Ezequiel Mazezela' },
+                { role: 'Coord. TM', email: 'silsom.bravo@ipikk.edu.ao', name: 'Silsom Bravo' },
+                { role: 'Coord. FC', email: 'gilberto.oleque@ipikk.edu.ao', name: 'Gilberto Oleque' },
+                { role: 'Coord. GSI', email: 'paulo.dala@ipikk.edu.ao', name: 'Paulo Dala' },
+                { role: 'Coord. OCC', email: 'lucas.fragoso@ipikk.edu.ao', name: 'Lucas Fragoso' },
+                { role: 'Coord. DP', email: 'muto.kalembe@ipikk.edu.ao', name: 'Muto Kalembe' },
+                { role: 'Coord. INF', email: 'diassilua.paulo@ipikk.edu.ao', name: 'Diassilua Paulo' }
+            ];
+
+            credentialsList.innerHTML = credentials.map(cred => `
+                <div class="credential-item">
+                    <strong>${cred.role}:</strong> ${cred.name}<br>
+                    <strong>Email:</strong> ${cred.email}
+                </div>
+            `).join('');
+
+            Swal.fire({
+                title: '🎉 Inicialização Concluída!',
+                html: `
+                    <p>O sistema foi inicializado com sucesso!</p>
+                    <p>Todos os dados básicos foram criados.</p>
+                    <p>Verifique as credenciais de acesso abaixo e faça login com uma das contas criadas.</p>
+                `,
+                icon: 'success',
+                confirmButtonText: 'Entendi'
+            });
+        }
+
+        // Verificar se o usuário tem permissão para acessar esta página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Esta página deve ser acessível apenas durante a configuração inicial
+            // ou por administradores
+            console.log('Página de inicialização carregada');
+            addLog('Sistema pronto para inicialização', 'info');
+        });
+    </script>
+</body>
+</html>

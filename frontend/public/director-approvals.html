@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH | Aprovações Pendentes</title>
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/styles/unified-design.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/sweetalert.css" />
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* Ensure the modal is hidden by default */
+        .modal.hidden {
+            display: none !important;
+        }
+
+        /* Style the modal to be centered and visible when not hidden */
+        .modal {
+            display: flex;
+            /* Changed to flex to center content */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Ensure it appears above other content */
+        }
+
+        /* Style the modal content */
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        /* Modal header, body, and footer styles */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: #1f2937;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 10px;
+        }
+
+        /* Button styles (if not already defined in unified-design.css) */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-success {
+            background-color: #10b981;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/assets/images/ipikk-logo.jpg" alt="IPIKK Logo">
+            </div>
+
+            <div class="sidebar-nav">
+                <a href="/director" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/director/relatorios" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="/director/aprovacoes" class="nav-item active">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Aprovações</span>
+                </a>
+                <a href="/conta" class="nav-item">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Conta</span>
+                </a>
+                <a href="/definicoes" class="nav-item">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Definições</span>
+                </a>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="/ajuda" class="nav-item">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Ajuda</span>
+                </a>
+                <button id="logout-btn" class="nav-item"
+                    style="width: 100%; background: none; border: none; text-align: left;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Terminar Sessão</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Aprovações Pendentes</h1>
+                <!-- <p class="page-subtitle">Gerencie solicitações e aprovações do sistema</p> -->
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="refreshApprovals()">
+                        <i class="fas fa-sync-alt"></i>
+                        Atualizar
+                    </button>
+                    <button class="btn btn-primary" onclick="bulkApprove()">
+                        <i class="fas fa-check-double"></i>
+                        Aprovar Selecionados
+                    </button>
+                </div>
+            </div>
+
+            <!-- Estatísticas de Aprovações -->
+            <div class="stats-grid" style="margin-bottom: 30px;">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-label">Pendentes</div>
+                    <div class="stat-value" id="pending-count">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="stat-label">Aprovadas Hoje</div>
+                    <div class="stat-value" id="approved-today">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="stat-label">Rejeitadas</div>
+                    <div class="stat-value" id="rejected-count">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="stat-label">Tempo Médio</div>
+                    <div class="stat-value" id="avg-time">-</div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="card" style="margin-bottom: 30px;">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-filter"></i>
+                        Filtros
+                    </h2>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div>
+                        <label class="form-label">Tipo de Solicitação:</label>
+                        <select id="type-filter" class="form-input">
+                            <option value="">Todos</option>
+                            <option value="schedule">Horários</option>
+                            <option value="teacher">Professores</option>
+                            <option value="room">Salas</option>
+                            <option value="system">Sistema</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Coordenação:</label>
+                        <select id="coordination-filter" class="form-input">
+                            <option value="">Todas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Prioridade:</label>
+                        <select id="priority-filter" class="form-input">
+                            <option value="">Todas</option>
+                            <option value="high">Alta</option>
+                            <option value="medium">Média</option>
+                            <option value="low">Baixa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Status:</label>
+                        <select id="status-filter" class="form-input">
+                            <option value="pending">Pendentes</option>
+                            <option value="approved">Aprovadas</option>
+                            <option value="rejected">Rejeitadas</option>
+                            <option value="all">Todas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Aprovações -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-list"></i>
+                        Solicitações
+                    </h2>
+                    <div style="display: flex; gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="select-all" onchange="toggleSelectAll()">
+                            Selecionar Todos
+                        </label>
+                    </div>
+                </div>
+
+                <div id="approvals-container">
+                    <!-- Aprovações serão carregadas aqui -->
+                </div>
+            </div>
+
+            <!-- Histórico de Aprovações -->
+            <!-- <div class="card" style="margin-top: 30px;">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-history"></i>
+                        Histórico Recente
+                    </h2>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Tipo</th>
+                                <th>Solicitante</th>
+                                <th>Ação</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table">
+                            <tr>
+                                <td colspan="5" class="text-center">Carregando histórico...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes -->
+    <div id="details-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Detalhes da Solicitação</h3>
+                <button class="modal-close" onclick="closeDetailsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body" id="modal-body">
+                <!-- Conteúdo será carregado dinamicamente -->
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDetailsModal()">Fechar</button>
+                <button class="btn btn-danger" id="reject-btn" onclick="rejectRequest()">Rejeitar</button>
+                <button class="btn btn-success" id="approve-btn" onclick="approveRequest()">Aprovar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script src="/src/js/director-approvals.js"></script>
+</body>
+
+</html>

@@ -16,12 +16,19 @@ app.use(cors({
 app.use(express.static(path.join(__dirname, 'frontend', 'public'), {
     setHeaders: (res, path) => {
         console.log(`Servindo arquivo estático: ${path}`);
-        }
+    }
 }));
 
 // Rotas personalizadas (mapeamento explícito)
 const rotasPersonalizadas = {
-    '/pagina-inicial': 'main.html',
+    '/dashboard-admin': 'dashboard-admin.html',
+    '/director': 'dashboard-director.html',
+    '/director/relatorios': 'director-reports.html',
+    '/director/aprovacoes': 'director-approvals.html',
+    '/subdirector': 'dashboard-subdirector.html',
+    '/operacoes': 'subdirector-operations.html',
+    '/coordenador': 'dashboard-coordenador.html',
+    '/professor': 'professor-schedule.html',
     '/calendario': 'calendar.html',
     '/turmas': 'classes.html',
     '/ajuda': 'help.html',
@@ -30,7 +37,10 @@ const rotasPersonalizadas = {
     '/horario': 'view.html',
     '/horarios-feitos': 'schedule.html',
     '/admin': 'admin.html',
+    '/permissoes': 'admin-permissions.html',
+    '/backup': 'admin-backup.html',
     '/conta': 'perfil.html',
+    '/notificacoes': 'notifications.html',
     '/estatisticas': 'statistics.html'
 };
 
@@ -39,8 +49,10 @@ Object.entries(rotasPersonalizadas).forEach(([rota, arquivo]) => {
     app.get(rota, (req, res) => {
         const filePath = path.join(__dirname, 'frontend', 'public', arquivo);
         if (fs.existsSync(filePath)) {
+            console.log(`Rota ${rota} servindo: ${filePath}`);
             res.sendFile(filePath);
         } else {
+            console.log(`Arquivo não encontrado para rota ${rota}: ${filePath}`);
             res.status(404).send('Página não encontrada');
         }
     });
@@ -50,8 +62,10 @@ Object.entries(rotasPersonalizadas).forEach(([rota, arquivo]) => {
 app.get('/login', (req, res) => {
     const filePath = path.join(__dirname, 'frontend', 'public', 'index.html');
     if (fs.existsSync(filePath)) {
+        console.log(`Rota /login servindo: ${filePath}`);
         res.sendFile(filePath);
     } else {
+        console.log(`Arquivo não encontrado para /login: ${filePath}`);
         res.status(404).send('Página de login não encontrada');
     }
 });
@@ -60,10 +74,11 @@ app.get('/login', (req, res) => {
 app.get('/:pagina', (req, res) => {
     const pagina = req.params.pagina;
     const filePath = path.join(__dirname, 'frontend', 'public', `${pagina}.html`);
-    
     if (fs.existsSync(filePath)) {
+        console.log(`Rota genérica /${pagina} servindo: ${filePath}`);
         res.sendFile(filePath);
     } else {
+        console.log(`Arquivo não encontrado para /${pagina}: ${filePath}`);
         res.status(404).send('Página não encontrada');
     }
 });

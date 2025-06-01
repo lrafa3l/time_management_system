@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const db = firebase.firestore();
-    const turmasTableBody = document.querySelector('.turmas-table tbody');
+    const turmasTableBody = document.getElementById('turmasTableBody');
     const turmaModal = document.getElementById('turmaModal');
     const turmaForm = document.getElementById('turmaForm');
     const modalTitle = document.getElementById('modalTitle');
@@ -76,6 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!user) throw new Error('Usuário não autenticado');
             console.log('Loading turmas for user:', user.uid);
 
+            // Show loading animation
+            turmasTableBody.innerHTML = '<tr><td colspan="5" class="table-loading"><span class="spinner"></span> Carregando...</td></tr>';
+
             const snapshot = await db.collection('turmas')
                 .where('userId', '==', user.uid)
                 .orderBy('createdAt', 'desc')
@@ -103,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } catch (error) {
             console.error('Error loading turmas:', error);
+            turmasTableBody.innerHTML = '<tr><td colspan="5" class="table-loading">Erro ao carregar turmas.</td></tr>';
             let errorMessage = 'Não foi possível carregar turmas: ' + error.message;
             if (error.message.includes('The query requires an index')) {
                 errorMessage = 'A consulta requer um índice no Firestore. Crie-o aqui: ' +
@@ -135,7 +139,14 @@ document.addEventListener('DOMContentLoaded', () => {
     turmaForm.addEventListener('submit', async e => {
         e.preventDefault();
         const submitButton = turmaForm.querySelector('button[type="submit"]');
+        const submitSpinner = submitButton.querySelector('.spinner');
+        const submitText = submitButton.querySelector('.btn-text');
+
+        // Show button loading animation
         submitButton.disabled = true;
+        submitButton.classList.add('btn-loading');
+        submitSpinner.classList.remove('hidden');
+        submitText.textContent = 'Salvando...';
 
         try {
             const user = firebase.auth().currentUser;
@@ -204,7 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 customClass: { popup: 'my-swal-popup', title: 'my-swal-title', confirmButton: 'my-swal-button' }
             });
         } finally {
+            // Hide button loading animation
             submitButton.disabled = false;
+            submitButton.classList.remove('btn-loading');
+            submitSpinner.classList.add('hidden');
+            submitText.textContent = 'Salvar';
         }
     });
 
@@ -248,8 +263,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then(async result => {
             if (result.isConfirmed) {
                 try {
+                    // Show centered loading spinner in the same modal
+                    Swal.showLoading();
                     console.log('Deleting turma:', id);
+
                     await db.collection('turmas').doc(id).delete();
+
+                    // Show success message
                     Swal.fire({
                         icon: 'success',
                         title: 'Excluído',

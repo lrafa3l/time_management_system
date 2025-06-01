@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <title>SGH | Administração de Usuários</title>
     <meta charset="UTF-8" />
@@ -27,6 +28,7 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body class="bg-gray-50 dark:bg-gray-900">
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
@@ -45,9 +47,17 @@
                 <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
             </div>
             <div class="nav-menu">
-                <a href="/pagina-inicial" class="nav-item">
-                    <i class="fas fa-home"></i>
-                    <span>Página Inicial</span>
+                <a href="/admin" class="nav-item active">
+                    <i class="fas fa-users mr-3"></i>
+                    <span>Administração de Usuários</span>
+                </a>
+                <a href="/permissoes" class="nav-item">
+                    <i class="fas fa-shield-alt mr-3"></i>
+                    <span>Permissões</span>
+                </a>
+                <a href="/backup" class="nav-item">
+                    <i class="fas fa-database mr-3"></i>
+                    <span>Backup</span>
                 </a>
                 <a href="/conta" class="nav-item">
                     <i class="fa-solid fa-circle-user"></i>
@@ -56,10 +66,6 @@
                 <a href="/definicoes" class="nav-item">
                     <i class="fas fa-sliders-h"></i>
                     <span>Definições</span>
-                </a>
-                <a href="/admin" class="nav-item active">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Administração</span>
                 </a>
             </div>
             <div class="nav-menu-bottom">
@@ -73,6 +79,8 @@
                 </button>
             </div>
         </div>
+
+        <!-- Main content -->
         <div class="main-content" id="contentWrapper">
             <div class="header">
                 <div class="welcome-section">
@@ -85,8 +93,58 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Stats Cards -->
+            <div class="w-full max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100">
+                            <i class="fas fa-users text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Total de Usuários</p>
+                            <p id="totalUsers" class="text-2xl font-semibold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100">
+                            <i class="fas fa-user-check text-green-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Usuários Ativos</p>
+                            <p id="activeUsers" class="text-2xl font-semibold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100">
+                            <i class="fas fa-chalkboard-teacher text-yellow-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Professores</p>
+                            <p id="totalProfessors" class="text-2xl font-semibold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100">
+                            <i class="fas fa-user-tie text-purple-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Administradores</p>
+                            <p id="totalAdmins" class="text-2xl font-semibold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Cards -->
             <section class="p-4 sm:p-6 flex justify-center items-center">
-                <div class="w-full max-w-7xl mx-auto">
+                <div class="w-full max-w-8xl mx-auto">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                         <div id="search" class="w-full md:w-1/2">
                             <div class="relative">
@@ -98,7 +156,9 @@
                                     placeholder="Pesquisar usuários...">
                             </div>
                         </div>
-                        <button id="add-user-btn" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Adicionar Novo Usuário</button>
+                        <button id="add-user-btn"
+                            class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Adicionar
+                            Novo Usuário</button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6" id="users-list">
                         <!-- User cards will be inserted here -->
@@ -112,9 +172,12 @@
             </section>
         </div>
     </div>
-    <div id="user-modal" class="hidden fixed inset-0 z-[1002] overflow-auto bg-gray-900/50 flex items-center justify-center">
-        <div class="bg-white dark:bg-[#ffffff] rounded-lg shadow p-6 w-[95%] sm:w-[640px] max-h-[90vh] overflow-y-auto relative">
-            <button type="button" class="modal-close-btn bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1 px-3 rounded-lg absolute top-4 right-4">Cancelar</button>
+    <div id="user-modal"
+        class="hidden fixed inset-0 z-[1002] overflow-auto bg-gray-900/50 flex items-center justify-center">
+        <div
+            class="bg-white dark:bg-[#ffffff] rounded-lg shadow p-6 w-[95%] sm:w-[640px] max-h-[90vh] overflow-y-auto relative">
+            <button type="button"
+                class="modal-close-btn bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1 px-3 rounded-lg absolute top-4 right-4">Cancelar</button>
             <h2 id="modal-title" class="text-lg font-semibold text-[#29a8dc] mb-4 border-b pb-2">Adicionar Usuário</h2>
             <form id="user-form">
                 <div class="account-section mb-6">
@@ -137,7 +200,8 @@
                             <input type="text" name="formacaoMedio" class="detail-input w-full p-2 border rounded" />
                         </div>
                         <div class="detail-item flex py-3 border-b border-gray-200">
-                            <span class="detail-label font-semibold text-gray-600 w-48">Habilitações do Ensino Superior:</span>
+                            <span class="detail-label font-semibold text-gray-600 w-48">Habilitações do Ensino
+                                Superior:</span>
                             <input type="text" name="habilitacoes" class="detail-input w-full p-2 border rounded" />
                         </div>
                     </div>
@@ -175,7 +239,8 @@
                     </div>
                 </div>
                 <div class="flex justify-end mt-6">
-                    <button type="submit" id="save-user-btn" class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Salvar</button>
+                    <button type="submit" id="save-user-btn"
+                        class="bg-[#29a8dc] hover:bg-[#2195c3] text-white font-semibold py-2 px-4 rounded-lg">Salvar</button>
                 </div>
             </form>
         </div>
@@ -188,4 +253,5 @@
     <script src="/src/js/logOut.js"></script>
     <script src="/src/js/admin.js"></script>
 </body>
+
 </html>

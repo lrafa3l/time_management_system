@@ -44,7 +44,7 @@
             overflow: hidden;
         }
         #turmaModal input, #turmaModal select {
-            @apply bg-[#e6e9f4] border-[#e6e9f4] text-[#072946] focus:ring-[#29a8dc] focus:border-[#29a8dc];
+            @apply bg-white border-[#e6e9f4] text-[#072946] focus:ring-[#29a8dc] focus:border-[#29a8dc];
         }
         #turmaModal label {
             @apply text-[#072946];
@@ -54,6 +54,45 @@
         }
         .divide-y > :not([hidden]) ~ :not([hidden]) {
             border-color: #e6e9f4;
+        }
+        /* Loading Animation for Table */
+        .table-loading {
+            @apply text-center py-4;
+        }
+        .spinner {
+            border: 3px solid #e6e9f4;
+            border-top: 3px solid #29a8dc;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        /* Button Loading Animation */
+        .btn-loading .spinner {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+        .btn-loading .btn-text {
+            display: inline;
+        }
+        /* Modal Fade Animation */
+        #turmaModal .modal-overlay {
+            @apply absolute inset-0 bg-[#072946] opacity-70 transition-opacity duration-300;
+        }
+        #turmaModal .modal-content {
+            @apply transform transition-transform duration-300;
+        }
+        #turmaModal.hidden .modal-overlay {
+            @apply opacity-0;
+        }
+        #turmaModal.hidden .modal-content {
+            @apply scale-95;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -140,7 +179,7 @@
                                         <th class="px-6 py-3 text-right">Ações</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-[#e6e9f4]">
+                                <tbody class="divide-y divide-[#e6e9f4]" id="turmasTableBody">
                                 </tbody>
                             </table>
                         </div>
@@ -149,9 +188,9 @@
             </section>
 
             <div id="turmaModal" class="hidden fixed inset-0 z-[9999]">
-                <div class="absolute inset-0 bg-[#072946] opacity-70"></div>
+                <div class="modal-overlay"></div>
                 <div class="relative flex items-center justify-center h-full">
-                    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+                    <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-medium text-[#072946]" id="modalTitle">Adicionar Turma</h3>
@@ -193,7 +232,10 @@
                                 </div>
                                 <div class="flex justify-end space-x-3 pt-4">
                                     <button type="button" onclick="closeTurmaModal()" class="btn-secondary">Cancelar</button>
-                                    <button type="submit" class="btn-primary">Salvar</button>
+                                    <button type="submit" class="btn-primary">
+                                        <span class="btn-text">Salvar</span>
+                                        <span class="spinner hidden"></span>
+                                    </button>
                                 </div>
                             </form>
                         </div>

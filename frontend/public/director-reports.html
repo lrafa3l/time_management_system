@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH | Relatórios do Director</title>
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/styles/unified-design.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/sweetalert-fix.css" />
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/assets/images/ipikk-logo.jpg" alt="IPIKK Logo">
+            </div>
+            
+            <div class="sidebar-nav">
+                <a href="/director" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/director/relatorios" class="nav-item active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="/director/aprovacoes" class="nav-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Aprovações</span>
+                </a>
+                <a href="/conta" class="nav-item">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Conta</span>
+                </a>
+                <a href="/definicoes" class="nav-item">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Definições</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-bottom">
+                <a href="/ajuda" class="nav-item">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Ajuda</span>
+                </a>
+                <button id="logout-btn" class="nav-item" style="width: 100%; background: none; border: none; text-align: left;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Terminar Sessão</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Relatórios Executivos</h1>
+                <!-- <p class="page-subtitle">Análises e estatísticas do sistema de gestão de horários</p> -->
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="exportAllReports()">
+                        <i class="fas fa-download"></i>
+                        Exportar Todos
+                    </button>
+                    <button class="btn btn-secondary" onclick="refreshReports()">
+                        <i class="fas fa-sync-alt"></i>
+                        Atualizar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros de Período -->
+            <div class="card" style="margin-bottom: 30px;">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-filter"></i>
+                        Filtros de Período
+                    </h2>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div>
+                        <label class="form-label">Período:</label>
+                        <select id="period-filter" class="form-input">
+                            <option value="week">Esta Semana</option>
+                            <option value="month" selected>Este Mês</option>
+                            <option value="semester">Este Trimestre</option>
+                            <option value="year">Este Ano</option>
+                            <option value="custom">Personalizado</option>
+                        </select>
+                    </div>
+                    <div id="custom-dates" style="display: none; grid-column: span 2;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label class="form-label">Data Inicial:</label>
+                                <input type="date" id="start-date" class="form-input">
+                            </div>
+                            <div>
+                                <label class="form-label">Data Final:</label>
+                                <input type="date" id="end-date" class="form-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">Coordenação:</label>
+                        <select id="coordination-filter" class="form-input">
+                            <option value="">Todas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPIs Principais -->
+            <div class="stats-grid" style="margin-bottom: 30px;">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-label">Taxa de Ocupação</div>
+                    <div class="stat-value" id="occupancy-rate">-</div>
+                    <div class="stat-change positive" id="occupancy-change">+5.2%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-label">Horas Lecionadas</div>
+                    <div class="stat-value" id="total-hours">-</div>
+                    <div class="stat-change positive" id="hours-change">+12.5%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-label">Professores Ativos</div>
+                    <div class="stat-value" id="active-teachers">-</div>
+                    <div class="stat-change neutral" id="teachers-change">0%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-label">Conflitos Resolvidos</div>
+                    <div class="stat-value" id="conflicts-resolved">-</div>
+                    <div class="stat-change positive" id="conflicts-change">-8.3%</div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <!-- Ocupação por Coordenação -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Ocupação por Coordenação
+                        </h2>
+                        <button class="btn btn-secondary" onclick="exportChart('occupancy-chart')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    
+                    <canvas id="occupancy-chart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Distribuição de Carga Horária -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-chart-pie"></i>
+                            Distribuição de Carga
+                        </h2>
+                        <button class="btn btn-secondary" onclick="exportChart('workload-chart')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    
+                    <canvas id="workload-chart" width="300" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Tendências Temporais -->
+            <div class="card" style="margin-bottom: 30px;">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Tendências de Utilização
+                    </h2>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="changeTimeframe('daily')">Diário</button>
+                        <button class="btn btn-primary" onclick="changeTimeframe('weekly')">Semanal</button>
+                        <button class="btn btn-secondary" onclick="changeTimeframe('monthly')">Mensal</button>
+                        <button class="btn btn-secondary" onclick="exportChart('trends-chart')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <canvas id="trends-chart" width="800" height="300"></canvas>
+            </div>
+
+            <!-- Tabelas de Dados -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <!-- Top Professores -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-star"></i>
+                            Professores com Maior Carga
+                        </h2>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Professor</th>
+                                    <th>Coordenação</th>
+                                    <th>Horas/Semana</th>
+                                    <th>Eficiência</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-teachers-table">
+                                <tr>
+                                    <td colspan="4" class="text-center">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Salas Mais Utilizadas -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-door-open"></i>
+                            Salas Mais Utilizadas
+                        </h2>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sala</th>
+                                    <th>Tipo</th>
+                                    <th>Ocupação</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-rooms-table">
+                                <tr>
+                                    <td colspan="4" class="text-center">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relatórios Detalhados -->
+            <div class="card" style="margin-top: 30px;">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-file-alt"></i>
+                        Relatórios Detalhados
+                    </h2>
+                </div>
+                
+                <div class="cards-grid">
+                    <div class="user-card" onclick="generateDetailedReport('occupancy')" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Relatório de Ocupação</div>
+                            <div class="user-email">Análise detalhada da utilização de salas</div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-card" onclick="generateDetailedReport('teachers')" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Relatório de Professores</div>
+                            <div class="user-email">Desempenho e carga horária dos professores</div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-card" onclick="generateDetailedReport('efficiency')" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Relatório de Eficiência</div>
+                            <div class="user-email">Análise de eficiência operacional</div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-card" onclick="generateDetailedReport('conflicts')" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Relatório de Conflitos</div>
+                            <div class="user-email">Identificação e resolução de conflitos</div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-card" onclick="generateDetailedReport('financial')" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Relatório Financeiro</div>
+                            <div class="user-email">Custos operacionais e otimização</div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-card" onclick="generateDetailedReport('custom')" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Relatório Personalizado</div>
+                            <div class="user-email">Criar relatório com métricas específicas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script src="/src/js/director-reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Pessoal - Sistema de Gestão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0">
+        <div class="flex items-center justify-center h-16 bg-blue-600">
+            <h1 class="text-white text-xl font-bold">Professor</h1>
+        </div>
+        <nav class="mt-8">
+            <a href="professor-schedule.html" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <i class="fas fa-calendar-alt mr-3"></i>
+                Meu Horário
+            </a>
+            <a href="perfil.html" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <i class="fas fa-user mr-3"></i>
+                Meu Perfil
+            </a>
+            <a href="notifications.html" class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50">
+                <i class="fas fa-bell mr-3"></i>
+                Notificações
+            </a>
+            <a href="professor-calendar.html" class="flex items-center px-6 py-3 text-blue-600 bg-blue-50 border-r-4 border-blue-600">
+                <i class="fas fa-calendar mr-3"></i>
+                Calendário Pessoal
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center">
+                    <button id="sidebarToggle" class="lg:hidden text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="ml-4 text-2xl font-semibold text-gray-800">Calendário Pessoal</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="addEventBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        <i class="fas fa-plus mr-2"></i>Novo Evento
+                    </button>
+                    <span id="userInfo" class="text-gray-600"></span>
+                    <button onclick="logout()" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="p-6">
+            <!-- Calendar Navigation -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+                <div class="flex items-center justify-between p-6">
+                    <div class="flex items-center space-x-4">
+                        <button id="prevMonth" class="p-2 text-gray-600 hover:text-gray-900">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h3 id="currentMonth" class="text-xl font-semibold text-gray-800"></h3>
+                        <button id="nextMonth" class="p-2 text-gray-600 hover:text-gray-900">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button id="todayBtn" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50">
+                            Hoje
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="grid grid-cols-7 gap-0 border-b border-gray-200">
+                    <div class="p-4 text-center font-medium text-gray-600 bg-gray-50">Dom</div>
+                    <div class="p-4 text-center font-medium text-gray-600 bg-gray-50">Seg</div>
+                    <div class="p-4 text-center font-medium text-gray-600 bg-gray-50">Ter</div>
+                    <div class="p-4 text-center font-medium text-gray-600 bg-gray-50">Qua</div>
+                    <div class="p-4 text-center font-medium text-gray-600 bg-gray-50">Qui</div>
+                    <div class="p-4 text-center font-medium text-gray-600 bg-gray-50">Sex</div>
+                    <div class="p-4 text-center font-medium text-gray-600 bg-gray-50">Sáb</div>
+                </div>
+                <div id="calendarGrid" class="grid grid-cols-7 gap-0">
+                    <!-- Calendar days will be generated here -->
+                </div>
+            </div>
+
+            <!-- Upcoming Events -->
+            <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800">Próximos Eventos</h3>
+                </div>
+                <div id="upcomingEvents" class="p-6">
+                    <!-- Events will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800">Novo Evento</h3>
+                </div>
+                <form id="eventForm" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Título</label>
+                        <input type="text" id="eventTitle" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Data</label>
+                        <input type="date" id="eventDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Hora</label>
+                        <input type="time" id="eventTime" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+                        <textarea id="eventDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" id="cancelEvent" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="src/js/auth.js"></script>
+    <script src="src/js/professor-calendar.js"></script>
+</body>
+</html>

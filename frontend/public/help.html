@@ -1,31 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt">
 <head>
     <title>SGH | Ajuda</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="/src/styles/main.css" />
     <link rel="stylesheet" href="/src/styles/transitions.css" />
     <link rel="stylesheet" href="/src/styles/cursor-follower.css" />
     <link rel="stylesheet" href="/src/styles/toggle.css" />
-    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
-
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!-- Adicione os SDKs do Firebase -->
+    <link rel="stylesheet" href="/src/styles/tailwind.css" /> <!-- Assumes Tailwind CSS is built and included -->
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon" />
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 </head>
-
 <body>
-
     <!-- Loader de transição -->
     <div class="page-transition" id="pageTransition">
         <div class="bounce-loader">
@@ -43,22 +35,13 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <img src="/assets/images/ipikk-logo.jpg" alt="Logo">
+            <img src="/assets/images/ipikk-logo.jpg" alt="Logo" />
         </div>
-
         <div class="nav-menu">
             <a href="/pagina-inicial" class="nav-item">
                 <i class="fas fa-home"></i>
                 <span>Página Inicial</span>
             </a>
-            <!-- <a href="/estatisticas" class="nav-item">
-                <i class="fa-solid fa-chart-simple"></i>
-                <span>Estatísticas</span>
-            </a>
-            <a href="/calendario" class="nav-item">
-                <i class="fa-solid fa-calendar-day"></i>
-                <span>Calendário</span>
-            </a> -->
             <a href="/conta" class="nav-item">
                 <i class="fa-solid fa-circle-user"></i>
                 <span>Conta</span>
@@ -71,7 +54,6 @@
                 <i class="fas fa-user-shield"></i>
                 <span>Administração</span>
             </a>
-
         </div>
         <div class="nav-menu-bottom">
             <a href="#" class="nav-item active">
@@ -92,7 +74,6 @@
             <div class="welcome-section">
                 <h1 class="welcome-title">Ajuda</h1>
             </div>
-
             <div class="header-right">
                 <div class="notification-bell">
                     <i class="fas fa-bell"></i>
@@ -102,49 +83,71 @@
         </div>
 
         <!-- Dashboard Container -->
-        <div class="dashboard-container"></div>
+        <div class="dashboard-container">
+            <div class="help-chat">
+                <h2>Como podemos ajudar?</h2>
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="Digite sua dúvida..." />
+                    <button id="send-btn">Enviar</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai/dist/gemini-api.js"></script>
-</body>
-<!-- <script src="/src/js/auth.js"></script> -->
-<!-- Adicione isso ANTES do seu help.js -->
-<script src="https://cdn.jsdelivr.net/npm/@google/generative-ai"></script>
-<script>
-    // Garante que a API está carregada antes de usar
-    window.initGemini = async () => {
-        if (!window.google || !window.google.generativeai) {
-            await new Promise(resolve => {
-                const script = document.createElement('script');
-                script.src = "https://cdn.jsdelivr.net/npm/@google/generative-ai";
-                script.onload = resolve;
-                document.head.appendChild(script);
-            });
+
+    <!-- Inline CSS for Chat -->
+    <style>
+        .help-chat {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        return window.google.generativeai;
-    };
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            // Carrega a API de forma assíncrona
-            const { GoogleGenerativeAI } = await initGemini();
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .chat-messages p {
+            margin: 10px 0;
+        }
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #send-btn {
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #send-btn:hover {
+            background: #0056b3;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
 
-            // Configuração (EM PRODUÇÃO, use backend Node.js para a chave!)
-            const apiKey = 'AIzaSyAxP9hKs7ZtMCcrpAVqud7XZW7I_oE9GTo';
-            const genAI = new GoogleGenerativeAI(apiKey);
-            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-            // Elementos do DOM
-            const chatContainer = `
-        <div class="help-chat">
-            <h2>Como podemos ajudar?</h2>
-            <div id="chat-messages"></div>
-            <input type="text" id="user-input" placeholder="Digite sua dúvida...">
-            <button id="send-btn">Enviar</button>
-        </div>`;
-            document.querySelector('.dashboard-container').innerHTML = chatContainer;
-
-            // Funções do chat
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
             const addMessage = (sender, text) => {
                 const chat = document.getElementById('chat-messages');
                 chat.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
@@ -156,33 +159,29 @@
                 const question = input.value.trim();
 
                 if (question) {
-                    addMessage("Você", question);
+                    addMessage('Você', question);
                     input.value = '';
 
                     try {
-                        const result = await model.generateContent(question);
-                        const response = await result.response;
-                        addMessage("Assistente", response.text());
+                        // Assumes backend endpoint for Gemini API
+                        const response = await fetch('/api/gemini', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ question, context: 'SGH system: Web application with user account management, admin controls, and help section.' })
+                        });
+                        const data = await response.json();
+                        addMessage('Assistente', data.text || 'Desculpe, não entendi sua pergunta.');
                     } catch (error) {
-                        console.error("Erro:", error);
-                        addMessage("Assistente", "❌ Erro ao processar sua pergunta");
+                        console.error('Erro:', error);
+                        addMessage('Assistente', '❌ Erro ao processar sua pergunta. Tente novamente mais tarde.');
                     }
                 }
             });
-
-        } catch (error) {
-            console.error("Falha ao carregar a API:", error);
-            document.querySelector('.dashboard-container').innerHTML = `
-            <div class="error">
-                <p>O serviço de ajuda está temporariamente indisponível.</p>
-            </div>
-        `;
-        }
-    });
-</script>
-<script src="/src/js/page-transitions.js"></script>
-<script defer src="/src/js/cursor-follower.js"></script>
-<script src="src/js/mobile-toggle.js"></script>
-<script src="/src/js/logOut.js"></script>
-
+        });
+    </script>
+    <script src="/src/js/page-transitions.js"></script>
+    <script defer src="/src/js/cursor-follower.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/logOut.js"></script>
+</body>
 </html>

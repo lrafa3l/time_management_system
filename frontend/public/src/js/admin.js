@@ -23,6 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const addUserBtn = document.getElementById('add-user-btn');
     const modalTitle = document.getElementById('modal-title');
     const searchInput = document.getElementById('search-docentes');
+    const totalUsers = document.getElementById('totalUsers');
+    const activeUsers = document.getElementById('activeUsers');
+    const totalProfessors = document.getElementById('totalProfessors');
+    const totalAdmins = document.getElementById('totalAdmins');
 
     let currentPage = 1;
     const usersPerPage = 6;
@@ -305,6 +309,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     allUsers = parsedUsers;
                     filteredUsers = [...allUsers];
                     console.log(`Usuários carregados do cache para admin ${adminId}, ${allUsers.length} usuários`);
+                    updateStats();
                     renderPage(currentPage);
                     return;
                 } else {
@@ -343,6 +348,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             filteredUsers = [...allUsers];
             cacheUsers(allUsers, adminId); // Cachear após carregar
+            updateStats();
             renderPage(currentPage);
             console.log(`Usuários carregados do Firestore para admin ${adminId}, ${allUsers.length} usuários`);
         } catch (error) {
@@ -357,6 +363,26 @@ document.addEventListener("DOMContentLoaded", function () {
         } finally {
             Swal.close();
         }
+    }
+
+    function updateStats() {
+        // Total de Usuários
+        totalUsers.textContent = allUsers.length;
+
+        // Usuários Ativos (assumindo que todos os usuários são ativos por padrão a menos que desativados)
+        const activeCount = allUsers.filter(user => {
+            const userData = db.collection('users').doc(user.id).get().then(doc => doc.data().active !== false);
+            return userData;
+        }).length;
+        activeUsers.textContent = activeCount;
+
+        // Professores (assumindo que todos os usuários não-admin são professores)
+        const professorCount = allUsers.filter(user => user.role !== 'admin').length;
+        totalProfessors.textContent = professorCount;
+
+        // Administradores
+        const adminCount = allUsers.filter(user => user.role === 'admin').length;
+        totalAdmins.textContent = adminCount;
     }
 
     function renderUsers(users, startIndex) {

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH | Dashboard Coordenador</title>
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/styles/unified-design.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/sweetalert-fix.css" />
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/assets/images/ipikk-logo.jpg" alt="IPIKK Logo">
+            </div>
+
+            <div class="sidebar-nav">
+                <a href="/pagina-inicial" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Página Inicial</span>
+                </a>
+                <a href="/conta" class="nav-item">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Conta</span>
+                </a>
+                <a href="/definicoes" class="nav-item">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Definições</span>
+                </a>
+                <a href="/admin" class="nav-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Administração</span>
+                </a>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="/ajuda" class="nav-item">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Ajuda</span>
+                </a>
+                <button id="logout-btn" class="nav-item"
+                    style="width: 100%; background: none; border: none; text-align: left;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Terminar Sessão</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Dashboard do Coordenador</h1>
+                <p class="page-subtitle">Instituto Politécnico Industrial do Kilamba Kiaxi Nº 8056 "Nova Vida"</p>
+                <div class="header-actions">
+                    <span style="color: var(--text-secondary); margin-right: 15px;">Bem-vindo, Coordenador!</span>
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <div class="notification-indicator"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coordination Info -->
+            <div class="card"
+                style="margin-bottom: 20px; background: linear-gradient(45deg, var(--primary-blue), var(--secondary-blue)); color: white;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <h3 style="margin: 0; font-size: 18px;">Coordenação: <span
+                                id="coordinationName">Carregando...</span></h3>
+                        <p style="margin: 5px 0 0 0; opacity: 0.9;">Coordenador responsável pela gestão da coordenação
+                        </p>
+                    </div>
+                    <div style="font-size: 48px; opacity: 0.3;">
+                        <i class="fas fa-building"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="stat-label">Professores da Coordenação</div>
+                    <div class="stat-value" id="totalProfessors">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-label">Turmas Ativas</div>
+                    <div class="stat-value" id="totalTurmas">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-label">Horários Gerados</div>
+                    <div class="stat-value" id="totalSchedules">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-label">Disciplinas</div>
+                    <div class="stat-value" id="totalDisciplinas">-</div>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <!-- Professores da Coordenação -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            Professores da Coordenação
+                        </h2>
+                    </div>
+
+                    <div style="max-height: 300px; overflow-y: auto;" id="professorList">
+                        <p style="text-align: center; color: var(--text-secondary); padding: 20px;">Carregando
+                            professores...</p>
+                    </div>
+                </div>
+
+                <!-- Turmas da Coordenação -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-users"></i>
+                            Turmas da Coordenação
+                        </h2>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 15px;"
+                        id="turmaGrid">
+                        <p
+                            style="text-align: center; color: var(--text-secondary); padding: 20px; grid-column: 1 / -1;">
+                            Carregando turmas...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-bolt"></i>
+                        Ações Rápidas
+                    </h2>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="user-card" onclick="generateScheduleForCoordination()" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Gerar Horários</div>
+                            <div class="user-email">Criar horários para professores da coordenação</div>
+                        </div>
+                    </div>
+
+                    <div class="user-card" onclick="manageTeachers()" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Gestão de Professores</div>
+                            <div class="user-email">Gerenciar professores da coordenação</div>
+                        </div>
+                    </div>
+
+                    <div class="user-card" onclick="sendNotifications()" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Enviar Notificações</div>
+                            <div class="user-email">Notificar professores sobre horários</div>
+                        </div>
+                    </div>
+
+                    <div class="user-card" onclick="viewReports()" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Relatórios</div>
+                            <div class="user-email">Ver estatísticas da coordenação</div>
+                        </div>
+                    </div>
+
+                    <div class="user-card" onclick="manageDisciplines()" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Disciplinas</div>
+                            <div class="user-email">Gerenciar disciplinas da coordenação</div>
+                        </div>
+                    </div>
+
+                    <div class="user-card" onclick="viewScheduleOverview()" style="cursor: pointer;">
+                        <div class="user-avatar">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Visão Geral</div>
+                            <div class="user-email">Ver todos os horários da coordenação</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script>
+        let db = null;
+        let currentUser = null;
+        let userCoordination = null;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                if (!userDoc.exists || userDoc.data().role !== 'coordenador') {
+                    Swal.fire({
+                        title: 'Acesso Negado!',
+                        text: 'Você não tem permissão para acessar esta página.',
+                        icon: 'error'
+                    }).then(() => {
+                        window.location.href = '/main.html';
+                    });
+                    return;
+                }
+
+                currentUser = user;
+                userCoordination = userDoc.data().coordenacao;
+                db = firebase.firestore();
+
+                await loadDashboardData();
+            });
+        });
+
+        async function loadDashboardData() {
+            try {
+                await Promise.all([
+                    loadCoordinationInfo(),
+                    loadStats(),
+                    loadProfessors(),
+                    loadTurmas()
+                ]);
+            } catch (error) {
+                console.error('Erro ao carregar dados do dashboard:', error);
+                Swal.fire('Erro!', 'Não foi possível carregar os dados do dashboard.', 'error');
+            }
+        }
+
+        async function loadCoordinationInfo() {
+            try {
+                if (!userCoordination) {
+                    document.getElementById('coordinationName').textContent = 'Não definida';
+                    return;
+                }
+
+                const coordDoc = await db.collection('coordenacoes').doc(userCoordination).get();
+                if (coordDoc.exists) {
+                    const coordData = coordDoc.data();
+                    document.getElementById('coordinationName').textContent = coordData.nome;
+                } else {
+                    document.getElementById('coordinationName').textContent = userCoordination;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar informações da coordenação:', error);
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const [
+                    professoresSnapshot,
+                    turmasSnapshot,
+                    horariosSnapshot,
+                    disciplinasSnapshot
+                ] = await Promise.all([
+                    db.collection('professores')
+                        .where('coordenacao', '==', userCoordination)
+                        .where('ativo', '==', true)
+                        .get(),
+                    db.collection('turmas')
+                        .where('coordenacao', '==', userCoordination)
+                        .where('ativo', '==', true)
+                        .get(),
+                    db.collection('horarios').get(),
+                    db.collection('coordenacoes').doc(userCoordination).get()
+                ]);
+
+                document.getElementById('totalProfessors').textContent = professoresSnapshot.size;
+                document.getElementById('totalTurmas').textContent = turmasSnapshot.size;
+
+                const professoresIds = professoresSnapshot.docs.map(doc => doc.id);
+                const horariosCount = horariosSnapshot.docs.filter(doc =>
+                    professoresIds.includes(doc.data().professorId)
+                ).length;
+                document.getElementById('totalSchedules').textContent = horariosCount;
+
+                if (disciplinasSnapshot.exists) {
+                    const disciplinas = disciplinasSnapshot.data().disciplinas || [];
+                    document.getElementById('totalDisciplinas').textContent = disciplinas.length;
+                } else {
+                    document.getElementById('totalDisciplinas').textContent = '0';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+            }
+        }
+
+        async function loadProfessors() {
+            try {
+                const professoresSnapshot = await db.collection('professores')
+                    .where('coordenacao', '==', userCoordination)
+                    .where('ativo', '==', true)
+                    .orderBy('nome')
+                    .get();
+
+                const container = document.getElementById('professorList');
+
+                if (professoresSnapshot.empty) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">Nenhum professor encontrado para esta coordenação.</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                professoresSnapshot.forEach(doc => {
+                    const professor = doc.data();
+                    const div = document.createElement('div');
+                    div.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-light);';
+                    div.innerHTML = `
+                        <div>
+                            <h4 style="margin: 0; color: var(--text-primary);">${professor.nome}</h4>
+                            <p style="margin: 5px 0 0 0; color: var(--text-secondary); font-size: 14px;">${professor.email}</p>
+                            <p style="margin: 5px 0 0 0; color: var(--text-secondary); font-size: 14px;">Cargo: ${professor.cargo || 'Professor'}</p>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="btn btn-primary" onclick="viewProfessorSchedule('${doc.id}')" style="padding: 6px 12px; font-size: 12px;">
+                                Ver Horário
+                            </button>
+                            <button class="btn btn-warning" onclick="editProfessorSchedule('${doc.id}')" style="padding: 6px 12px; font-size: 12px;">
+                                Editar
+                            </button>
+                            <button class="btn btn-success" onclick="notifyProfessor('${doc.id}')" style="padding: 6px 12px; font-size: 12px;">
+                                Notificar
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar professores:', error);
+            }
+        }
+
+        async function loadTurmas() {
+            try {
+                const turmasSnapshot = await db.collection('turmas')
+                    .where('coordenacao', '==', userCoordination)
+                    .where('ativo', '==', true)
+                    .orderBy('nome')
+                    .get();
+
+                const container = document.getElementById('turmaGrid');
+
+                if (turmasSnapshot.empty) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px; grid-column: 1 / -1;">Nenhuma turma encontrada para esta coordenação.</p>';
+                    return;
+                }
+
+                const horariosSnapshot = await db.collection('horarios').get();
+                const turmasComHorario = new Set();
+
+                horariosSnapshot.forEach(doc => {
+                    turmasComHorario.add(doc.data().turmaId);
+                });
+
+                container.innerHTML = '';
+
+                turmasSnapshot.forEach(doc => {
+                    const turma = doc.data();
+                    const hasSchedule = turmasComHorario.has(doc.id);
+
+                    const div = document.createElement('div');
+                    div.style.cssText = `
+                        background: ${hasSchedule ? '#e8f5e8' : '#ffe6e6'};
+                        padding: 15px;
+                        border-radius: var(--border-radius);
+                        text-align: center;
+                        border: 2px solid ${hasSchedule ? '#27ae60' : '#e74c3c'};
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    `;
+                    div.onclick = () => viewTurmaSchedule(doc.id);
+                    div.innerHTML = `
+                        <h4 style="margin: 0 0 5px 0; color: var(--text-primary);">${turma.nome}</h4>
+                        <p style="margin: 0 0 5px 0; color: var(--text-secondary); font-size: 14px;">${turma.turno}</p>
+                        <small style="color: ${hasSchedule ? '#27ae60' : '#e74c3c'}; font-weight: 500;">
+                            ${hasSchedule ? 'Com horário' : 'Sem horário'}
+                        </small>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar turmas:', error);
+            }
+        }
+
+        function viewProfessorSchedule(professorId) {
+            window.open(`/view.html?professorId=${professorId}`, '_blank');
+        }
+
+        function editProfessorSchedule(professorId) {
+            window.location.href = `/schedule-generator.html?professorId=${professorId}`;
+        }
+
+        async function notifyProfessor(professorId) {
+            const { value: message } = await Swal.fire({
+                title: 'Enviar Notificação',
+                input: 'textarea',
+                inputLabel: 'Mensagem:',
+                inputPlaceholder: 'Digite sua mensagem...',
+                showCancelButton: true,
+                confirmButtonText: 'Enviar',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (message) {
+                try {
+                    await db.collection('notificacoes').add({
+                        destinatarioId: professorId,
+                        remetenteId: currentUser.uid,
+                        tipo: 'message',
+                        titulo: 'Mensagem do Coordenador',
+                        mensagem: message,
+                        lida: false,
+                        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    Swal.fire('Sucesso!', 'Notificação enviada com sucesso.', 'success');
+                } catch (error) {
+                    Swal.fire('Erro!', 'Não foi possível enviar a notificação.', 'error');
+                }
+            }
+        }
+
+        function viewTurmaSchedule(turmaId) {
+            window.open(`/turma-schedule.html?turmaId=${turmaId}`, '_blank');
+        }
+
+        function generateScheduleForCoordination() {
+            window.location.href = '/schedule-generator.html';
+        }
+
+        function manageTeachers() {
+            window.location.href = '/prof.html';
+        }
+
+        async function sendNotifications() {
+            const { value: formValues } = await Swal.fire({
+                title: 'Enviar Notificação em Massa',
+                html: `
+                    <input id="swal-input1" class="swal2-input" placeholder="Título da notificação">
+                    <textarea id="swal-input2" class="swal2-textarea" placeholder="Mensagem"></textarea>
+                `,
+                focusConfirm: false,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        document.getElementById('swal-input2').value
+                    ];
+                }
+            });
+
+            if (formValues && formValues[0] && formValues[1]) {
+                try {
+                    const professoresSnapshot = await db.collection('professores')
+                        .where('coordenacao', '==', userCoordination)
+                        .where('ativo', '==', true)
+                        .get();
+
+                    const batch = db.batch();
+
+                    professoresSnapshot.forEach(doc => {
+                        const notificacaoRef = db.collection('notificacoes').doc();
+                        batch.set(notificacaoRef, {
+                            destinatarioId: doc.id,
+                            remetenteId: currentUser.uid,
+                            tipo: 'broadcast',
+                            titulo: formValues[0],
+                            mensagem: formValues[1],
+                            lida: false,
+                            criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    });
+
+                    await batch.commit();
+
+                    Swal.fire('Sucesso!', `Notificação enviada para ${professoresSnapshot.size} professores.`, 'success');
+                } catch (error) {
+                    Swal.fire('Erro!', 'Não foi possível enviar as notificações.', 'error');
+                }
+            }
+        }
+
+        function viewReports() {
+            window.location.href = `/coordination-reports.html?coordination=${userCoordination}`;
+        }
+
+        function manageDisciplines() {
+            window.location.href = `/disciplines-management.html?coordination=${userCoordination}`;
+        }
+
+        function viewScheduleOverview() {
+            window.location.href = `/coordination-overview.html?coordination=${userCoordination}`;
+        }
+    </script>
+</body>
+
+</html>

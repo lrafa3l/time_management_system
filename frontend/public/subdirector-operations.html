@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH | Operações - Subdirector</title>
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/styles/unified-design.css" />
+    <link rel="stylesheet" href="/src/styles/transitions.css" />
+    <link rel="stylesheet" href="/src/styles/sweetalert-fix.css" />
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/assets/images/ipikk-logo.jpg" alt="IPIKK Logo">
+            </div>
+            
+            <div class="sidebar-nav">
+                <a href="/subdirector" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/operacoes" class="nav-item active">
+                    <i class="fas fa-tasks"></i>
+                    <span>Operações</span>
+                </a>
+                <a href="/conta" class="nav-item">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Conta</span>
+                </a>
+                <a href="/definicoes" class="nav-item">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Definições</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-bottom">
+                <a href="/ajuda" class="nav-item">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Ajuda</span>
+                </a>
+                <button id="logout-btn" class="nav-item" style="width: 100%; background: none; border: none; text-align: left;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Terminar Sessão</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Operações do Sistema</h1>
+                <p class="page-subtitle">Gestão operacional e resolução de problemas</p>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="refreshAllData()">
+                        <i class="fas fa-sync-alt"></i>
+                        Atualizar Dados
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros e Controles -->
+            <div class="card" style="margin-bottom: 30px;">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-filter"></i>
+                        Filtros e Controles
+                    </h2>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div>
+                        <label class="form-label">Coordenação:</label>
+                        <select id="coordination-filter" class="form-input">
+                            <option value="">Todas</option>
+                            <option value="eie">EIE</option>
+                            <option value="gsi">GSI</option>
+                            <option value="mecanica">Mecânica</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Status:</label>
+                        <select id="status-filter" class="form-input">
+                            <option value="">Todos</option>
+                            <option value="active">Ativo</option>
+                            <option value="pending">Pendente</option>
+                            <option value="conflict">Conflito</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Período:</label>
+                        <select id="period-filter" class="form-input">
+                            <option value="today">Hoje</option>
+                            <option value="week">Esta Semana</option>
+                            <option value="month">Este Mês</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: end;">
+                        <button class="btn btn-secondary" onclick="applyFilters()">
+                            <i class="fas fa-search"></i>
+                            Aplicar Filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operações Principais -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <!-- Gestão de Horários -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            Gestão de Horários
+                        </h2>
+                        <button class="btn btn-primary" onclick="createNewSchedule()">
+                            <i class="fas fa-plus"></i>
+                            Novo Horário
+                        </button>
+                    </div>
+                    
+                    <div class="operations-grid">
+                        <button class="operation-card" onclick="viewActiveSchedules()">
+                            <i class="fas fa-eye"></i>
+                            <span>Ver Horários Ativos</span>
+                            <small id="active-schedules-count">-</small>
+                        </button>
+                        
+                        <button class="operation-card" onclick="detectConflicts()">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Detectar Conflitos</span>
+                            <small id="conflicts-count">-</small>
+                        </button>
+                        
+                        <button class="operation-card" onclick="optimizeSchedules()">
+                            <i class="fas fa-magic"></i>
+                            <span>Otimizar Horários</span>
+                            <small>Automático</small>
+                        </button>
+                        
+                        <button class="operation-card" onclick="bulkScheduleOperations()">
+                            <i class="fas fa-tasks"></i>
+                            <span>Operações em Massa</span>
+                            <small>Múltiplos</small>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Gestão de Recursos -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-building"></i>
+                            Gestão de Recursos
+                        </h2>
+                        <button class="btn btn-primary" onclick="addNewResource()">
+                            <i class="fas fa-plus"></i>
+                            Novo Recurso
+                        </button>
+                    </div>
+                    
+                    <div class="operations-grid">
+                        <button class="operation-card" onclick="manageRooms()">
+                            <i class="fas fa-door-open"></i>
+                            <span>Gestão de Salas</span>
+                            <small id="rooms-count">-</small>
+                        </button>
+                        
+                        <button class="operation-card" onclick="manageEquipment()">
+                            <i class="fas fa-tools"></i>
+                            <span>Equipamentos</span>
+                            <small id="equipment-count">-</small>
+                        </button>
+                        
+                        <button class="operation-card" onclick="checkAvailability()">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Verificar Disponibilidade</span>
+                            <small>Tempo Real</small>
+                        </button>
+                        
+                        <button class="operation-card" onclick="maintenanceSchedule()">
+                            <i class="fas fa-wrench"></i>
+                            <span>Manutenção</span>
+                            <small id="maintenance-count">-</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestão de Professores -->
+            <!-- <div class="card" style="margin-bottom: 30px;">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-users"></i>
+                        Gestão de Professores
+                    </h2>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="importTeachers()">
+                            <i class="fas fa-upload"></i>
+                            Importar
+                        </button>
+                        <button class="btn btn-primary" onclick="addNewTeacher()">
+                            <i class="fas fa-user-plus"></i>
+                            Novo Professor
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="select-all-teachers" onchange="toggleSelectAllTeachers()">
+                                </th>
+                                <th>Professor</th>
+                                <th>Coordenação</th>
+                                <th>Disciplinas</th>
+                                <th>Carga Horária</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachers-table">
+                            <tr>
+                                <td colspan="7" class="text-center">Carregando professores...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn btn-warning" onclick="bulkEditTeachers()" disabled id="bulk-edit-btn">
+                        <i class="fas fa-edit"></i>
+                        Editar Selecionados
+                    </button>
+                    <button class="btn btn-info" onclick="exportTeachers()">
+                        <i class="fas fa-download"></i>
+                        Exportar Lista
+                    </button>
+                </div>
+            </div> -->
+
+            <!-- Relatórios Operacionais -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <!-- Relatórios Rápidos -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Relatórios Rápidos
+                        </h2>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button class="btn btn-outline" onclick="generateOccupancyReport()">
+                            <i class="fas fa-percentage"></i>
+                            Relatório de Ocupação
+                        </button>
+                        <button class="btn btn-outline" onclick="generateConflictReport()">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Relatório de Conflitos
+                        </button>
+                        <button class="btn btn-outline" onclick="generateWorkloadReport()">
+                            <i class="fas fa-clock"></i>
+                            Relatório de Carga Horária
+                        </button>
+                        <button class="btn btn-outline" onclick="generateEfficiencyReport()">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Relatório de Eficiência
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ferramentas de Sistema -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-cogs"></i>
+                            Ferramentas de Sistema
+                        </h2>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button class="btn btn-outline" onclick="runSystemDiagnostics()">
+                            <i class="fas fa-stethoscope"></i>
+                            Diagnóstico do Sistema
+                        </button>
+                        <button class="btn btn-outline" onclick="clearSystemCache()">
+                            <i class="fas fa-broom"></i>
+                            Limpar Cache
+                        </button>
+                        <button class="btn btn-outline" onclick="syncWithExternalSystems()">
+                            <i class="fas fa-sync"></i>
+                            Sincronizar Sistemas
+                        </button>
+                        <button class="btn btn-outline" onclick="validateDataIntegrity()">
+                            <i class="fas fa-shield-alt"></i>
+                            Validar Integridade
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/mobile-toggle.js"></script>
+    <script src="/src/js/logOut.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script src="/src/js/subdirector-operations.js"></script>
+
+    <style>
+        .operations-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .operation-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .operation-card:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .operation-card i {
+            font-size: 24px;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+        
+        .operation-card span {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .operation-card small {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            justify-content: flex-start;
+            gap: 10px;
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+    </style>
+</body>
+</html>

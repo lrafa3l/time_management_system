@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH | Notificações</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-messaging-compat.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/styles/transitions.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    
+    <style>
+        :root {
+            --charcoal: #29465c;
+            --berkeley-blue: #1c3a5c;
+            --picton-blue: #23aae2;
+            --cerulean: #20708a;
+            --alice-blue: #e4eff4;
+            --seasalt: #f6f6f6;
+        }
+        
+        body {
+            font-family: 'AfacadFlux', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--alice-blue), var(--seasalt));
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, var(--charcoal), var(--berkeley-blue));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        
+        .notifications-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .notifications-header {
+            background: var(--charcoal);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notifications-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .notification-item.unread {
+            background-color: #e6f3ff;
+            border-left: 4px solid var(--picton-blue);
+        }
+        
+        .notification-item.read {
+            opacity: 0.8;
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .notification-title {
+            font-weight: bold;
+            color: var(--charcoal);
+            margin: 0;
+        }
+        
+        .notification-time {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .notification-message {
+            color: #555;
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+        
+        .notification-type {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        
+        .type-schedule {
+            background: #e8f5e8;
+            color: #27ae60;
+        }
+        
+        .type-message {
+            background: #e6f3ff;
+            color: var(--picton-blue);
+        }
+        
+        .type-broadcast {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .type-system {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn-primary {
+            background: var(--picton-blue);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: var(--cerulean);
+        }
+        
+        .btn-secondary {
+            background: var(--berkeley-blue);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--charcoal);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .notification-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-view {
+            background: var(--picton-blue);
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .filter-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            transition: background-color 0.2s;
+        }
+        
+        .filter-tab.active {
+            background: var(--picton-blue);
+            color: white;
+        }
+        
+        .filter-tab:hover:not(.active) {
+            background: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-transition" id="pageTransition">
+        <div class="bounce-loader">
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+            <div class="bounce-ball"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Notificações</h1>
+            <p>Instituto Politécnico Industrial do Kilamba Kiaxi Nº 8056 "Nova Vida"</p>
+            <button onclick="window.history.back()" class="btn-secondary" style="float: right;">Voltar</button>
+        </div>
+
+        <div class="notifications-container">
+            <div class="notifications-header">
+                <h3>Suas Notificações</h3>
+                <div>
+                    <button class="btn-primary" onclick="markAllAsRead()">Marcar Todas como Lidas</button>
+                    <button class="btn-secondary" onclick="deleteAllRead()">Limpar Lidas</button>
+                </div>
+            </div>
+            
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterNotifications('all')">Todas</button>
+                <button class="filter-tab" onclick="filterNotifications('unread')">Não Lidas</button>
+                <button class="filter-tab" onclick="filterNotifications('schedule')">Horários</button>
+                <button class="filter-tab" onclick="filterNotifications('message')">Mensagens</button>
+            </div>
+            
+            <div class="notifications-list" id="notificationsList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔔</div>
+                    <p>Carregando notificações...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/src/js/page-transitions.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script>
+        let db = null;
+        let currentUser = null;
+        let allNotifications = [];
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    window.location.href = '/login';
+                    return;
+                }
+                
+                currentUser = user;
+                db = firebase.firestore();
+                
+                await loadNotifications();
+                
+                // Configurar listener para notificações em tempo real
+                setupRealtimeListener();
+            });
+        });
+
+        async function loadNotifications() {
+            try {
+                const notificationsSnapshot = await db.collection('notificacoes')
+                    .where('destinatarioId', '==', currentUser.uid)
+                    .orderBy('criadoEm', 'desc')
+                    .limit(50)
+                    .get();
+                
+                allNotifications = notificationsSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                displayNotifications();
+                
+            } catch (error) {
+                console.error('Erro ao carregar notificações:', error);
+                document.getElementById('notificationsList').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <p>Erro ao carregar notificações</p>
+                    </div>
+                `;
+            }
+        }
+
+        function setupRealtimeListener() {
+            db.collection('notificacoes')
+                .where('destinatarioId', '==', currentUser.uid)
+                .orderBy('criadoEm', 'desc')
+                .onSnapshot((snapshot) => {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === 'added') {
+                            const notification = {
+                                id: change.doc.id,
+                                ...change.doc.data()
+                            };
+                            
+                            // Adicionar nova notificação ao início da lista
+                            allNotifications.unshift(notification);
+                            
+                            // Mostrar notificação toast para novas notificações
+                            if (change.doc.data().criadoEm && 
+                                change.doc.data().criadoEm.toDate() > new Date(Date.now() - 5000)) {
+                                showNotificationToast(notification);
+                            }
+                        }
+                    });
+                    
+                    displayNotifications();
+                });
+        }
+
+        function showNotificationToast(notification) {
+            Swal.fire({
+                title: 'Nova Notificação!',
+                text: notification.titulo,
+                icon: 'info',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        }
+
+        function displayNotifications() {
+            const container = document.getElementById('notificationsList');
+            
+            let filteredNotifications = allNotifications;
+            
+            // Aplicar filtro
+            switch (currentFilter) {
+                case 'unread':
+                    filteredNotifications = allNotifications.filter(n => !n.lida);
+                    break;
+                case 'schedule':
+                    filteredNotifications = allNotifications.filter(n => n.tipo === 'schedule_created' || n.tipo === 'schedule_updated');
+                    break;
+                case 'message':
+                    filteredNotifications = allNotifications.filter(n => n.tipo === 'message' || n.tipo === 'broadcast');
+                    break;
+            }
+            
+            if (filteredNotifications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>Nenhuma notificação encontrada</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredNotifications.map(notification => {
+                const time = notification.criadoEm ? 
+                    new Date(notification.criadoEm.toDate()).toLocaleString('pt') : 
+                    'Data não disponível';
+                
+                const typeClass = getNotificationTypeClass(notification.tipo);
+                const typeLabel = getNotificationTypeLabel(notification.tipo);
+                
+                return `
+                    <div class="notification-item ${notification.lida ? 'read' : 'unread'}" 
+                         onclick="markAsRead('${notification.id}')">
+                        <div class="notification-header">
+                            <h4 class="notification-title">${notification.titulo}</h4>
+                            <span class="notification-time">${time}</span>
+                        </div>
+                        <div class="notification-message">${notification.mensagem}</div>
+                        <div style="margin-top: 8px;">
+                            <span class="notification-type ${typeClass}">${typeLabel}</span>
+                        </div>
+                        <div class="notification-actions">
+                            ${getNotificationActions(notification)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getNotificationTypeClass(type) {
+            switch (type) {
+                case 'schedule_created':
+                case 'schedule_updated':
+                    return 'type-schedule';
+                case 'message':
+                    return 'type-message';
+                case 'broadcast':
+                    return 'type-broadcast';
+                case 'system':
+                    return 'type-system';
+                default:
+                    return 'type-message';
+            }
+        }
+
+        function getNotificationTypeLabel(type) {
+            switch (type) {
+                case 'schedule_created':
+                    return 'Horário Criado';
+                case 'schedule_updated':
+                    return 'Horário Atualizado';
+                case 'message':
+                    return 'Mensagem';
+                case 'broadcast':
+                    return 'Comunicado';
+                case 'system':
+                    return 'Sistema';
+                default:
+                    return 'Notificação';
+            }
+        }
+
+        function getNotificationActions(notification) {
+            let actions = `
+                <button class="btn-small btn-delete" onclick="deleteNotification('${notification.id}', event)">
+                    Excluir
+                </button>
+            `;
+            
+            // Adicionar ação específica baseada no tipo
+            if (notification.tipo === 'schedule_created' || notification.tipo === 'schedule_updated') {
+                actions = `
+                    <button class="btn-small btn-view" onclick="viewSchedule('${notification.professorId || currentUser.uid}', event)">
+                        Ver Horário
+                    </button>
+                ` + actions;
+            }
+            
+            return actions;
+        }
+
+        async function markAsRead(notificationId) {
+            try {
+                await db.collection('notificacoes').doc(notificationId).update({
+                    lida: true
+                });
+                
+                // Atualizar localmente
+                const notification = allNotifications.find(n => n.id === notificationId);
+                if (notification) {
+                    notification.lida = true;
+                    displayNotifications();
+                }
+                
+            } catch (error) {
+                console.error('Erro ao marcar como lida:', error);
+            }
+        }
+
+        async function markAllAsRead() {
+            try {
+                const batch = db.batch();
+                const unreadNotifications = allNotifications.filter(n => !n.lida);
+                
+                unreadNotifications.forEach(notification => {
+                    const notificationRef = db.collection('notificacoes').doc(notification.id);
+                    batch.update(notificationRef, { lida: true });
+                });
+                
+                await batch.commit();
+                
+                // Atualizar localmente
+                allNotifications.forEach(n => n.lida = true);
+                displayNotifications();
+                
+                Swal.fire('Sucesso!', 'Todas as notificações foram marcadas como lidas.', 'success');
+                
+            } catch (error) {
+                console.error('Erro ao marcar todas como lidas:', error);
+                Swal.fire('Erro!', 'Não foi possível marcar as notificações como lidas.', 'error');
+            }
+        }
+
+        async function deleteAllRead() {
+            const readNotifications = allNotifications.filter(n => n.lida);
+            
+            if (readNotifications.length === 0) {
+                Swal.fire('Info', 'Nenhuma notificação lida para excluir.', 'info');
+                return;
+            }
+            
+            const result = await Swal.fire({
+                title: 'Confirmar Exclusão',
+                text: `Deseja excluir ${readNotifications.length} notificações lidas?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar'
+            });
+            
+            if (!result.isConfirmed) return;
+            
+            try {
+                const batch = db.batch();
+                
+                readNotifications.forEach(notification => {
+                    const notificationRef = db.collection('notificacoes').doc(notification.id);
+                    batch.delete(notificationRef);
+                });
+                
+                await batch.commit();
+                
+                // Atualizar localmente
+                allNotifications = allNotifications.filter(n => !n.lida);
+                displayNotifications();
+                
+                Swal.fire('Sucesso!', 'Notificações lidas excluídas com sucesso.', 'success');
+                
+            } catch (error) {
+                console.error('Erro ao excluir notificações:', error);
+                Swal.fire('Erro!', 'Não foi possível excluir as notificações.', 'error');
+            }
+        }
+
+        async function deleteNotification(notificationId, event) {
+            event.stopPropagation();
+            
+            const result = await Swal.fire({
+                title: 'Confirmar Exclusão',
+                text: 'Deseja excluir esta notificação?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar'
+            });
+            
+            if (!result.isConfirmed) return;
+            
+            try {
+                await db.collection('notificacoes').doc(notificationId).delete();
+                
+                // Atualizar localmente
+                allNotifications = allNotifications.filter(n => n.id !== notificationId);
+                displayNotifications();
+                
+                Swal.fire('Sucesso!', 'Notificação excluída com sucesso.', 'success');
+                
+            } catch (error) {
+                console.error('Erro ao excluir notificação:', error);
+                Swal.fire('Erro!', 'Não foi possível excluir a notificação.', 'error');
+            }
+        }
+
+        function viewSchedule(professorId, event) {
+            event.stopPropagation();
+            window.open(`/view.html?professorId=${professorId}`, '_blank');
+        }
+
+        function filterNotifications(filter) {
+            currentFilter = filter;
+            
+            // Atualizar tabs ativas
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            displayNotifications();
+        }
+    </script>
+</body>
+</html>
