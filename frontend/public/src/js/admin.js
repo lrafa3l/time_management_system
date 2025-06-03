@@ -376,8 +376,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }).length;
         activeUsers.textContent = activeCount;
 
-        // Professores (assumindo que todos os usuários não-admin são professores)
-        const professorCount = allUsers.filter(user => user.role !== 'admin').length;
+        // Professores   
+        const professorCount = allUsers.filter(user => user.role === 'professor').length;
         totalProfessors.textContent = professorCount;
 
         // Administradores

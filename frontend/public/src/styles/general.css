@@ -10,10 +10,11 @@ html {
   background: linear-gradient(to bottom right, #e7edf7, #c5e4f9);
   font-family: "AfacadFlux", sans-serif;
   font-weight: 400;
-  height: 100%;
+  height: 100vh;
   margin: 0;
+  position: relative; /* Adicionado para conter o container */
+  overflow: hidden; /* Evita rolagem indesejada */
 }
-
 
 .d-flex {
   display: flex;
@@ -29,14 +30,13 @@ html {
   background-color: #f5f7ff;
   border-right: 1px solid var(--gray-medium);
   display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 80;
+  position: absolute; /* Alterado de fixed para absolute */
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Ajusta para centro exato */
+  z-index: 10; /* Garante que fique acima do fundo, mas abaixo do modal */
   box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  position: relative;
   border-radius: 12px;
   padding-bottom: 25px;
   justify-content: space-around;
@@ -56,6 +56,15 @@ html {
 
 .logo {
   width: 130px;
+}
+
+/* Ajustes para compatibilidade com SweetAlert2 */
+body.swal2-shown .container {
+  position: absolute; /* Mantém o posicionamento absoluto */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10; /* Garante que o container não seja obscurecido */
 }
 
 /* ===== RESPONSIVE DESIGN STYLES ===== */

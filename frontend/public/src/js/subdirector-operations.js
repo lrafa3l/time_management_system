@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Verificar autenticação e permissões
   firebase.auth().onAuthStateChanged(async (user) => {
     if (!user) {
-      window.location.href = "/index.html"
+      window.location.href = "/login"
       return
     }
 
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         text: "Você não tem permissão para acessar esta página.",
         icon: "error",
       }).then(() => {
-        window.location.href = "/main.html"
+        window.location.href = "/login"
       })
       return
     }

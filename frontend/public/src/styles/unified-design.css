@@ -192,11 +192,24 @@ body {
 }
 
 .page-title {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
-  color: var(--text-primary);
+  background: linear-gradient(45deg, var(--text-primary), var(--primary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color:  transparent;
   margin-bottom: 8px;
 }
+
+/* 
+.welcome-title {
+  font-size: 30px;
+  font-weight: 700;
+  background: linear-gradient(45deg, var(--text-primary), var(--primary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+*/
 
 .page-subtitle {
   color: var(--text-secondary);

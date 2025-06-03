@@ -3,11 +3,11 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Configura CORS para permitir requisições externas (ex.: Firebase)
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: ['http://localhost:5000', 'http://127.0.0.1:5000'],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
@@ -23,8 +23,8 @@ app.use(express.static(path.join(__dirname, 'frontend', 'public'), {
 const rotasPersonalizadas = {
     '/dashboard-admin': 'dashboard-admin.html',
     '/director': 'dashboard-director.html',
-    '/director/relatorios': 'director-reports.html',
-    '/director/aprovacoes': 'director-approvals.html',
+    '/relatorios': 'director-reports.html',
+    '/aprovacoes': 'director-approvals.html',
     '/subdirector': 'dashboard-subdirector.html',
     '/operacoes': 'subdirector-operations.html',
     '/coordenador': 'dashboard-coordenador.html',

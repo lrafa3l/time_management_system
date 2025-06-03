@@ -19,6 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "Acesso Negado!",
         text: "Você não tem permissão para acessar esta página.",
         icon: "error",
+        customClass: {
+          popup: 'my-swal-popup',
+          title: 'my-swal-title',
+          content: 'my-swal-text',
+          confirmButton: 'my-swal-confirm-button',
+        }
       }).then(() => {
         window.location.href = "/main.html"
       })
@@ -33,12 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
   async function initializeDashboard() {
     try {
       await Promise.all([
-        loadAlerts(),
+        // loadAlerts(),
         loadStats(),
         loadConflicts(),
-        loadRecentActivity(),
+        // loadRecentActivity(),
         loadCoordinationsStatus(),
-        loadTasks(),
+        // loadTasks(),
         updateSystemStatus(),
       ])
 
@@ -46,68 +52,78 @@ document.addEventListener("DOMContentLoaded", () => {
       setupEventListeners()
     } catch (error) {
       console.error("Erro ao inicializar dashboard:", error)
-      Swal.fire("Erro!", "Não foi possível carregar o dashboard.", "error")
-    }
-  }
-
-  async function loadAlerts() {
-    try {
-      const alertsContainer = document.getElementById("alerts-container")
-
-      // Mock data para alertas críticos
-      const alerts = [
-        {
-          type: "error",
-          title: "Conflito de Horário Detectado",
-          message: "Professor João Silva tem conflito na Sala 201 às 14:00",
-          time: "Há 5 minutos",
-          urgent: true,
-        },
-        {
-          type: "warning",
-          title: "Sala em Manutenção",
-          message: "Lab. Informática 2 indisponível até amanhã",
-          time: "Há 1 hora",
-          urgent: false,
-        },
-        {
-          type: "info",
-          title: "Backup Automático",
-          message: "Backup do sistema concluído com sucesso",
-          time: "Há 2 horas",
-          urgent: false,
-        },
-      ]
-
-      alertsContainer.innerHTML = ""
-
-      alerts.forEach((alert) => {
-        const alertCard = document.createElement("div")
-        alertCard.className = `alert-card ${alert.type}`
-
-        alertCard.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div style="flex: 1;">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                                <i class="fas fa-${alert.type === "error" ? "exclamation-triangle" : alert.type === "warning" ? "exclamation-circle" : "info-circle"}"></i>
-                                <strong>${alert.title}</strong>
-                                ${alert.urgent ? '<span style="background: #ef4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">URGENTE</span>' : ""}
-                            </div>
-                            <p style="margin: 0; font-size: 14px;">${alert.message}</p>
-                            <small style="color: var(--text-secondary);">${alert.time}</small>
-                        </div>
-                        <button onclick="dismissAlert(this)" style="background: none; border: none; color: var(--text-secondary); cursor: pointer;">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `
-
-        alertsContainer.appendChild(alertCard)
+      Swal.fire({
+        title: "Erro!",
+        text: "Não foi possível carregar o dashboard.",
+        icon: "error",
+        customClass: {
+          popup: 'my-swal-popup',
+          title: 'my-swal-title',
+          content: 'my-swal-text',
+          confirmButton: 'my-swal-confirm-button',
+        }
       })
-    } catch (error) {
-      console.error("Erro ao carregar alertas:", error)
     }
   }
+
+  // async function loadAlerts() {
+  //   try {
+  //     const alertsContainer = document.getElementById("alerts-container")
+
+  //     // Mock data para alertas críticos
+  //     const alerts = [
+  //       {
+  //         type: "error",
+  //         title: "Conflito de Horário Detectado",
+  //         message: "Professor João Silva tem conflito na Sala 201 às 14:00",
+  //         time: "Há 5 minutos",
+  //         urgent: true,
+  //       },
+  //       {
+  //         type: "warning",
+  //         title: "Sala em Manutenção",
+  //         message: "Lab. Informática 2 indisponível até amanhã",
+  //         time: "Há 1 hora",
+  //         urgent: false,
+  //       },
+  //       {
+  //         type: "info",
+  //         title: "Backup Automático",
+  //         message: "Backup do sistema concluído com sucesso",
+  //         time: "Há 2 horas",
+  //         urgent: false,
+  //       },
+  //     ]
+
+  //     alertsContainer.innerHTML = ""
+
+  //     alerts.forEach((alert) => {
+  //       const alertCard = document.createElement("div")
+  //       alertCard.className = `alert-card ${alert.type}`
+
+  //       alertCard.innerHTML = `
+  //                   <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+  //                       <div style="flex: 1;">
+  //                           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+  //                               <i class="fas fa-${alert.type === "error" ? "exclamation-triangle" : alert.type === "warning" ? "exclamation-circle" : "info-circle"}"></i>
+  //                               <strong>${alert.title}</strong>
+  //                               ${alert.urgent ? '<span style="background: #ef4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">URGENTE</span>' : ""}
+  //                           </div>
+  //                           <p style="margin: 0; font-size: 14px;">${alert.message}</p>
+  //                           <small style="color: var(--text-secondary);">${alert.time}</small>
+  //                       </div>
+  //                       <button onclick="dismissAlert(this)" style="background: none; border: none; color: var(--text-secondary); cursor: pointer;">
+  //                           <i class="fas fa-times"></i>
+  //                       </button>
+  //                   </div>
+  //               `
+
+  //       alertsContainer.appendChild(alertCard)
+  //     })
+  //   } catch (error) {
+  //     console.error("Erro ao carregar alertas:", error)
+  //   }
+  // }
 
   async function loadStats() {
     try {
@@ -254,82 +270,82 @@ document.addEventListener("DOMContentLoaded", () => {
     return card
   }
 
-  async function loadRecentActivity() {
-    try {
-      const activityContainer = document.getElementById("recent-activity")
+  // async function loadRecentActivity() {
+  //   try {
+  //     const activityContainer = document.getElementById("recent-activity")
 
-      // Mock data para atividade recente
-      const activities = [
-        {
-          type: "schedule_created",
-          user: "João Silva",
-          action: "criou um novo horário",
-          target: "Programação I - EIE-2A",
-          time: new Date(Date.now() - 300000), // 5 min atrás
-          icon: "fas fa-plus",
-          color: "#10b981",
-        },
-        {
-          type: "conflict_resolved",
-          user: "Maria Santos",
-          action: "resolveu conflito",
-          target: "Sala 201 - 14:00",
-          time: new Date(Date.now() - 900000), // 15 min atrás
-          icon: "fas fa-check",
-          color: "#3b82f6",
-        },
-        {
-          type: "teacher_added",
-          user: "Ana Costa",
-          action: "adicionou professor",
-          target: "Paulo Mendes",
-          time: new Date(Date.now() - 1800000), // 30 min atrás
-          icon: "fas fa-user-plus",
-          color: "#8b5cf6",
-        },
-        {
-          type: "room_updated",
-          user: "Carlos Lima",
-          action: "atualizou sala",
-          target: "Lab. Informática 2",
-          time: new Date(Date.now() - 3600000), // 1 hora atrás
-          icon: "fas fa-edit",
-          color: "#f59e0b",
-        },
-      ]
+  //     // Mock data para atividade recente
+  //     const activities = [
+  //       {
+  //         type: "schedule_created",
+  //         user: "João Silva",
+  //         action: "criou um novo horário",
+  //         target: "Programação I - EIE-2A",
+  //         time: new Date(Date.now() - 300000), // 5 min atrás
+  //         icon: "fas fa-plus",
+  //         color: "#10b981",
+  //       },
+  //       {
+  //         type: "conflict_resolved",
+  //         user: "Maria Santos",
+  //         action: "resolveu conflito",
+  //         target: "Sala 201 - 14:00",
+  //         time: new Date(Date.now() - 900000), // 15 min atrás
+  //         icon: "fas fa-check",
+  //         color: "#3b82f6",
+  //       },
+  //       {
+  //         type: "teacher_added",
+  //         user: "Ana Costa",
+  //         action: "adicionou professor",
+  //         target: "Paulo Mendes",
+  //         time: new Date(Date.now() - 1800000), // 30 min atrás
+  //         icon: "fas fa-user-plus",
+  //         color: "#8b5cf6",
+  //       },
+  //       {
+  //         type: "room_updated",
+  //         user: "Carlos Lima",
+  //         action: "atualizou sala",
+  //         target: "Lab. Informática 2",
+  //         time: new Date(Date.now() - 3600000), // 1 hora atrás
+  //         icon: "fas fa-edit",
+  //         color: "#f59e0b",
+  //       },
+  //     ]
 
-      activityContainer.innerHTML = ""
+  //     activityContainer.innerHTML = ""
 
-      activities.forEach((activity) => {
-        const activityItem = document.createElement("div")
-        activityItem.style.cssText = `
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-                    padding: 12px 0;
-                    border-bottom: 1px solid var(--border-light);
-                `
+  //     activities.forEach((activity) => {
+  //       const activityItem = document.createElement("div")
+  //       activityItem.style.cssText = `
+  //                   display: flex;
+  //                   align-items: center;
+  //                   gap: 15px;
+  //                   padding: 12px 0;
+  //                   border-bottom: 1px solid var(--border-light);
+  //               `
 
-        const timeAgo = getTimeAgo(activity.time)
+  //       const timeAgo = getTimeAgo(activity.time)
 
-        activityItem.innerHTML = `
-                    <div style="width: 32px; height: 32px; border-radius: 50%; background: ${activity.color}20; display: flex; align-items: center; justify-content: center;">
-                        <i class="${activity.icon}" style="color: ${activity.color}; font-size: 14px;"></i>
-                    </div>
-                    <div style="flex: 1;">
-                        <p style="margin: 0; font-size: 14px;">
-                            <strong>${activity.user}</strong> ${activity.action} <em>${activity.target}</em>
-                        </p>
-                        <small style="color: var(--text-secondary);">${timeAgo}</small>
-                    </div>
-                `
+  //       activityItem.innerHTML = `
+  //                   <div style="width: 32px; height: 32px; border-radius: 50%; background: ${activity.color}20; display: flex; align-items: center; justify-content: center;">
+  //                       <i class="${activity.icon}" style="color: ${activity.color}; font-size: 14px;"></i>
+  //                   </div>
+  //                   <div style="flex: 1;">
+  //                       <p style="margin: 0; font-size: 14px;">
+  //                           <strong>${activity.user}</strong> ${activity.action} <em>${activity.target}</em>
+  //                       </p>
+  //                       <small style="color: var(--text-secondary);">${timeAgo}</small>
+  //                   </div>
+  //               `
 
-        activityContainer.appendChild(activityItem)
-      })
-    } catch (error) {
-      console.error("Erro ao carregar atividade recente:", error)
-    }
-  }
+  //       activityContainer.appendChild(activityItem)
+  //     })
+  //   } catch (error) {
+  //     console.error("Erro ao carregar atividade recente:", error)
+  //   }
+  // }
 
   async function loadCoordinationsStatus() {
     try {
@@ -356,8 +372,8 @@ document.addEventListener("DOMContentLoaded", () => {
           lastUpdate: new Date(Date.now() - 3600000),
         },
         {
-          name: "Mecânica",
-          coordinator: "Ana Costa",
+          name: "INF",
+          coordinator: "Diassilua Paulo",
           teachers: 15,
           schedules: 60,
           conflicts: 2,
@@ -408,96 +424,96 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function loadTasks() {
-    try {
-      const tasksTable = document.getElementById("tasks-table")
+  // async function loadTasks() {
+  //   try {
+  //     const tasksTable = document.getElementById("tasks-table")
 
-      // Mock data para tarefas
-      const tasks = [
-        {
-          id: "1",
-          title: "Revisar horários da semana",
-          priority: "high",
-          responsible: "João Silva",
-          deadline: new Date(Date.now() + 86400000), // amanhã
-          status: "pending",
-        },
-        {
-          id: "2",
-          title: "Atualizar dados dos professores",
-          priority: "medium",
-          responsible: "Maria Santos",
-          deadline: new Date(Date.now() + 172800000), // 2 dias
-          status: "in_progress",
-        },
-        {
-          id: "3",
-          title: "Preparar relatório mensal",
-          priority: "low",
-          responsible: "Ana Costa",
-          deadline: new Date(Date.now() + 604800000), // 1 semana
-          status: "pending",
-        },
-      ]
+  //     // Mock data para tarefas
+  //     const tasks = [
+  //       {
+  //         id: "1",
+  //         title: "Revisar horários da semana",
+  //         priority: "high",
+  //         responsible: "João Silva",
+  //         deadline: new Date(Date.now() + 86400000), // amanhã
+  //         status: "pending",
+  //       },
+  //       {
+  //         id: "2",
+  //         title: "Atualizar dados dos professores",
+  //         priority: "medium",
+  //         responsible: "Maria Santos",
+  //         deadline: new Date(Date.now() + 172800000), // 2 dias
+  //         status: "in_progress",
+  //       },
+  //       {
+  //         id: "3",
+  //         title: "Preparar relatório mensal",
+  //         priority: "low",
+  //         responsible: "Ana Costa",
+  //         deadline: new Date(Date.now() + 604800000), // 1 semana
+  //         status: "pending",
+  //       },
+  //     ]
 
-      tasksTable.innerHTML = ""
+  //     tasksTable.innerHTML = ""
 
-      if (tasks.length === 0) {
-        tasksTable.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma tarefa pendente</td></tr>'
-        return
-      }
+  //     if (tasks.length === 0) {
+  //       tasksTable.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma tarefa pendente</td></tr>'
+  //       return
+  //     }
 
-      tasks.forEach((task) => {
-        const row = document.createElement("tr")
+  //     tasks.forEach((task) => {
+  //       const row = document.createElement("tr")
 
-        const priorityColors = {
-          high: "bg-red-100 text-red-800",
-          medium: "bg-yellow-100 text-yellow-800",
-          low: "bg-green-100 text-green-800",
-        }
+  //       const priorityColors = {
+  //         high: "bg-red-100 text-red-800",
+  //         medium: "bg-yellow-100 text-yellow-800",
+  //         low: "bg-green-100 text-green-800",
+  //       }
 
-        const statusColors = {
-          pending: "bg-gray-100 text-gray-800",
-          in_progress: "bg-blue-100 text-blue-800",
-          completed: "bg-green-100 text-green-800",
-        }
+  //       const statusColors = {
+  //         pending: "bg-gray-100 text-gray-800",
+  //         in_progress: "bg-blue-100 text-blue-800",
+  //         completed: "bg-green-100 text-green-800",
+  //       }
 
-        const statusNames = {
-          pending: "Pendente",
-          in_progress: "Em Andamento",
-          completed: "Concluída",
-        }
+  //       const statusNames = {
+  //         pending: "Pendente",
+  //         in_progress: "Em Andamento",
+  //         completed: "Concluída",
+  //       }
 
-        row.innerHTML = `
-                    <td>${task.title}</td>
-                    <td>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${priorityColors[task.priority]}">
-                            ${task.priority === "high" ? "Alta" : task.priority === "medium" ? "Média" : "Baixa"}
-                        </span>
-                    </td>
-                    <td>${task.responsible}</td>
-                    <td>${task.deadline.toLocaleDateString("pt-BR")}</td>
-                    <td>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[task.status]}">
-                            ${statusNames[task.status]}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm" onclick="editTask('${task.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-success btn-sm" onclick="completeTask('${task.id}')">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    </td>
-                `
+  //       row.innerHTML = `
+  //                   <td>${task.title}</td>
+  //                   <td>
+  //                       <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${priorityColors[task.priority]}">
+  //                           ${task.priority === "high" ? "Alta" : task.priority === "medium" ? "Média" : "Baixa"}
+  //                       </span>
+  //                   </td>
+  //                   <td>${task.responsible}</td>
+  //                   <td>${task.deadline.toLocaleDateString("pt-BR")}</td>
+  //                   <td>
+  //                       <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[task.status]}">
+  //                           ${statusNames[task.status]}
+  //                       </span>
+  //                   </td>
+  //                   <td>
+  //                       <button class="btn btn-secondary btn-sm" onclick="editTask('${task.id}')">
+  //                           <i class="fas fa-edit"></i>
+  //                       </button>
+  //                       <button class="btn btn-success btn-sm" onclick="completeTask('${task.id}')">
+  //                           <i class="fas fa-check"></i>
+  //                       </button>
+  //                   </td>
+  //               `
 
-        tasksTable.appendChild(row)
-      })
-    } catch (error) {
-      console.error("Erro ao carregar tarefas:", error)
-    }
-  }
+  //       tasksTable.appendChild(row)
+  //     })
+  //   } catch (error) {
+  //     console.error("Erro ao carregar tarefas:", error)
+  //   }
+  // }
 
   async function updateSystemStatus() {
     try {
@@ -552,10 +568,18 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Como deseja resolver este conflito?",
       icon: "question",
       showCancelButton: true,
+      showDenyButton: true,
       confirmButtonText: "Resolver Automaticamente",
       cancelButtonText: "Resolver Manualmente",
-      showDenyButton: true,
       denyButtonText: "Cancelar",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        content: 'my-swal-text',
+        confirmButton: 'my-swal-confirm-button',
+        cancelButton: 'my-swal-cancel-button',
+        denyButton: 'my-swal-button',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         autoResolveConflict(conflictId)
@@ -573,6 +597,13 @@ document.addEventListener("DOMContentLoaded", () => {
       showCancelButton: true,
       confirmButtonText: "Sim, resolver todos",
       cancelButtonText: "Cancelar",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        content: 'my-swal-text',
+        confirmButton: 'my-swal-confirm-button',
+        cancelButton: 'my-swal-cancel-button',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
@@ -580,13 +611,28 @@ document.addEventListener("DOMContentLoaded", () => {
           text: "Processando soluções automáticas...",
           allowOutsideClick: false,
           showConfirmButton: false,
+          customClass: {
+            popup: 'my-swal-popup',
+            title: 'my-swal-title',
+            content: 'my-swal-text',
+          },
           willOpen: () => {
             Swal.showLoading()
           },
         })
 
         setTimeout(() => {
-          Swal.fire("Sucesso!", "Todos os conflitos foram resolvidos.", "success")
+          Swal.fire({
+            title: "Sucesso!",
+            text: "Todos os conflitos foram resolvidos.",
+            icon: "success",
+            customClass: {
+              popup: 'my-swal-popup',
+              title: 'my-swal-title',
+              content: 'my-swal-text',
+              confirmButton: 'my-swal-confirm-button',
+            }
+          })
           loadConflicts()
           loadStats()
         }, 3000)
@@ -600,36 +646,52 @@ document.addEventListener("DOMContentLoaded", () => {
       html: `
                 <div style="text-align: left;">
                     <label class="form-label">Professor:</label>
-                    <select class="swal2-input" id="emergency-teacher">
+                    <select class="detail-input" id="emergency-teacher">
                         <option>João Silva</option>
                         <option>Maria Santos</option>
                         <option>Ana Costa</option>
                     </select>
                     
                     <label class="form-label">Disciplina:</label>
-                    <select class="swal2-input" id="emergency-subject">
+                    <select class="detail-input" id="emergency-subject">
                         <option>Programação I</option>
                         <option>Matemática</option>
                         <option>Física</option>
                     </select>
                     
                     <label class="form-label">Turma:</label>
-                    <select class="swal2-input" id="emergency-class">
+                    <select class="detail-input" id="emergency-class">
                         <option>EIE-2A</option>
                         <option>GSI-1B</option>
                         <option>MEC-3A</option>
                     </select>
                     
                     <label class="form-label">Horário:</label>
-                    <input type="time" class="swal2-input" id="emergency-time" value="14:00">
+                    <input type="time" class="detail-input" id="emergency-time" value="14:00">
                 </div>
             `,
       showCancelButton: true,
       confirmButtonText: "Gerar Horário",
       cancelButtonText: "Cancelar",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        confirmButton: 'my-swal-confirm-button',
+        cancelButton: 'my-swal-cancel-button',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Sucesso!", "Horário de emergência gerado com sucesso.", "success")
+        Swal.fire({
+          title: "Sucesso!",
+          text: "Horário de emergência gerado com sucesso.",
+          icon: "success",
+          customClass: {
+            popup: 'my-swal-popup',
+            title: 'my-swal-title',
+            content: 'my-swal-text',
+            confirmButton: 'my-swal-confirm-button',
+          }
+        })
       }
     })
   }
@@ -640,12 +702,32 @@ document.addEventListener("DOMContentLoaded", () => {
       input: "textarea",
       inputLabel: "Mensagem:",
       inputPlaceholder: "Digite a mensagem para todos os usuários...",
+      inputAttributes: {
+        class: 'detail-input'
+      },
       showCancelButton: true,
       confirmButtonText: "Enviar",
       cancelButtonText: "Cancelar",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        inputLabel: 'my-swal-text',
+        confirmButton: 'my-swal-confirm-button',
+        cancelButton: 'my-swal-cancel-button',
+      }
     }).then((result) => {
       if (result.isConfirmed && result.value) {
-        Swal.fire("Enviado!", "Notificação enviada para todos os usuários.", "success")
+        Swal.fire({
+          title: "Enviado!",
+          text: "Notificação enviada para todos os usuários.",
+          icon: "success",
+          customClass: {
+            popup: 'my-swal-popup',
+            title: 'my-swal-title',
+            content: 'my-swal-text',
+            confirmButton: 'my-swal-confirm-button',
+          }
+        })
       }
     })
   }
@@ -693,6 +775,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `,
       confirmButtonText: "OK",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        content: 'my-swal-text',
+        confirmButton: 'my-swal-confirm-button',
+      }
     })
   }
 
@@ -702,6 +790,11 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Gerando relatório do dia...",
       allowOutsideClick: false,
       showConfirmButton: false,
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        content: 'my-swal-text',
+      },
       willOpen: () => {
         Swal.showLoading()
       },
@@ -712,9 +805,14 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "Relatório Gerado!",
         text: "O relatório diário foi gerado com sucesso.",
         icon: "success",
-        showCancelButton: true,
+        showCancelButton: false,
         confirmButtonText: "Download",
-        cancelButtonText: "OK",
+        customClass: {
+          popup: 'my-swal-popup',
+          title: 'my-swal-title',
+          content: 'my-swal-text',
+          confirmButton: 'my-swal-confirm-button',
+        }
       })
     }, 2000)
   }
@@ -727,6 +825,11 @@ document.addEventListener("DOMContentLoaded", () => {
       icon: "success",
       timer: 1500,
       showConfirmButton: false,
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        content: 'my-swal-text',
+      }
     })
   }
 
@@ -736,32 +839,48 @@ document.addEventListener("DOMContentLoaded", () => {
       html: `
                 <div style="text-align: left;">
                     <label class="form-label">Título:</label>
-                    <input type="text" class="swal2-input" id="task-title" placeholder="Título da tarefa">
+                    <input type="text" class="detail-input" id="task-title" placeholder="Título da tarefa">
                     
                     <label class="form-label">Responsável:</label>
-                    <select class="swal2-input" id="task-responsible">
+                    <select class="detail-input" id="task-responsible">
                         <option>João Silva</option>
                         <option>Maria Santos</option>
                         <option>Ana Costa</option>
                     </select>
                     
                     <label class="form-label">Prioridade:</label>
-                    <select class="swal2-input" id="task-priority">
+                    <select class="detail-input" id="task-priority">
                         <option value="low">Baixa</option>
                         <option value="medium">Média</option>
                         <option value="high">Alta</option>
                     </select>
                     
                     <label class="form-label">Prazo:</label>
-                    <input type="date" class="swal2-input" id="task-deadline">
+                    <input type="date" class="detail-input" id="task-deadline">
                 </div>
             `,
       showCancelButton: true,
       confirmButtonText: "Criar Tarefa",
       cancelButtonText: "Cancelar",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        confirmButton: 'my-swal-confirm-button',
+        cancelButton: 'my-swal-cancel-button',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Sucesso!", "Tarefa criada com sucesso.", "success")
+        Swal.fire({
+          title: "Sucesso!",
+          text: "Tarefa criada com sucesso.",
+          icon: "success",
+          customClass: {
+            popup: 'my-swal-popup',
+            title: 'my-swal-title',
+            content: 'my-swal-text',
+            confirmButton: 'my-swal-confirm-button',
+          }
+        })
         loadTasks()
       }
     })
@@ -772,6 +891,12 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Editar Tarefa",
       text: "Funcionalidade de edição será implementada.",
       icon: "info",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        content: 'my-swal-text',
+        confirmButton: 'my-swal-confirm-button',
+      }
     })
   }
 
@@ -783,9 +908,26 @@ document.addEventListener("DOMContentLoaded", () => {
       showCancelButton: true,
       confirmButtonText: "Sim, concluir",
       cancelButtonText: "Cancelar",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        content: 'my-swal-text',
+        confirmButton: 'my-swal-confirm-button',
+        cancelButton: 'my-swal-cancel-button',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Concluída!", "Tarefa marcada como concluída.", "success")
+        Swal.fire({
+          title: "Concluída!",
+          text: "Tarefa marcada como concluída.",
+          icon: "success",
+          customClass: {
+            popup: 'my-swal-popup',
+            title: 'my-swal-title',
+            content: 'my-swal-text',
+            confirmButton: 'my-swal-confirm-button',
+          }
+        })
         loadTasks()
       }
     })
@@ -797,13 +939,28 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Aplicando solução automática...",
       allowOutsideClick: false,
       showConfirmButton: false,
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        content: 'my-swal-text',
+      },
       willOpen: () => {
         Swal.showLoading()
       },
     })
 
     setTimeout(() => {
-      Swal.fire("Resolvido!", "Conflito resolvido automaticamente.", "success")
+      Swal.fire({
+        title: "Resolvido!",
+        text: "Conflito resolvido automaticamente.",
+        icon: "success",
+        customClass: {
+          popup: 'my-swal-popup',
+          title: 'my-swal-title',
+          content: 'my-swal-text',
+          confirmButton: 'my-swal-confirm-button',
+        }
+      })
       loadConflicts()
       loadStats()
     }, 2000)
@@ -815,7 +972,7 @@ document.addEventListener("DOMContentLoaded", () => {
       html: `
                 <div style="text-align: left;">
                     <label class="form-label">Solução:</label>
-                    <select class="swal2-input" id="solution-type">
+                    <select class="detail-input" id="solution-type">
                         <option>Alterar horário</option>
                         <option>Trocar sala</option>
                         <option>Substituir professor</option>
@@ -823,15 +980,31 @@ document.addEventListener("DOMContentLoaded", () => {
                     </select>
                     
                     <label class="form-label">Observações:</label>
-                    <textarea class="swal2-input" id="solution-notes" placeholder="Observações sobre a solução..."></textarea>
+                    <textarea class="detail-input" id="solution-notes" placeholder="Observações sobre a solução..."></textarea>
                 </div>
             `,
       showCancelButton: true,
       confirmButtonText: "Aplicar Solução",
       cancelButtonText: "Cancelar",
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        confirmButton: 'my-swal-confirm-button',
+        cancelButton: 'my-swal-cancel-button',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("Resolvido!", "Conflito resolvido manualmente.", "success")
+        Swal.fire({
+          title: "Resolvido!",
+          text: "Conflito resolvido manualmente.",
+          icon: "success",
+          customClass: {
+            popup: 'my-swal-popup',
+            title: 'my-swal-title',
+            content: 'my-swal-text',
+            confirmButton: 'my-swal-confirm-button',
+          }
+        })
         loadConflicts()
         loadStats()
       }

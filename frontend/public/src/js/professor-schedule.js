@@ -129,7 +129,6 @@ class ProfessorSchedule {
 
         row.appendChild(cell)
       })
-
       scheduleTable.appendChild(row)
     })
   }
@@ -169,12 +168,4 @@ document.addEventListener("DOMContentLoaded", () => {
   new ProfessorSchedule()
 })
 
-// Logout function
-function logout() {
-  firebase
-    .auth()
-    .signOut()
-    .then(() => {
-      window.location.href = "index.html"
-    })
-}
+

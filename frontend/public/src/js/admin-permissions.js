@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function checkAdminAccess() {
     const user = auth.currentUser
     if (!user) {
-      window.location.href = "/index.html"
+      window.location.href = "/login"
       return false
     }
 
